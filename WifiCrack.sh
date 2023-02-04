@@ -43,13 +43,12 @@ if [ $airtest -eq 0 ]; then
 			echo -e "\n[*] Se esta iniciando el modo monitor en $tar\n"
 			airmon-ng start $tar > /dev/null 2>&1
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "${redColour}"
-			echo -e "\n[*] Ya tienes tu tarjeta preparada!"
-		$cleancolor
-		read -p "${blueColour}Quieres continuar? [Y/N]: " rps
+			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
+		read -p "Quieres continuar? [Y/N]: " rps
 			if [ "rps" == "Y" ] || [ "rps" == "y" ]; then
+				echo -e "${purpleColour}
+				read -p "Nombre de la red wifi: " wifi
 				$cleancolor
-				read -p "${greenColour}Nombre de la red wifi: " wifi
 				sudo airodump-ng --essid $wifi ${tar}mon
 			fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
