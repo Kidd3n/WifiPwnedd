@@ -45,7 +45,7 @@ if [ $airtest -eq 0 ]; then
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
 		read -p "Quieres continuar? [Y/N]: " rps
-			if [ "rps" == "Y" ] || [ "rps" == "y" ]; then
+			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				echo -e "${purpleColour}"
 				read -p "Nombre de la red wifi: " wifi
 				$cleancolor
