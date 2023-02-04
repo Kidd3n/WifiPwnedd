@@ -47,12 +47,14 @@ if [ $airtest -eq 0 ]; then
 			echo -e "\n[*] Ya tienes tu tarjeta preparada!"
 		$cleancolor
 		read -p "${blueColour}Quieres continuar? [Y/N]: " rps
-			if rps == "Y" or rps == "y"; then
+			if [ "rps" == "Y" ] || [ "rps" == "y" ]; then
 				$cleancolor
-				read -p "Nombre de la red wifi: " wifi
+				read -p "${greenColour}Nombre de la red wifi: " wifi
 				sudo airodump-ng --essid $wifi ${tar}mon
 			fi
-			if rps == "N" or rps == "n"; then
+			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
+				echo -e "${redColour}\n[*] Saliendo"
+				$cleancolor
 				break
 			fi
 else
