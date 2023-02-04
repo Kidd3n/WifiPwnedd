@@ -11,7 +11,6 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 
-
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
 exit 1
@@ -19,6 +18,9 @@ fi
 
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
+
+test -f /usr/bin/macchanger
+macctest=$(echo $?)
 
 if [ $airtest -eq 0 ]; then
 	clear
@@ -40,16 +42,20 @@ if [ $airtest -eq 0 ]; then
 			echo -e "${blueColour}"
 			read -p "[?] Que tarjeta deseas usar: " tar
 			$cleancolor
-			echo -e "\n[*] Se esta iniciando el modo monitor en $tar\n"
+			echo -e "\n[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 			airmon-ng start $tar > /dev/null 2>&1
+			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
+			ifconfig ${tar}mon up
 			airmon-ng check kill > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*] Nueva dirección MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
-		read -p "Quieres continuar? [Y/N]: " rps
+		read -p "Quieres hacer un ataque? [Y/N]: " rps
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				echo -e "${purpleColour}"
 				read -p "Nombre de la red wifi: " wifi
 				$cleancolor
-				sudo airodump-ng --essid $wifi ${tar}mon
+				xterm -hold -e "airodump-ng --essid $wifi ${tar}mon
+			
 			fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[*] Saliendo"
@@ -58,15 +64,27 @@ if [ $airtest -eq 0 ]; then
 			fi
 else
 	tool_name="aircrack-ng"
+	tool_name2="macchanger"
 
 	if ! command -v $tool_name > /dev/null 2>&1; then
-	  echo -e "\n[*] Instalando aircrack"
-	  sudo apt-get install aircrack-ng -y > /dev/null 2>&1 || {
-	    echo "[*] Instalando aircrack"
-	    sudo pacman -S $tool_name || {
-	      echo -e "\n$redColour[!] No se pudo instalar aircrack" >&2
-	      exit 1
-	    }
-	  }
+	echo -e "\n[*] Instalando Dependencias"
+	sudo apt-get install $tool_name -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
+		exit 1
+		}
+	}
+	fi
+
+	if ! command -v $tool_name2 > /dev/null 2>&1; then
+	echo -e "\n[*] Instalando Dependencias"
+	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name2 || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name2" >&2
+		exit 1
+		}
+	}
 	fi
 fi
