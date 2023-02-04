@@ -6,9 +6,11 @@
 
 Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
-- Empieza desde configandote la tarjeta de red para que este en modo monitor (mon)
+- Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
 
-- Luego podemos hacer un airodump a la red que le indiquemos
+- Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
+
+- Luego podemos hacer un con otra ventana airodump a la red que le indiquemos
 
 
 ## Como se ejecuta la herramienta? 
