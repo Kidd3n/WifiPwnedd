@@ -67,8 +67,9 @@ else
 	tool_name2="macchanger"
 
 	if ! command -v $tool_name > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando Dependencias"
+	echo -e "\n[*] Instalando aircrack y xterm, luego ejecute de nuevo la herramienta"
 	sudo apt-get install $tool_name -y > /dev/null 2>&1 || {  
+	sudo apt-get install xterm -y > /dev/null 2>&1 	
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
@@ -78,7 +79,7 @@ else
 	fi
 
 	if ! command -v $tool_name2 > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando Dependencias"
+	echo -e "\n[*] Instalando macchanger, luego ejecute de nuevo la herramienta"
 	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 || {  
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name2 || {
