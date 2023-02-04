@@ -54,7 +54,7 @@ if [ $airtest -eq 0 ]; then
 				echo -e "${purpleColour}"
 				read -p "Nombre de la red wifi: " wifi
 				$cleancolor
-				xterm -hold -e "airodump-ng --essid $wifi ${tar}mon
+				xterm -hold -e "airodump-ng --essid $wifi ${tar}mon"
 			
 			fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
