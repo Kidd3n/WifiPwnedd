@@ -44,7 +44,15 @@ if [ $airtest -eq 0 ]; then
 			airmon-ng start $tar > /dev/null 2>&1
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "${redColour}"
-			echo -e "\n[*] Ya tienes tu tarjeta preparada!\n"
+			echo -e "\n[*] Ya tienes tu tarjeta preparada!"
+		$cleancolor
+		read -p "\nQuieres continuar? [Y/N]: " rps
+			if rps == "Y" or rps == "y"; then
+				read -p "\nNombre de la red wifi: " wifi
+					sudo airodump-ng --essid $wifi ${tar}mon
+			if rps == "N" or rps == "n"; then
+				break
+			fi
 else
 	tool_name="aircrack-ng"
 
