@@ -33,7 +33,7 @@ if [ $airtest -eq 0 ]; then
 	echo "WifiCrack ByKidd3n"
 	echo "/\/\/\/\/\/\/\/\ "
 	echo -e "${purpleColour}"
-	
+	echo "[+] Github: https://github.com/kidd3n"
 	read -p "[+] Enter para continuar"
 		$cleancolor
 		iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
