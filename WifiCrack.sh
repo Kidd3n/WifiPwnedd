@@ -81,7 +81,7 @@ if [ $airtest -eq 0 ]; then
 					cd /usr/share/wordlists
 					sudo gunzip -d rockyou.txt.gz > /dev/null 2>&1
 					
-					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap"
+					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap" &
 					aircrack_xterm_PID=$!
 
 					sleep 120; kill -9  $aircrack_xterm_PID
