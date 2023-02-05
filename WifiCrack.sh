@@ -57,9 +57,11 @@ if [ $airtest -eq 0 ]; then
 				if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 					xterm -hold -e "airodump-ng ${tar}mon" &
 					airodump_xterm_PID=$!
+					echo -e "$grayColour"
 					read -p "[?] Que red deseas atacar?: " ap
 					read -p "[?] En que canal esta ${ap}?: " channel
-					echo - "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
+					$cleancolor
+					echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
 					kill -9 $airodump_xterm_PID
 					wait $airodump_xterm_PID 2>/dev/null
 
