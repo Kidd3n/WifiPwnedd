@@ -19,6 +19,9 @@ fi
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
 
+test -f /usr/bin/xterm
+xtermtest=$(echo $?)
+
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
