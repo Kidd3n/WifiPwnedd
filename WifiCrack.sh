@@ -76,7 +76,7 @@ if [ $airtest -eq 0 ]; then
 					echo -e "${redColour}\n[...] Esperando Handshake\n"
 					$cleancolor
 					
-					sleep 10; kill -9 $airodump_filter_xtrem_PID
+					sleep 10; kill -9 $airodump_filter_xterm_PID
 					wait $airodump_filter_xterm_PID 2>/dev/null
 					echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 					read -p "[?] Ruta del Diccionario al usar: " dicc
