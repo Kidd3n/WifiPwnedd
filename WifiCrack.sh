@@ -76,12 +76,20 @@ if [ $airtest -eq 0 ]; then
 					echo -e "${redColour}\n[...] Esperando Handshake\n"
 					$cleancolor
 					
-					sleep 10; kill -9 $airodump_filter_xterm_PID
-					wait $airodump_filter_xterm_PID 2>/dev/null
+					sleep 10
 					echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 					read -p "[?] Ruta del Diccionario al usar: " dicc
 					$cleancolor
 					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+					aircrack=$!
+					
+					read -p "[+] Enter para salir"
+					kill -9 $airodump_filter_xterm_PID
+					wait $airodump_filter_xterm_PID 2>/dev/null
+					kill -9 $aircrack
+					wait $airodump_filter_xterm_PID 2>/dev/null
+					sudo airmon-ng stop ${tar}mon
+					break
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[!] Saliendo"
