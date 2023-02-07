@@ -10,8 +10,25 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
 - Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
-- Luego podemos hacer un con otra ventana airodump a la red que le indiquemos
+- Nos saldra una ventana con todas las redes disponibles y sus canales, le debemos indicar el nombre correctamnete de la red y su canal
 
+- Luego nos saldra una ventana igual, solo que ahora estara filtrada por el nombre y el canal que le pasamos anteriormente
+
+- Esperamos unos segundos y empezara el ataque a la red
+
+- Despues de algunos segundos vamos a optener un Handshake
+
+- Nos preguntara por algun diccionario que queramos usar, igual se dara la ruta de rockyou.txt por si quieres usar ese diccionario (El rockyou en kali esta comprimido, para descomprimir el archivo debemos aplicar estos comandos): 
+```batch
+    ┌──(kidden㉿kidd3n)-[~]
+    └─$ cd /usr/share/wordlists
+```
+```batch
+    ┌──(kidden㉿kidd3n)-[~]
+    └─$ gunzip -d rockyou.txt.gz
+```
+
+- Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
 
 ## Como se ejecuta la herramienta? 
 
