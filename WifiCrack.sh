@@ -50,8 +50,8 @@ if [ $airtest -eq 0 ]; then
 			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
 			ifconfig ${tar}mon up
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*] Nueva direcciÃ³n MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
-			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
+			echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
+			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
 			read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
 				$cleancolor
 				if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
@@ -81,15 +81,6 @@ if [ $airtest -eq 0 ]; then
 					read -p "[?] Ruta del Diccionario al usar: " dicc
 					$cleancolor
 					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
-					aircrack=$!
-					
-					read -p "[+] Enter para salir"
-					kill -9 $airodump_filter_xterm_PID
-					wait $airodump_filter_xterm_PID 2>/dev/null
-					kill -9 $aircrack
-					wait $airodump_filter_xterm_PID 2>/dev/null
-					sudo airmon-ng stop ${tar}mon
-					break
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[!] Saliendo"
@@ -125,7 +116,7 @@ else
 
 	if ! command -v $tool_name3 > /dev/null 2>&1; then
 	echo -e "\n[*] Instalando xterm, luego ejecute de nuevo la herramienta"
-	sudo apt-get install $tool_name3 -y > /dev/null 2>&1 || {  
+	sudo apt install $tool_name3 -y > /dev/null 2>&1 || {  
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name3 || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name3" >&2
