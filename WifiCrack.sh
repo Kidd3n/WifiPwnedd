@@ -25,7 +25,7 @@ xtermtest=$(echo $?)
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
-if [ $airtest == "0" && $xtermtest == "0" && $macctest == "0" ]; then
+if [ $airtest -eq 0 ]; then
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
@@ -88,16 +88,40 @@ if [ $airtest == "0" && $xtermtest == "0" && $macctest == "0" ]; then
 					break
 				fi
 else
-	echo -e "${yellowColour}\nInstalando dependencias...\n"
-	if [ $airtest != "0" ]; then
-		sudo apt install aircrack-ng -y > /dev/null 2>&1
+	tool_name="aircrack-ng"
+	tool_name2="macchanger"
+	tool_name3="xterm"
+
+	if ! command -v $tool_name > /dev/null 2>&1; then
+	echo -e "\n[*] Instalando aircrack-ng, luego ejecute de nuevo la herramienta"
+	sudo apt-get install $tool_name -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
+		exit 1
+		}
+	}
 	fi
 
-	if [ $xtermtest != "0" ]; then
-		sudo apt install xterm -y > /dev/null 2>&1
+	if ! command -v $tool_name2 > /dev/null 2>&1; then
+	echo -e "\n[*] Instalando macchanger, luego ejecute de nuevo la herramienta"
+	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name2 || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name2" >&2
+		exit 1
+		}
+	}
 	fi
 
-	if [ $macctest != "0" ]; then
-		sudo apt install macctest -y > /dev/null 2>&1
+	if ! command -v $tool_name3 > /dev/null 2>&1; then
+	echo -e "\n[*] Instalando xterm, luego ejecute de nuevo la herramienta"
+	sudo apt install $tool_name3 -y > /dev/null 2>&1 || {  
+		echo "[*] Instalando Dependencias"
+		sudo pacman -S $tool_name3 || {
+		echo -e "\n$redColour[!] No se pudo instalar $tool_name3" >&2
+		exit 1
+		}
+	}
 	fi
-
+fi
