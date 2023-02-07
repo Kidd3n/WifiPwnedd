@@ -93,8 +93,8 @@ else
 	tool_name3="xterm"
 
 	if ! command -v $tool_name > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando aircrack-ng, luego ejecute de nuevo la herramienta"
-	sudo apt-get install $tool_name -y > /dev/null 2>&1 || {  
+	echo -e "\n[*] Instalando aircrack-ng..."
+	sudo apt-get install $tool_name -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
@@ -104,8 +104,8 @@ else
 	fi
 
 	if ! command -v $tool_name2 > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando macchanger, luego ejecute de nuevo la herramienta"
-	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 || {  
+	echo -e "\n[*] Instalando macchanger..."
+	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name2 || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name2" >&2
@@ -115,8 +115,8 @@ else
 	fi
 
 	if ! command -v $tool_name3 > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando xterm, luego ejecute de nuevo la herramienta"
-	sudo apt install $tool_name3 -y > /dev/null 2>&1 || {  
+	echo -e "\n[*] Instalando xterm..."
+	sudo apt install $tool_name3 -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
 		echo "[*] Instalando Dependencias"
 		sudo pacman -S $tool_name3 || {
 		echo -e "\n$redColour[!] No se pudo instalar $tool_name3" >&2
