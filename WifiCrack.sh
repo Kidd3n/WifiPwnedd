@@ -25,7 +25,7 @@ xtermtest=$(echo $?)
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
-if [ $airtest -eq 0 ]; then
+if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
