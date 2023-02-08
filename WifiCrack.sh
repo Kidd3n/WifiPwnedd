@@ -73,7 +73,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 						aireplay_xterm_PID=$!
 						sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-						echo -e "${redColour}\n[...] Esperando Handshake\n"
+						echo -e "${redColour}\n[%] Esperando Handshake\n"
 						$cleancolor
 						
 						sleep 10
@@ -85,7 +85,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 				if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 					echo -e "${redColour}\n[!] Saliendo"
 					$cleancolor
-					break
+					exit
 				fi
 else
 	tool_name="aircrack-ng"
