@@ -81,6 +81,13 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 						read -p "[?] Ruta del Diccionario al usar: " dicc
 						$cleancolor
 						xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+
+						echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+						airmon-ng stop ${tar}mon > /dev/null 2>&1
+						sudo /etc/init.d/networking start > /dev/null 2>&1
+						sudo /etc/init.d/networking restart > /dev/null 2>&1
+						ifconfig $tar up > /dev/null 2>&1
+						exit
 					fi
 				if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 					echo -e "${redColour}\n[!] Saliendo"
