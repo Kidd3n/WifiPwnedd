@@ -53,3 +53,5 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
     └─$ sudo ./WifiCrack.sh
 ```
 ![image](https://user-images.githubusercontent.com/89719224/216750782-c4c7908d-f428-4263-8e8f-57b61154af76.png)
+
+#### [!] Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
