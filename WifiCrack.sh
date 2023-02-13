@@ -60,8 +60,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							echo -e "${grayColour}\n[+] Menu de ataque\n"
 							sleep 1
 							echo -e "${blueColour}[+] Targeta de Red:${tar}mon" 
-							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show eth0 | grep "Current MAC" | awk '{print $3}')"
-							echo -e "${blueColour}[+] Direccion IP: $(ifconfig ${tar}mon | grep "inet " | awk '{print $2}')"
+							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
 							echo -e "4) Salir"
