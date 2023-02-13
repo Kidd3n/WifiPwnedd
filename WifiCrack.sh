@@ -63,7 +63,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
-							echo -e "4) Salir"
+							echo -e "3) Salir"
 							echo -e "${greenColour}"; read -p "Selecciona una opción: " opcion
 							$cleancolor
 							case $opcion in
