@@ -90,17 +90,23 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								$cleancolor
 								
 								sleep 10
-								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-								read -p "[?] Ruta del Diccionario al usar: " dicc
-								$cleancolor
-								xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+								test -f Handshake-01.cap
+								if [ "$(echo $?)" == "0" ]; then
+									echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+									read -p "[?] Ruta del Diccionario al usar: " dicc
+									$cleancolor
+									xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 
-								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-								airmon-ng stop ${tar}mon > /dev/null 2>&1
-								sudo /etc/init.d/networking start > /dev/null 2>&1
-								sudo /etc/init.d/networking restart > /dev/null 2>&1
-								ifconfig $tar up > /dev/null 2>&1
-								exit
+									echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+									airmon-ng stop ${tar}mon > /dev/null 2>&1
+									sudo /etc/init.d/networking start > /dev/null 2>&1
+									sudo /etc/init.d/networking restart > /dev/null 2>&1
+									ifconfig $tar up > /dev/null 2>&1
+									sudo rm Handshake*
+									exit
+								else 
+									echo -e "${redColour}\n [!] No se ha capturado el Handshake"
+								fi
 								;;
 								2)
 								echo "Prueba"
@@ -111,6 +117,8 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								sudo /etc/init.d/networking start > /dev/null 2>&1
 								sudo /etc/init.d/networking restart > /dev/null 2>&1
 								ifconfig $tar up > /dev/null 2>&1
+								sudo rm Handshake*
+								exit
 								;;
 								*)
 								echo "Opción inválida"
