@@ -59,7 +59,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							clear
 							echo -e "${grayColour}\n[+] Menu de ataque\n"
 							sleep 1
-							echo -e "${blueColour}[+] Targeta de Red:${tar}mon" 
+							echo -e "${blueColour}[+] Targeta de Red: ${tar}mon" 
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
@@ -106,7 +106,11 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								echo "Prueba"
 								;;
 								4)
-								break
+								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+								airmon-ng stop ${tar}mon > /dev/null 2>&1
+								sudo /etc/init.d/networking start > /dev/null 2>&1
+								sudo /etc/init.d/networking restart > /dev/null 2>&1
+								ifconfig $tar up > /dev/null 2>&1
 								;;
 								*)
 								echo "Opción inválida"
