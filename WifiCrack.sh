@@ -133,40 +133,33 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 					exit
 				fi
 else
-	tool_name="aircrack-ng"
-	tool_name2="macchanger"
-	tool_name3="xterm"
-
-	if ! command -v $tool_name > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando aircrack-ng..."
-	sudo apt-get install $tool_name -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
-		echo "[*] Instalando Dependencias"
-		sudo pacman -S $tool_name || {
-		echo -e "\n$redColour[!] No se pudo instalar $tool_name" >&2
-		exit 1
-		}
-	}
+	if [ $airtest != "0" ]; then
+		echo -e "\n[*] Instalando aircrack-ng..."
+		wget https://download.aircrack-ng.org/aircrack-ng-1.7.tar.gz > /dev/null 2>&1
+		tar -zxvf aircrack-ng-1.7.tar.gz > /dev/null 2>&1
+		cd aircrack-ng-1.7 > /dev/null 2>&1
+		./configure > /dev/null 2>&1
+		make > /dev/null 2>&1
+		sudo make install > /dev/null 2>&1
 	fi
 
-	if ! command -v $tool_name2 > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando macchanger..."
-	sudo apt-get install $tool_name2 -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
-		echo "[*] Instalando Dependencias"
-		sudo pacman -S $tool_name2 || {
-		echo -e "\n$redColour[!] No se pudo instalar $tool_name2" >&2
-		exit 1
-		}
-	}
+	if [ $macctest != "0" ]; then
+		echo -e "\n[*] Instalando macchanger..."
+		wget https://github.com/alobbs/macchanger/releases/download/v1.7.0/macchanger-1.7.0.tar.gz > /dev/null 2>&1
+		tar -zxvf macchanger-1.7.0.tar.gz > /dev/null 2>&1
+		cd macchanger-1.7.0 > /dev/null 2>&1
+		./configure > /dev/null 2>&1
+		make > /dev/null 2>&1
+		sudo make install > /dev/null 2>&1
 	fi
 
-	if ! command -v $tool_name3 > /dev/null 2>&1; then
-	echo -e "\n[*] Instalando xterm..."
-	sudo apt install $tool_name3 -y > /dev/null 2>&1 && sudo ./WifiCrack.sh || {  
-		echo "[*] Instalando Dependencias"
-		sudo pacman -S $tool_name3 || {
-		echo -e "\n$redColour[!] No se pudo instalar $tool_name3" >&2
-		exit 1
-		}
-	}
+	if [ $xtermtest != "0" ]; then
+		echo -e "\n[*] Instalando xterm..."
+		wget https://invisible-mirror.net/archives/xterm/xterm-351.tgz > /dev/null 2>&1
+		tar -zxvf xterm-351.tgz > /dev/null 2>&1
+		cd xterm-351 > /dev/null 2>&1
+		./configure > /dev/null 2>&1
+		make > /dev/null 2>&1
+		sudo make install > /dev/null 2>&1
 	fi
 fi
