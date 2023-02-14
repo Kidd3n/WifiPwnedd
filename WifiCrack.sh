@@ -36,7 +36,7 @@ test -f /usr/bin/xterm
 xtermtest=$(echo $?)
 	if [ $xtermtest != "0" ]; then
 		clear
-		read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
+		read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 			if [ $distro == "1" ]; then
 				echo -e "${grayColour}[*] Instalando xterm...${endColour}"
 				sudo apt-get update -y > /dev/null 2>&1
@@ -52,7 +52,7 @@ test -f /usr/bin/macchanger
 macctest=$(echo $?)
 	if [ $macctest != "0" ]; then
 		clear
-		read -p "[?] Cual Distribucion estas usando? [ 1)Debian  2)Arch ]: " distro
+		read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 			if [ $distro == "1" ]; then
 				echo -e "${grayColour}[*] Instalando macchanger...${endColour}"
 				sudo apt-get update -y > /dev/null 2>&1
