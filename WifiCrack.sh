@@ -18,13 +18,49 @@ fi
 
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
-
+if [ $airtest != "0" ]; then
+read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
+		if [ $distro == "1" ]; then
+			echo -e "[*] Instalando aircrack-ng..."
+			sudo apt-get update > /dev/null 2>&1
+			sudo apt-get install aircrack-ng -y > /dev/null 2>&1
+		fi
+		if [ $distro == "2" ]; then
+			echo -e "[*] Instalando aircrack-ng..."
+			sudo pacman -Sy -y > /dev/null 2>&1
+			sudo pacman -S aircrack-ng -y > /dev/null 2>&1
+		fi
+fi
 test -f /usr/bin/xterm
 xtermtest=$(echo $?)
-
+if [ $xtermtest != "0" ]; then
+read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
+		if [ $distro == "1" ]; then
+			echo -e "[*] Instalando xterm..."
+			sudo apt-get update > /dev/null 2>&1
+			sudo apt-get install xterm -y > /dev/null 2>&1
+		fi
+		if [ $distro == "2" ]; then
+			echo -e "[*] Instalando xterm..."
+			sudo pacman -Sy -y > /dev/null 2>&1
+			sudo pacman -S xterm -y > /dev/null 2>&1
+		fi
+fi
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
-
+if [ $macctest != "0" ]; then
+	read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
+		if [ $distro == "1" ]; then
+			echo -e "[*] Instalando macchanger..."
+			sudo apt-get update > /dev/null 2>&1
+			sudo apt-get install macchanger -y > /dev/null 2>&1
+		fi
+		if [ $distro == "2" ]; then
+			echo -e "[*] Instalando macchanger..."
+			sudo pacman -Sy -y > /dev/null 2>&1
+			sudo pacman -S macchanger -y > /dev/null 2>&1
+		fi
+fi
 if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 	clear
 	# Banner
@@ -132,34 +168,4 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 					$cleancolor
 					exit
 				fi
-else
-	if [ $airtest != "0" ]; then
-		echo -e "\n[*] Instalando aircrack-ng..."
-		wget https://download.aircrack-ng.org/aircrack-ng-1.7.tar.gz > /dev/null 2>&1
-		tar -zxvf aircrack-ng-1.7.tar.gz > /dev/null 2>&1
-		cd aircrack-ng-1.7 > /dev/null 2>&1
-		./configure > /dev/null 2>&1
-		make > /dev/null 2>&1
-		sudo make install > /dev/null 2>&1
-	fi
-
-	if [ $macctest != "0" ]; then
-		echo -e "\n[*] Instalando macchanger..."
-		wget https://github.com/alobbs/macchanger/releases/download/v1.7.0/macchanger-1.7.0.tar.gz > /dev/null 2>&1
-		tar -zxvf macchanger-1.7.0.tar.gz > /dev/null 2>&1
-		cd macchanger-1.7.0 > /dev/null 2>&1
-		./configure > /dev/null 2>&1
-		make > /dev/null 2>&1
-		sudo make install > /dev/null 2>&1
-	fi
-
-	if [ $xtermtest != "0" ]; then
-		echo -e "\n[*] Instalando xterm..."
-		wget https://invisible-mirror.net/archives/xterm/xterm-351.tgz > /dev/null 2>&1
-		tar -zxvf xterm-351.tgz > /dev/null 2>&1
-		cd xterm-351 > /dev/null 2>&1
-		./configure > /dev/null 2>&1
-		make > /dev/null 2>&1
-		sudo make install > /dev/null 2>&1
-	fi
 fi
