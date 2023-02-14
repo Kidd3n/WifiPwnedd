@@ -62,8 +62,6 @@ if [ $airtest != "0" ] && [ $xtermtest != "0" ] && [ $macctest != "0" ]; then
 				sudo pacman -Sy -y > /dev/null 2>&1
 				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
 		fi
-fi
-
 else 
 	clear
 	# Banner
