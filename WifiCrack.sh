@@ -18,51 +18,52 @@ fi
 
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
-if [ $airtest != "0" ]; then
-	clear
-	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
-		if [ $distro == "1" ]; then
-			echo -e "${grayColour}[*] Instalando aircrack-ng...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install aircrack-ng -y > /dev/null 2>&1
-		fi
-		if [ $distro == "2" ]; then
-			echo -e "${grayColour}[*] Instalando aircrack-ng...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S aircrack-ng -y > /dev/null 2>&1
-		fi
-fi
+	if [ $airtest != "0" ]; then
+		clear
+		read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
+			if [ $distro == "1" ]; then
+				echo -e "${grayColour}[*] Instalando aircrack-ng...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install aircrack-ng -y > /dev/null 2>&1
+			fi
+			if [ $distro == "2" ]; then
+				echo -e "${grayColour}[*] Instalando aircrack-ng...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
+			fi
+	fi
 test -f /usr/bin/xterm
 xtermtest=$(echo $?)
-if [ $xtermtest != "0" ]; then
-	clear
-	read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
-		if [ $distro == "1" ]; then
-			echo -e "${grayColour}[*] Instalando xterm...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install xterm -y > /dev/null 2>&1
-		fi
-		if [ $distro == "2" ]; then
-			echo -e "${grayColour}[*] Instalando xterm...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S xterm -y > /dev/null 2>&1
-		fi
-fi
+	if [ $xtermtest != "0" ]; then
+		clear
+		read -p "[?] Cual Distribucion estas usando? [ 1) Debian  2) Arch ]: " distro
+			if [ $distro == "1" ]; then
+				echo -e "${grayColour}[*] Instalando xterm...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install xterm -y > /dev/null 2>&1
+			fi
+			if [ $distro == "2" ]; then
+				echo -e "${grayColour}[*] Instalando xterm...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S xterm -y > /dev/null 2>&1
+			fi
+	fi
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
-if [ $macctest != "0" ]; then
-	clear
-	read -p "[?] Cual Distribucion estas usando? [ 1)Debian  2)Arch ]: " distro
-		if [ $distro == "1" ]; then
-			echo -e "${grayColour}[*] Instalando macchanger...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install macchanger -y > /dev/null 2>&1
-		fi
-		if [ $distro == "2" ]; then
-			echo -e "${grayColour}[*] Instalando macchanger...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S macchanger -y > /dev/null 2>&1
-		fi
+	if [ $macctest != "0" ]; then
+		clear
+		read -p "[?] Cual Distribucion estas usando? [ 1)Debian  2)Arch ]: " distro
+			if [ $distro == "1" ]; then
+				echo -e "${grayColour}[*] Instalando macchanger...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install macchanger -y > /dev/null 2>&1
+			fi
+			if [ $distro == "2" ]; then
+				echo -e "${grayColour}[*] Instalando macchanger...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S macchanger -y > /dev/null 2>&1
+			fi
+	fi
 if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 	clear
 	# Banner
