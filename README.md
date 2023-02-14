@@ -10,6 +10,9 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
 - Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
+
+### 1) Ataque Handshake 
+
 - Nos saldra una ventana con todas las redes disponibles y sus canales, le debemos indicar el nombre correctamnete de la red y su canal
 
 - Luego nos saldra una ventana igual, solo que ahora estara filtrada por el nombre y el canal que le pasamos anteriormente
@@ -29,6 +32,12 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 ```
 
 - Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
+
+### 2) Ataque PKMID (proximamente)
+
+
+
+
 
 ## Como se ejecuta la herramienta? 
 
