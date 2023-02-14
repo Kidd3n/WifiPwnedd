@@ -59,13 +59,13 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							clear
 							echo -e "${grayColour}\n[+] Menu de ataque\n${endColour}"
 							echo -e "${redColour}"
-							echo "   #"
-							echo "	  #				   	             ( ( \ )  ( / ) )"
-							echo "    ###=====================\      	  \----/"
-							echo "    ###==WifiCrack by kidd3n ----->  	  |    |"
-							echo "    ###=====================/           +----+"
-							echo "    #"
-							echo "   #"
+							echo -e "   #"
+							echo -e "	  #	       	                     ( ( \ )  ( / ) )"
+							echo -e "    ###=====================\      	  \----/"
+							echo -e "    ###==WifiCrack by kidd3n ----->  	  |    |"
+							echo -e "    ###=====================/             +----+"
+							echo -e "    #"
+							echo -e "   #"
 							sleep 1
 							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
@@ -142,6 +142,8 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 				fi
 else
 	clear
+	echo -e "\n${purpleColour}[!] Se necesitan instalar dependencias\n"
+	sleep 1
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
