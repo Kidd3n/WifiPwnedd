@@ -133,6 +133,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 					exit
 				fi
 else
+	clear
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
@@ -159,3 +160,4 @@ else
 				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
 				sudo ./WifiCrack.sh
 		fi
+fi
