@@ -57,9 +57,15 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 					if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 						while true; do
 							clear
-							echo -e "${grayColour}\n[+] Menu de ataque\n"
+							echo -e "${grayColour}\n[+] Menu de ataque\n${endColour}"
+							echo -e "${redColour}"
+							echo -e "						                    			${blueColour}( ( \ )  ( / ) ) "
+							echo -e "${redColour}##=====================\\\\${endColour}    ${blueColour}    \----/"
+							echo -e "${redColour}##==WifiCrack by kidd3n --->${endColour}   ${blueColour}    |    |"
+							echo -e "${redColour}##=====================////${endColour}    ${blueColour}    +----+"
+							$cleancolor
 							sleep 1
-							echo -e "${blueColour}[+] Targeta de Red: ${tar}mon" 
+							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
