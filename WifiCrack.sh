@@ -59,11 +59,11 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							clear
 							echo -e "${grayColour}\n[+] Menu de ataque\n${endColour}"
 							echo -e "${redColour}"
-							echo -e "						                    			${blueColour}( ( \ )  ( / ) ) "
-							echo -e "${redColour}##=====================\\\\${endColour}    ${blueColour}    \----/"
-							echo -e "${redColour}##==WifiCrack by kidd3n --->${endColour}   ${blueColour}    |    |"
-							echo -e "${redColour}##=====================////${endColour}    ${blueColour}    +----+"
-							$cleancolor
+							echo "						   ( ( \ )  ( / ) ) "
+							echo "##=====================\\\\   \----/"
+							echo "##==WifiCrack by kidd3n --->  |    |"
+							echo "##=====================////   +----+"
+							
 							sleep 1
 							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
