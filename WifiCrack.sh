@@ -25,31 +25,7 @@ xtermtest=$(echo $?)
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
-if [ $xtermtest != "0" ]; then
-	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
-	if [ $distro == "1" ]; then	
-		echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install xterm -y > /dev/null 2>&1
-		echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install macchanger -y > /dev/null 2>&1
-		echo -e "${grayColour}[*] Instalando  o actualizando aircrack-ng...${endColour}"
-			sudo apt-get update -y > /dev/null 2>&1
-			sudo apt-get install aircrack-ng -y > /dev/null 2>&1
-	fi
-
-	if [ $distro == "2" ]; then
-		echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S macchanger -y > /dev/null 2>&1
-		echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S xterm -y > /dev/null 2>&1
-		echo -e "${grayColour}[*] Instalando  o actualizando aircrack-ng...${endColour}"
-			sudo pacman -Sy -y > /dev/null 2>&1
-			sudo pacman -S aircrack-ng -y > /dev/null 2>&1
-else 
+if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
@@ -156,4 +132,30 @@ else
 					$cleancolor
 					exit
 				fi
-fi
+else
+	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
+		if [ $distro == "1" ]; then	
+			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install xterm -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install macchanger -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando  o actualizando aircrack-ng...${endColour}"
+				sudo apt-get update -y > /dev/null 2>&1
+				sudo apt-get install aircrack-ng -y > /dev/null 2>&1
+				sudo ./WifiCrack.sh
+		fi
+
+		if [ $distro == "2" ]; then
+			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S macchanger -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S xterm -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando  o actualizando aircrack-ng...${endColour}"
+				sudo pacman -Sy -y > /dev/null 2>&1
+				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
+				sudo ./WifiCrack.sh
+		fi
