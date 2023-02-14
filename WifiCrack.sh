@@ -59,10 +59,10 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							clear
 							echo -e "${grayColour}\n[+] Menu de ataque\n${endColour}"
 							echo -e "${redColour}"
-							echo "						   ( ( \ )  ( / ) ) "
-							echo "##=====================\\\\   \----/"
-							echo "##==WifiCrack by kidd3n --->  |    |"
-							echo "##=====================////   +----+"
+							echo "						   	   ( ( \ )  ( / ) ) "
+							echo "##=====================\\\\\   	\----/"
+							echo "##==WifiCrack by kidd3n ----->  	|    |"
+							echo "##=====================/////      +----+"
 							
 							sleep 1
 							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
