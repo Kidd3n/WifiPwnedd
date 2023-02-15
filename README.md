@@ -35,11 +35,19 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
 - Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
 
-### 2) Ataque PKMID (proximamente)
+### 2) Ataque PKMID 
 
+- Esperara el paquete necesario por 60 segundos
 
+- Si lo captura pasara a la fase de fuerza bruta con hashcat
 
+- Si no lo captura se cerrara el programa
 
+### 3) Ataque Fuerza Bruta
+
+- Por el momento solo esta disponible para Handshake .cap 
+
+- Puedes elejir el diccionario que quieras 
 
 ## Como se ejecuta la herramienta? 
 
