@@ -16,12 +16,6 @@ if [ $(id -u) -ne 0 ]; then
 exit 1
 fi
 
-test -f /usr/bin/hashcat
-catest=$(echo $?)
-
-test -f /usr/bin/hcxtool
-hcxtool=$(echo $?)
-
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
 
@@ -31,7 +25,7 @@ xtermtest=$(echo $?)
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
-if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ] && [ $hcxtool -eq 0 ] && [ $catest -eq 0 ]; then
+if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
@@ -180,17 +174,12 @@ else
 	sleep 1
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
-			echo -e "${greenColour}\n[*] Actualizando Repositorios..."
-			sudo apt-get update -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando  o actualizando hcxtool${endColour}"
+			echo -e "${greenColour}\n[*] Actualizando Repositorios y descargando las dependencias..."
+				sudo apt-get update -y > /dev/null 2>&1
 				sudo apt-get install hcxtool -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando xterm...${endColour}"
 				sudo apt-get install xterm -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando macchanger...${endColour}"
 				sudo apt-get install macchanger -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando  o actualizando aircrack-ng...${endColour}"
 				sudo apt-get install aircrack-ng -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando  o actualizando Hashcat...${endColour}"	
 				sudo apt-get install hashcat -y > /dev/null 2>&1
 				sudo ./WifiCrack.sh
 
