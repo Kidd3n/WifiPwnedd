@@ -16,6 +16,9 @@ if [ $(id -u) -ne 0 ]; then
 exit 1
 fi
 
+test -f /usr/bin/hcxdumptool
+dumptool=$(echo $?)
+
 test -f /usr/bin/aircrack-ng
 airtest=$(echo $?)
 
@@ -25,7 +28,7 @@ xtermtest=$(echo $?)
 test -f /usr/bin/macchanger
 macctest=$(echo $?)
 
-if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
+if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ] && [ $dumptool -eq 0 ]; then
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
@@ -123,7 +126,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								2)
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
-								timeuout 60 bash -c "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
+								timeout 60 bash -c "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
 								echo -e "\n${redColour} [%] Capturando Hashes\n"
 								sleep 2
 								hcxcaptool -z Hashes Hash; rm Hash 2>/dev/null
@@ -175,6 +178,8 @@ else
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
 			sudo apt-get update -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando  o actualizando hcxdumptool${endColour}"
+				sudo apt-get install hcxdumptool -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
 				sudo apt-get install xterm -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
@@ -186,6 +191,8 @@ else
 
 		if [ $distro == "2" ]; then
 			sudo pacman -Sy -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando o actualizando hcxdumptool...${endColour}"
+				sudo pacman -S hcxdumptool -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
 				sudo pacman -S macchanger -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
