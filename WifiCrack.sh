@@ -60,7 +60,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ] && [ $dumpt
 					if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 						while true; do
 							clear
-							echo -e "${grayColour}\n[+] Menu de ataque\n${endColour}"
+							echo -e "${grayColour}\n[+] Menu de ataques\n${endColour}"
 							echo -e "${redColour}"
 							echo -e "   #"
 							echo -e "    #	                             ( ( \ )  ( / ) )"
@@ -76,7 +76,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ] && [ $dumpt
 							echo -e "2) Ataque PKMID"
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Salir"
-							echo -e "${greenColour}"; read -p "Selecciona una opción: " opcion
+							echo -e "${greenColour}"; read -p "Seleccione un ataque: " opcion
 							$cleancolor
 							case $opcion in
 								1)
@@ -177,9 +177,10 @@ else
 	sleep 1
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
+			echo -e ${greenColour}"[*] Actualizando Repositorios..."
 			sudo apt-get update -y > /dev/null 2>&1
-			echo -e "${grayColour}[*] Instalando  o actualizando hcxdumptool${endColour}"
-				sudo apt-get install hcxdumptool -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando  o actualizando hcxtool${endColour}"
+				sudo apt-get install hcxtool -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
 				sudo apt-get install xterm -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
@@ -190,9 +191,10 @@ else
 		fi
 
 		if [ $distro == "2" ]; then
+			echo -e ${greenColour}"[*] Actualizando Repositorios..."
 			sudo pacman -Sy -y > /dev/null 2>&1
-			echo -e "${grayColour}[*] Instalando o actualizando hcxdumptool...${endColour}"
-				sudo pacman -S hcxdumptool -y > /dev/null 2>&1
+			echo -e "${grayColour}[*] Instalando o actualizando hcxtool...${endColour}"
+				sudo pacman -S hcxtools -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando macchanger...${endColour}"
 				sudo pacman -S macchanger -y > /dev/null 2>&1
 			echo -e "${grayColour}[*] Instalando o actualizando xterm...${endColour}"
