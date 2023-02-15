@@ -180,7 +180,7 @@ else
 	sleep 1
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
-			echo -e ${greenColour}"\n[*] Actualizando Repositorios..."
+			echo -e "${greenColour}\n[*] Actualizando Repositorios..."
 			sudo apt-get update -y > /dev/null 2>&1
 			echo -e "${grayColour}\n[*] Instalando  o actualizando hcxtool${endColour}"
 				sudo apt-get install hcxtool -y > /dev/null 2>&1
@@ -191,7 +191,7 @@ else
 			echo -e "${grayColour}\n[*] Instalando  o actualizando aircrack-ng...${endColour}"
 				sudo apt-get install aircrack-ng -y > /dev/null 2>&1
 			echo -e "${grayColour}\n[*] Instalando  o actualizando Hashcat...${endColour}"	
-				sudo apt-get install hashcat -y  > /dev/null 2>&1
+				sudo apt-get install hashcat -y > /dev/null 2>&1
 				sudo ./WifiCrack.sh
 
 		fi
@@ -205,7 +205,7 @@ else
 				sudo pacman -S macchanger -y > /dev/null 2>&1
 			echo -e "${grayColour}\n[*] Instalando o actualizando xterm...${endColour}"
 				sudo pacman -S xterm -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando  o actualizando aircrack-ng...${endColour}"
+			echo -e "${grayColour}\n[*] Instalando o actualizando aircrack-ng...${endColour}"
 				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
 				sudo ./WifiCrack.sh
 		fi
