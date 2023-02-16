@@ -41,7 +41,6 @@ if [ $(id -u) -ne 0 ]; then
 else
 	programs
 	clear
-	# Banner
 	echo -e "${turquoiseColour}"
 	echo " ( ( ( /\ ) ) )  "
 	echo "      /\/\      "  
