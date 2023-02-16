@@ -77,6 +77,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 							$cleancolor
 							case $opcion in
 								1)
+								clear
 								echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
 								sleep 1
 								xterm -hold -e "airodump-ng ${tar}mon" &
@@ -115,12 +116,12 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 									sudo /etc/init.d/networking restart > /dev/null 2>&1
 									ifconfig $tar up > /dev/null 2>&1
 									sudo rm Handshake* > /dev/null 2>&1
-									exit
 								else 
 									echo -e "${redColour}\n [!] No se ha capturado el Handshake"
 								fi
 								;;
 								2)
+								clear
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
 								echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
@@ -147,6 +148,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								fi
 								;;
 								3)
+								clear
 								echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
 								sleep 1
 								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
