@@ -11,21 +11,35 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 
+programs() {
+	clear
+	tput civis
+	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat)
+
+	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
+	sleep 1
+
+	for program in "${dependencias[@]}"; do
+		echo -e "\n${blueColour}[%] Programa ${program}..."
+		
+		test -f /usr/bin/$program
+
+		if [ "$(echo $?)" -eq 0 ]; then
+			echo -e "${greenColour}[+] Listo"
+		else 
+			echo -e "${redColour} [-] No instalada"
+			echo -r "${blueColour} [*] Instalando ${program}..." 
+			sudo apt-get install $program -y > /dev/null 2>&1
+		fi
+	done
+}
+
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
-exit 1
-fi
+	exit 1
 
-test -f /usr/bin/aircrack-ng
-airtest=$(echo $?)
-
-test -f /usr/bin/xterm
-xtermtest=$(echo $?)
-
-test -f /usr/bin/macchanger
-macctest=$(echo $?)
-
-if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
+else
+	programs
 	clear
 	# Banner
 	echo -e "${turquoiseColour}"
@@ -179,10 +193,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 					$cleancolor
 					exit
 				fi
-else
-	clear
-	echo -e "\n${purpleColour}[!] Se necesitan instalar dependencias\n"
-	sleep 1
+'''
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
 			echo -e "${greenColour}\n[*] Actualizando Repositorios y descargando las dependencias..."
@@ -194,7 +205,6 @@ else
 				sudo apt-get install hashcat -y > /dev/null 2>&1
 				sudo ./WifiCrack.sh
 
-		fi
 
 		if [ $distro == "2" ]; then
 			echo -e ${greenColour}"\n[*] Actualizando Repositorios..."
@@ -207,6 +217,5 @@ else
 				sudo pacman -S xterm -y > /dev/null 2>&1
 			echo -e "${grayColour}\n[*] Instalando o actualizando aircrack-ng...${endColour}"
 				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
-				sudo ./WifiCrack.sh
-		fi
-fi
+				sudo ./WifiCrack
+'''
