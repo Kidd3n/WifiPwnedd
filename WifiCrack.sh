@@ -20,15 +20,15 @@ programs() {
 	sleep 1
 
 	for program in "${dependencias[@]}"; do
-		echo -e "\n${blueColour}[%] Programa ${program}..."
+		echo -e "${blueColour}[%] Programa ${program}..."
 		
 		test -f /usr/bin/$program
 
 		if [ "$(echo $?)" -eq 0 ]; then
 			echo -e "${greenColour}[+] Listo"
 		else 
-			echo -e "${redColour} [-] No instalada"
-			echo -e "${blueColour} [*] Instalando ${program}..." 
+			echo -e "${redColour}[-] No instalada"
+			echo -e "${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
 	done
@@ -57,17 +57,18 @@ else
 		$cleancolor
 		iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			echo -e "${blueColour}"
+			tput cnorm
 			read -p "[?] Que tarjeta deseas usar: " tar
 				$cleancolor
-				echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+				teput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 				airmon-ng start $tar > /dev/null 2>&1
 				ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
 				ifconfig ${tar}mon up
 				airmon-ng check kill > /dev/null 2>&1
 				echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
 				echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
-				read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
-					$cleancolor
+				tput cnorm; read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
+					tput civis; $cleancolor
 					if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 						while true; do
 							clear
