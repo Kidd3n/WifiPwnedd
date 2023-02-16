@@ -114,6 +114,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 									airmon-ng stop ${tar}mon > /dev/null 2>&1
 									sudo /etc/init.d/networking start > /dev/null 2>&1
 									sudo /etc/init.d/networking restart > /dev/null 2>&1
+									sudo systemctl start NetworkManager > /dev/null 2>&1
 									ifconfig $tar up > /dev/null 2>&1
 									sudo rm Handshake* > /dev/null 2>&1
 								else 
@@ -162,6 +163,7 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								airmon-ng stop ${tar}mon > /dev/null 2>&1
 								sudo /etc/init.d/networking start > /dev/null 2>&1
 								sudo /etc/init.d/networking restart > /dev/null 2>&1
+								sudo systemctl start NetworkManager > /dev/null 2>&1
 								ifconfig $tar up > /dev/null 2>&1
 								sudo rm Handshake* > /dev/null 2>&1
 								exit
