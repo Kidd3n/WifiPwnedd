@@ -193,6 +193,7 @@ else
 					$cleancolor
 					exit
 				fi
+fi
 '''
 	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
 		if [ $distro == "1" ]; then	
