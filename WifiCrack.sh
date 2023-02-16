@@ -20,7 +20,7 @@ programs() {
 	sleep 1
 
 	for program in "${dependencias[@]}"; do
-		echo -e "${blueColour}[%] Programa ${program}..."
+		echo -e "${yellowColour}[%] Programa ${program}..."
 		
 		test -f /usr/bin/$program
 
@@ -60,7 +60,7 @@ else
 			tput cnorm
 			read -p "[?] Que tarjeta deseas usar: " tar
 				$cleancolor
-				teput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+				tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 				airmon-ng start $tar > /dev/null 2>&1
 				ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
 				ifconfig ${tar}mon up
@@ -89,7 +89,7 @@ else
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Salir"
 							tput cnorm
-							echo -e "${greenColour}"; read -p "Seleccione un ataque:" opcion
+							echo -e "${greenColour}"; read -p "Seleccione un ataque: " opcion
 							$cleancolor
 							case $opcion in
 								1)
@@ -145,7 +145,7 @@ else
 								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
 								sleep 1 
 								echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
-								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?:" seg
+								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
 								$cleancolor
 								xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 								hcxcaptool_PID=$!
@@ -187,6 +187,7 @@ else
 								sudo systemctl start NetworkManager > /dev/null 2>&1
 								ifconfig $tar up > /dev/null 2>&1
 								sudo rm Handshake* > /dev/null 2>&1
+								tput cnorm
 								exit
 								;;
 								*)
@@ -198,6 +199,7 @@ else
 				if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
 					echo -e "${redColour}\n[!] Saliendo"
 					$cleancolor
+					tput cnorm
 					exit
 				fi
 fi
