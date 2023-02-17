@@ -20,14 +20,12 @@ programs() {
 	sleep 1
 
 	for program in "${dependencias[@]}"; do
-		echo -e "${yellowColour}[%] Programa ${program}..."
-		
 		test -f /usr/bin/$program
 
 		if [ "$(echo $?)" -eq 0 ]; then
-			echo -e "${greenColour}[+] Listo"
+			echo -e "${greenColour}[+] $program listo"
 		else 
-			echo -e "${redColour}[-] No instalada"
+			echo -e "${redColour}[-] $program no instalada"
 			echo -e "${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
