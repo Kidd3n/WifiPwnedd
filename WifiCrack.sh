@@ -206,7 +206,8 @@ else
 								salir
 								;;
 								*)
-								echo "Opción inválida"
+								echo -e "${redColour}\n[!] Opción inválida"
+								sleep 2
 								;;
 							esac
 							done
