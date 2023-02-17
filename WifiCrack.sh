@@ -219,29 +219,3 @@ else
 					exit
 				fi
 fi
-'''
-	read -p "[?] Cual Distribucion estas usando? [1)Debian  2)Arch]: " distro
-		if [ $distro == "1" ]; then	
-			echo -e "${greenColour}\n[*] Actualizando Repositorios y descargando las dependencias..."
-				sudo apt-get update -y > /dev/null 2>&1
-				sudo apt-get install hcxtool -y > /dev/null 2>&1
-				sudo apt-get install xterm -y > /dev/null 2>&1
-				sudo apt-get install macchanger -y > /dev/null 2>&1
-				sudo apt-get install aircrack-ng -y > /dev/null 2>&1
-				sudo apt-get install hashcat -y > /dev/null 2>&1
-				sudo ./WifiCrack.sh
-
-
-		if [ $distro == "2" ]; then
-			echo -e ${greenColour}"\n[*] Actualizando Repositorios..."
-			sudo pacman -Sy -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando hcxtool...${endColour}"
-				sudo pacman -S hcxtools -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando macchanger...${endColour}"
-				sudo pacman -S macchanger -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando xterm...${endColour}"
-				sudo pacman -S xterm -y > /dev/null 2>&1
-			echo -e "${grayColour}\n[*] Instalando o actualizando aircrack-ng...${endColour}"
-				sudo pacman -S aircrack-ng -y > /dev/null 2>&1
-				sudo ./WifiCrack
-'''
