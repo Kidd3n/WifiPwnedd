@@ -50,6 +50,12 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
 - Puedes elejir el diccionario que quieras 
 
+### 4) Ataque evilTrus
+
+- Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
+
+- Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
+
 ## Como se ejecuta la herramienta? 
 
 ### Clonamos el repositorio
