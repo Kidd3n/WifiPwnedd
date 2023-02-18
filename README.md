@@ -11,7 +11,8 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 - Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
 ## Menu de ataques 
-![Menu ataque](https://user-images.githubusercontent.com/89719224/219447188-b3701de8-1b3a-4666-b564-114e0f59789d.png)
+![evil](https://user-images.githubusercontent.com/89719224/219881877-96c20be5-e333-4f5e-b5f6-6aea61e1a24c.png)
+
 
 
 ### 1) Ataque Handshake 
