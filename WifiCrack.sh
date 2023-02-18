@@ -129,11 +129,14 @@ evil_ataque() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sleep 7
-	echo -e "${blueColour}\n[*]Clonando el programa..."; git clone https://github.com/Kidd3n/evilTrust.git > /dev/null 2>&1
+	sleep 10
+	echo -e "${blueColour}\n[*] Clonando el programa..."
+	git clone https://github.com/Kidd3n/evilTrust.git > /dev/null 2>&1
 	cd evilTrust
 	chmod 755 evilTrust.sh
-	xterm -hold -e "sudo ./evilTrust.sh -m terminal" &
+	sudo ./evilTrust.sh -m terminal
+	cd .. 
+	sudo rm -r evilTrust
 }
 
 
