@@ -50,7 +50,7 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 
 - Puedes elejir el diccionario que quieras 
 
-### 4) Ataque evilTrus
+### 4) Ataque evilTrust
 
 - Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
 
