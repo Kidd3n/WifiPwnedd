@@ -4,7 +4,7 @@
 ![Aircrack---ng-lightgrey](https://user-images.githubusercontent.com/89719224/216780435-f0d943b3-9f94-4ae8-aee0-409dd954aea5.svg)
 
 
-Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
+Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 - Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
 
