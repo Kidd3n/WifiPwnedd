@@ -243,8 +243,8 @@ else
 							echo -e "2) Ataque PKMID"
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Ataque evilTrust (S4vitar)"
-							echo -e "5) Scanner de la red local"
-							echo -e "6) Salir"
+							#echo -e "5) Scanner de la red local"
+							echo -e "5) Salir"
 							tput cnorm
 							echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 							$cleancolor
@@ -262,7 +262,7 @@ else
 								evil_ataque
 								;;
 								5)
-								scanner
+								salir
 								;;
 								6)
 								salir
