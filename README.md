@@ -4,14 +4,15 @@
 ![Aircrack---ng-lightgrey](https://user-images.githubusercontent.com/89719224/216780435-f0d943b3-9f94-4ae8-aee0-409dd954aea5.svg)
 
 
-Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
+Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 - Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
 
 - Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
 ## Menu de ataques 
-![Menu ataque](https://user-images.githubusercontent.com/89719224/219447188-b3701de8-1b3a-4666-b564-114e0f59789d.png)
+![evil](https://user-images.githubusercontent.com/89719224/219881877-96c20be5-e333-4f5e-b5f6-6aea61e1a24c.png)
+
 
 
 ### 1) Ataque Handshake 
@@ -49,6 +50,12 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK)
 - Por el momento solo esta disponible para Handshake .cap 
 
 - Puedes elejir el diccionario que quieras 
+
+### 4) Ataque evilTrust
+
+- Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
+
+- Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
 
 ## Como se ejecuta la herramienta? 
 
