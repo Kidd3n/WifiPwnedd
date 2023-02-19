@@ -146,31 +146,37 @@ scanner() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sleep 10
-	ip="192.168.1.1-254"
+	sleep 15
+	red="192.168.1.1-254"
 
-	nmap -sP $ip > /dev/null
-	output=$(grep -E -o '([0-9]{1,3}\.){3}[0-9]{1,3}|([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' /proc/net/arp)
-	function guess_os {
-	local ip=$1
-	local ttl=$(ping -c 1 $ip | grep -o 'ttl=[0-9]*' | cut -d= -f2)
-	if [ $ttl -gt 60 ] && [ $ttl -lt 90 ]; then
+	
+	nmap -sP "$red" > /dev/null
+	salida_arp=$(grep -E -o '([0-9]{1,3}\.){3}[0-9]{1,3}|([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' /proc/net/arp)
+
+
+	function adivinar_so {
+	local ip="$1"
+	local ttl=$(ping -c 1 "$ip" | grep -o 'ttl=[0-9]*' | cut -d= -f2)
+	if [[ -n "$ttl" && "$ttl" -gt 60 && "$ttl" -lt 90 ]]; then
 		echo "Linux"
-	elif [ $ttl -gt 110 ] && [ $ttl -lt 140 ]; then
+	elif [[ -n "$ttl" && "$ttl" -gt 110 && "$ttl" -lt 140 ]]; then
 		echo "Windows"
 	else
 		echo "Desconocido"
 	fi
 	}
+	printf "%-15s %-20s %-25s %s\n" "Host" "IP" "MAC" "OS"
+	printf "%-15s %-20s %-25s %s\n" "----" "--" "---" "--"
+	while read -r linea; do
 
-	echo -e "Host\t\tIP\t\t\tMAC\t\t\t\tOS"
-	echo -e "----\t\t--\t\t\t---\t\t\t\t--"
-	while read -r line; do
-	ip=$(echo $line | awk '{print $1}')
-	mac=$(echo $line | awk '{print $2}')
-	os=$(guess_os $ip)
-	echo -e "$ip\t$mac\t\t$os"
-	done <<< "$output"
+	ip=$(echo "$linea" | awk '{print $1}')
+	mac=$(echo "$linea" | awk '{print $2}')
+
+	if [[ "$ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+		so=$(adivinar_so "$ip")
+		printf "%-15s %-20s %-25s %s\n" "$ip" "$mac" "$so"
+	fi
+	done <<< "$salida_arp"
 
 }
 
