@@ -140,13 +140,17 @@ evil_ataque() {
 }
 
 scanner() {
-	
+	clear; echo -e "\n${grayColour}[*] Iniciando Scanner..."
+	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	sudo /etc/init.d/networking start > /dev/null 2>&1
+	sudo /etc/init.d/networking restart > /dev/null 2>&1
+	sudo systemctl start NetworkManager > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	sleep 10
 	ip="192.168.1.1-254"
 
 	nmap -sP $ip > /dev/null
-
 	output=$(grep -E -o '([0-9]{1,3}\.){3}[0-9]{1,3}|([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' /proc/net/arp)
-
 	function guess_os {
 	local ip=$1
 	local ttl=$(ping -c 1 $ip | grep -o 'ttl=[0-9]*' | cut -d= -f2)
