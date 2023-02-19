@@ -148,22 +148,19 @@ scanner() {
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 15
 	red="192.168.1.1-254"
-
-	
-	nmap -sP "$red" > /dev/null
+	nmap -sP $red > /dev/null
 	salida_arp=$(grep -E -o '([0-9]{1,3}\.){3}[0-9]{1,3}|([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' /proc/net/arp)
 
-
 	function adivinar_so {
-	local ip="$1"
-	local ttl=$(ping -c 1 "$ip" | grep -o 'ttl=[0-9]*' | cut -d= -f2)
-	if [[ -n "$ttl" && "$ttl" -gt 60 && "$ttl" -lt 90 ]]; then
-		echo "Linux"
-	elif [[ -n "$ttl" && "$ttl" -gt 110 && "$ttl" -lt 140 ]]; then
-		echo "Windows"
-	else
-		echo "Desconocido"
-	fi
+		local ip="$1"
+		local ttl=$(ping -c 1 $ip | grep -o 'ttl=[0-9]*' | cut -d= -f2)
+		if [[ -n $ttl && $ttl -gt 60 && $ttl -lt 90 ]]; then
+			echo "Linux"
+		elif [[ -n $ttl && "$ttl" -gt 110 && $ttl -lt 140 ]]; then
+			echo "Windows"
+		else
+			echo "Desconocido"
+		fi
 	}
 	printf "%-15s %-20s %-25s %s\n" "Host" "IP" "MAC" "OS"
 	printf "%-15s %-20s %-25s %s\n" "----" "--" "---" "--"
