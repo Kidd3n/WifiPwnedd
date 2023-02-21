@@ -83,7 +83,7 @@ handshake_ataque() {
 
 pkmid_ataque() {
 	clear
-	echo -e "\n${greenColour}[*] Iniciando ataque PKMID..\n"
+	echo -e "\n${greenColour}[*] Iniciando ataque PMKID..\n"
 	sleep 1 
 	echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
 	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
@@ -212,11 +212,11 @@ else
 							echo -e "    ###=====================/             +----+"
 							echo -e "    #"
 							echo -e "   #"
-							sleep 1
+							sleep 0.5
 							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
-							echo -e "2) Ataque PKMID"
+							echo -e "2) Ataque PMKID"
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Ataque evilTrust (S4vitar)"
 							echo -e "5) Scanner de la red local"
