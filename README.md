@@ -37,7 +37,7 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 - Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
 
-### 2) Ataque PKMID 
+### 2) Ataque PMKID 
 
 - Esperara el paquete necesario por 60 segundos
 
