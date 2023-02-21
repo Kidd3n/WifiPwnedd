@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat git)
+	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat git nmap)
 
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 1
@@ -140,43 +140,17 @@ evil_ataque() {
 }
 
 scanner() {
-	clear; echo -e "\n${grayColour}[*] Iniciando Scanner..."
+	echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sleep 15
-	red="192.168.1.1-254"
-	nmap -sP $red > /dev/null
-	salida_arp=$(grep -E -o '([0-9]{1,3}\.){3}[0-9]{1,3}|([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}' /proc/net/arp)
-
-	function adivinar_so {
-		local ip="$1"
-		local ttl=$(ping -c 1 $ip | grep -o 'ttl=[0-9]*' | cut -d= -f2)
-		if [[ -n $ttl && $ttl -gt 60 && $ttl -lt 90 ]]; then
-			echo "Linux"
-		elif [[ -n $ttl && "$ttl" -gt 110 && $ttl -lt 140 ]]; then
-			echo "Windows"
-		else
-			echo "Desconocido"
-		fi
-	}
-	printf "%-15s %-20s %-25s %s\n" "Host" "IP" "MAC" "OS"
-	printf "%-15s %-20s %-25s %s\n" "----" "--" "---" "--"
-	while read -r linea; do
-
-	ip=$(echo "$linea" | awk '{print $1}')
-	mac=$(echo "$linea" | awk '{print $2}')
-
-	if [[ "$ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-		so=$(adivinar_so "$ip")
-		printf "%-15s %-20s %-25s %s\n" "$ip" "$mac" "$so"
-	fi
-	done <<< "$salida_arp"
-
+	sleep 10
+	echo -e "\n${yellowColour}[?]Cual es tu subred? (Ejemplo: 192.168.1): " read ipnmap
+	nmap -sP -Pn ${ipnmap}0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
+	read -p "Enter para salir: "
 }
-
 
 salir() {
 	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
@@ -243,8 +217,8 @@ else
 							echo -e "2) Ataque PKMID"
 							echo -e "3) Ataque de fuerza bruta"
 							echo -e "4) Ataque evilTrust (S4vitar)"
-							#echo -e "5) Scanner de la red local"
-							echo -e "5) Salir"
+							echo -e "5) Scanner de la red local"
+							echo -e "6) Salir"
 							tput cnorm
 							echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 							$cleancolor
@@ -262,7 +236,7 @@ else
 								evil_ataque
 								;;
 								5)
-								salir
+								scanner
 								;;
 								6)
 								salir
