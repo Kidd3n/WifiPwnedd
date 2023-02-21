@@ -148,9 +148,9 @@ scanner() {
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 10
 	read -p "[?] Cual es tu subred? (Ejemplo: 192.168.1): " ipnmap
-	echo -e "\n------------------------------------------------"
+	echo -e "\n---------------------------------------------------\n"
 	nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
-	echo -e "\n------------------------------------------------"
+	echo -e "\n---------------------------------------------------"
 	read -p "Enter para salir: "
 }
 
