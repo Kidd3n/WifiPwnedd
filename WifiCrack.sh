@@ -140,14 +140,14 @@ evil_ataque() {
 }
 
 scanner() {
-	echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
+	clear; echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 10
-	echo -e "\n${yellowColour}[?]Cual es tu subred? (Ejemplo: 192.168.1): " read ipnmap
+	read -p "[?] Cual es tu subred? (Ejemplo: 192.168.1): " ipnmap
 	nmap -sP -Pn ${ipnmap}0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	read -p "Enter para salir: "
 }
