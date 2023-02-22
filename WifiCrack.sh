@@ -134,11 +134,14 @@ fuerza_.cap() {
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
 
+fuerza_rainbow() {
+	read -p "[?] Nombre del archivo .cap: " cap
+	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
+}
+
 rainbowtaibles() {
 	clear; echo -e "\n${yellowColour}[*] Iniciando..."
 	read -p "[?] Ruta del diccionario: " ruta
-	mkdir Diccionario hasheado
-	cd Diccionario hasheado
 	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hasheado
 	if [ "$(echo $?)" -eq 0 ]; then
@@ -150,6 +153,12 @@ rainbowtaibles() {
 		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
+		read -p "[?] Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " attak
+		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
+			fuerza_rainbow
+		else
+			echo -e "\n${redColour}[!] Saliendo"
+		fi
 	else
 		echo -e "\n${redColour}[!] No se pudo crear el diccionario o pusiste mal la ruta del diccionario"
 		sleep 2
@@ -159,7 +168,8 @@ rainbowtaibles() {
 menuforce() {
 	echo -e "${yellowColour}\n1) Ataque Fuerza bruta (.cap)"
 	echo -e "2) Crear diccionario hasheado (Rainbow taibles)"
-	echo -e "3) Salir"
+	echo -e "3) Ataque fuerza bruta con diccionario hasheado"
+	echo -e "4) Salir"
 	case $force in 
 	1)
 	fuerza_.cap
@@ -168,6 +178,9 @@ menuforce() {
 	rainbowtaibles
 	;;
 	3)
+	fuerza_rainbow
+	;;
+	4)
 	salir
 	;;
 	*)
