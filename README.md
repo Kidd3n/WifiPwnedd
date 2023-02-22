@@ -3,17 +3,29 @@
 ![Wifi-Crack-critical](https://user-images.githubusercontent.com/89719224/216780347-516cd39c-132b-4082-b1e1-174aec9ec5a8.svg)
 ![Aircrack---ng-lightgrey](https://user-images.githubusercontent.com/89719224/216780435-f0d943b3-9f94-4ae8-aee0-409dd954aea5.svg)
 
-
 Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
-- Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
+❗ Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
 
-- Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
+## Como se ejecuta la herramienta? 
+
+```
+cd WifiCrack
+```
+
+```
+chmod 755 WifiCrack.sh
+```
+```
+sudo ./WifiCrack.sh
+```
 
 ## Menu de ataques 
 ![evil](https://user-images.githubusercontent.com/89719224/219881877-96c20be5-e333-4f5e-b5f6-6aea61e1a24c.png)
 
+- Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
 
+- Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
 ### 1) Ataque Handshake 
 
@@ -45,11 +57,11 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 - Si no lo captura se cerrara el programa
 
-### 3) Ataque Fuerza Bruta
+### 3) Menu Fuerza Bruta
 
-- Por el momento solo esta disponible para Handshake .cap 
+- Tendremos varia opciones la primera es para atacar un archivo .cap 
 
-- Puedes elejir el diccionario que quieras 
+- El segundo lo que podemos hacer es un diccionario precomputado, esto hara que sea mas rapido el proceso de fuerza bruta
 
 ### 4) Ataque evilTrust
 
@@ -57,28 +69,6 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 - Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
 
-## Como se ejecuta la herramienta? 
+### 5) Scanner
 
-### Clonamos el repositorio
-```batch
-    ┌──(kidden㉿kidd3n)-[~]
-    └─$ git clone https://github.com/Kidd3n/WifiCrack.git
-```
-### Vamos a la carpeta
-```batch
-    ┌──(kidden㉿kidd3n)-[~]
-    └─$ cd WifiCrack
-```
-### Le damos permiso de ejecucion a la herramienta
-```batch
-    ┌──(kidden㉿kidd3n)-[~]
-    └─$ chmod 755 WifiCrack.sh
-```
-### Ejecutamos la herramienta como root
-```batch
-    ┌──(kidden㉿kidd3n)-[~]
-    └─$ sudo ./WifiCrack.sh
-```
-![image](https://user-images.githubusercontent.com/89719224/216750782-c4c7908d-f428-4263-8e8f-57b61154af76.png)
-
-#### [!] Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
+- Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
