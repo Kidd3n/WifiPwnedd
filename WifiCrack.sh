@@ -14,18 +14,18 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hcxtools hashcat git nmap)
+	dependencias=(aircrack-ng macchanger xterm hashcat git nmap hcxtools)
 
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
-	sleep 1
+	sleep 0.5
 
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
 
 		if [ "$(echo $?)" -eq 0 ]; then
-			echo -e "${greenColour}[+] $program listo"
+			echo -e "\n${greenColour}[V] $program listo"
 		else 
-			echo -e "${redColour}[-] $program no instalado"
+			echo -e "${redColour}[X] $program no instalado"
 			echo -e "${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
@@ -269,7 +269,6 @@ else
 	tput cnorm
 	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
 	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
-	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			read -p "[?] Que tarjeta deseas usar: " tar
@@ -341,5 +340,6 @@ else
 			fi
 		else
 			menunomon
+		fi
 
 fi
