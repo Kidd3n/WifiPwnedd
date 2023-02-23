@@ -24,8 +24,10 @@ programs() {
 
 		if [ "$(echo $?)" -eq 0 ]; then
 			echo -e "\n${greenColour}[V] $program listo"
+			sleep 0.5
 		else 
 			echo -e "${redColour}[X] $program no instalado"
+			sleep 0.5
 			echo -e "${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
