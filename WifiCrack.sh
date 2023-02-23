@@ -166,10 +166,11 @@ rainbowtaibles() {
 }
 
 menuforce() {
-	echo -e "${yellowColour}\n1) Ataque Fuerza bruta (.cap)"
+	clear; echo -e "${yellowColour}\n1) Ataque Fuerza bruta (.cap)"
 	echo -e "2) Crear diccionario hasheado (Rainbow taibles)"
 	echo -e "3) Ataque fuerza bruta con diccionario hasheado"
 	echo -e "4) Salir"
+	echo -e "${greenColour}"; read -p "Seleccione una opcion: " force 
 	case $force in 
 	1)
 	fuerza_.cap
@@ -187,8 +188,7 @@ menuforce() {
 	echo -e "${redColour}\n[!] Opción inválida"
 	sleep 2
 	;;
-	esac 
-	done
+	esac
 }
 
 
@@ -291,7 +291,7 @@ else
 								pkmid_ataque
 								;;
 								3)
-								fuerza_ataque
+								menuforce
 								;;
 								4)
 								evil_ataque
