@@ -23,12 +23,12 @@ programs() {
 		test -f /usr/bin/$program
 
 		if [ "$(echo $?)" -eq 0 ]; then
-			echo -e "\n${greenColour}[V] $program listo"
+			echo -e "\n${greenColour}[+] $program listo"
 			sleep 0.5
 		else 
-			echo -e "${redColour}[X] $program no instalado"
+			echo -e "\n${redColour}[-] $program no instalado"
 			sleep 0.5
-			echo -e "${blueColour}[*] Instalando ${program}..." 
+			echo -e "\n${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
 	done
@@ -269,8 +269,8 @@ else
 	read -p "[+] Enter para continuar"
 	$cleancolor
 	tput cnorm
-	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
 	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
+	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			read -p "[?] Que tarjeta deseas usar: " tar
