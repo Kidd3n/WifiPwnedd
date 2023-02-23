@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hcxtool hashcat git nmap)
+	dependencias=(aircrack-ng macchanger xterm hcxtools hashcat git nmap)
 
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 1
@@ -182,7 +182,7 @@ menuforce() {
 	fuerza_rainbow
 	;;
 	4)
-	salir
+	echo -e "\n[*] Saliendo..."
 	;;
 	*)
 	echo -e "${redColour}\n[!] Opción inválida"
@@ -224,6 +224,27 @@ scanner() {
 	echo -e "\n---------------------------------------------------"
 	read -p "Enter para salir: "
 }
+menunomon() {
+	clear; echo -e "${yellowColour}\n1) Menu fuerza bruta"
+	echo -e "2) Scanner de la red local"
+	echo -e "3) Salir"
+	echo -e "${greenColour}"; read -p "Seleccione una opcion: " force 
+	case $force in 
+	1)
+	menuforce
+	;;
+	2)
+	scanner
+	;;
+	3)
+	echo -e "\n[*] Saliendo..."
+	;;
+	*)
+	echo -e "${redColour}\n[!] Opción inválida"
+	sleep 2
+	;;
+	esac
+}
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
@@ -244,75 +265,81 @@ else
 	echo -e "${purpleColour}"
 	echo "[+] Github: https://github.com/kidd3n"
 	read -p "[+] Enter para continuar"
-		$cleancolor
-		iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -e "${blueColour}"
-			tput cnorm
+	$cleancolor
+	tput cnorm
+	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
+	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
+	$cleancolor
+		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
+			iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			read -p "[?] Que tarjeta deseas usar: " tar
+			$cleancolor
+			tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+			airmon-ng start $tar > /dev/null 2>&1
+			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
+			ifconfig ${tar}mon up
+			airmon-ng check kill > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
+			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
+			tput cnorm; read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
+			tput civis; $cleancolor
+			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
+				while true; do
+				clear
+				echo -e "${grayColour}\n[+] Menu de ataques\n${endColour}"
+				echo -e "${redColour}"
+				echo -e "   #"
+				echo -e "    #	                             ( ( \ )  ( / ) )"
+				echo -e "    ###=====================\      	  \----/"
+				echo -e "    ###==WifiCrack by kidd3n ----->  	  |    |"
+				echo -e "    ###=====================/             +----+"
+				echo -e "    #"
+				echo -e "   #"
+				sleep 0.5
+				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
+				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
+				echo -e "${yellowColour}\n1) Ataque Handshake"
+				echo -e "2) Ataque PMKID"
+				echo -e "3) Menu de ataques con fuerza bruta"
+				echo -e "4) Ataque evilTrust (S4vitar)"
+				echo -e "5) Scanner de la red local"
+				echo -e "6) Salir"
+				tput cnorm
+				echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 				$cleancolor
-				tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
-				airmon-ng start $tar > /dev/null 2>&1
-				ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
-				ifconfig ${tar}mon up
-				airmon-ng check kill > /dev/null 2>&1
-				echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
-				echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
-				tput cnorm; read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
-					tput civis; $cleancolor
-					if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
-						while true; do
-							clear
-							echo -e "${grayColour}\n[+] Menu de ataques\n${endColour}"
-							echo -e "${redColour}"
-							echo -e "   #"
-							echo -e "    #	                             ( ( \ )  ( / ) )"
-							echo -e "    ###=====================\      	  \----/"
-							echo -e "    ###==WifiCrack by kidd3n ----->  	  |    |"
-							echo -e "    ###=====================/             +----+"
-							echo -e "    #"
-							echo -e "   #"
-							sleep 0.5
-							echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
-							echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
-							echo -e "${yellowColour}\n1) Ataque Handshake"
-							echo -e "2) Ataque PMKID"
-							echo -e "3) Menu de ataques con fuerza bruta"
-							echo -e "4) Ataque evilTrust (S4vitar)"
-							echo -e "5) Scanner de la red local"
-							echo -e "6) Salir"
-							tput cnorm
-							echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
-							$cleancolor
-							case $opcion in
-								1)
-								handshake_ataque
-								;;
-								2)
-								pkmid_ataque
-								;;
-								3)
-								menuforce
-								;;
-								4)
-								evil_ataque
-								;;
-								5)
-								scanner
-								;;
-								6)
-								salir
-								;;
-								*)
-								echo -e "${redColour}\n[!] Opción inválida"
-								sleep 2
-								;;
-							esac
-							done
-					fi
-				if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
-					echo -e "${redColour}\n[!] Saliendo"
-					$cleancolor
-					tput cnorm
-					exit
-				fi
+				case $opcion in
+				1)
+				handshake_ataque
+				;;
+				2)
+				pkmid_ataque
+				;;
+				3)
+				menuforce
+				;;
+				4)
+				evil_ataque
+				;;
+				5)
+				scanner
+				;;
+				6)
+				salir
+				;;
+				*)
+				echo -e "${redColour}\n[!] Opción inválida"
+				sleep 2
+				;;
+				esac
+				done
+			fi
+			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
+				echo -e "${redColour}\n[!] Saliendo"
+				$cleancolor
+				tput cnorm
+				exit
+			fi
+		else
+			menunomon
+
 fi
