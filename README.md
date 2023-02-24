@@ -1,4 +1,4 @@
-## WifiCrack
+## WifiPwnedd
 ![Bash-Scripting-brightgreen](https://user-images.githubusercontent.com/89719224/216780401-60655d5f-6804-4a3d-a9f2-3a02a1a3f9c8.svg)
 ![Wifi-Crack-critical](https://user-images.githubusercontent.com/89719224/216780347-516cd39c-132b-4082-b1e1-174aec9ec5a8.svg)
 ![Aircrack---ng-lightgrey](https://user-images.githubusercontent.com/89719224/216780435-f0d943b3-9f94-4ae8-aee0-409dd954aea5.svg)
@@ -10,13 +10,10 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 ## Como se ejecuta la herramienta? 
 
 ```
-cd WifiCrack
-```
+cd WifiPwnedd
 
-```
 chmod 755 WifiCrack.sh
-```
-```
+
 sudo ./WifiCrack.sh
 ```
 
