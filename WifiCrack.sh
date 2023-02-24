@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hashcat git nmap hcxtools)
+	dependencias=(aircrack-ng macchanger xterm hashcat git nmap hcxtools greep net-tools)
 
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 0.5
@@ -27,7 +27,7 @@ programs() {
 			sleep 0.5
 		else 
 			echo -e "\n${redColour}[-] $program no instalado"
-			sleep 0.5
+			sleep 1
 			echo -e "\n${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
 		fi
@@ -250,7 +250,7 @@ menunomon() {
 }
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
-	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)"
+	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
 	exit 1
 # Programa principal
 else
@@ -274,8 +274,8 @@ else
 	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
-			iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			read -p "[?] Que tarjeta deseas usar: " tar
+			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
+			echo -e "\n"; read -p "[?] Que tarjeta deseas usar: " tar
 			$cleancolor
 			tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 			airmon-ng start $tar > /dev/null 2>&1
