@@ -14,11 +14,19 @@ cleancolor="echo -e "${endColour}""
 programs() {
 	clear
 	tput civis
-	dependencias=(aircrack-ng macchanger xterm hashcat git nmap hcxtools greep net-tools)
-
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
+	test -f /usr/bin/macchanger
+	mactest=$(echo= $?)
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 0.5
-
+	if [ $mactest -eq 0 ]; then 
+		echo -e "\n${greenColour}[+] macchanger listo"
+	
+	else
+		echo -e "${blueColour}[*] Instalando macchanger..."
+		sudo apt-get install macchanger -y 
+		clear
+	fi
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
 
@@ -30,6 +38,7 @@ programs() {
 			sleep 1
 			echo -e "\n${blueColour}[*] Instalando ${program}..." 
 			sudo apt-get install $program -y > /dev/null 2>&1
+
 		fi
 	done
 }
