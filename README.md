@@ -11,12 +11,9 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 
 ```
 cd WifiCrack
-```
 
-```
 chmod 755 WifiCrack.sh
-```
-```
+
 sudo ./WifiCrack.sh
 ```
 
