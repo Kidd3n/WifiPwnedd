@@ -12,9 +12,9 @@ Herramienta para automatizar ataques WiFi (WPA/WPA2 - PSK - Hijacking)
 ```
 cd WifiPwnedd
 
-chmod 755 WifiCrack.sh
+chmod 755 WifiPwnedd.sh
 
-sudo ./WifiCrack.sh
+sudo ./WifiPwnedd.sh
 ```
 
 ## Menu de ataques 
