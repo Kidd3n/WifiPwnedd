@@ -21,7 +21,6 @@ programs() {
 	sleep 0.5
 	if [ $mactest -eq 0 ]; then 
 		echo -e "\n${greenColour}[+] macchanger listo"
-	
 	else
 		echo -e "${blueColour}[*] Instalando macchanger..."
 		sudo apt-get install macchanger -y 
