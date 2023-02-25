@@ -15,7 +15,7 @@ programs() {
 	clear; tput civis
 	
 	test -f /usr/bin/macchanger
-	mactest=$(echo=$?)
+	mactest=$(echo $?)
 	if [ $mactest -eq 0 ]; then
 		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 		sleep 0.5
