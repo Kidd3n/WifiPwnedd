@@ -216,13 +216,10 @@ evil_ataque() {
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 10
-	echo -e "${blueColour}\n[*] Clonando el programa..."
-	git clone https://github.com/Kidd3n/evilTrust.git > /dev/null 2>&1
-	cd evilTrust
+	cd src; cd evilTrust
 	chmod 755 evilTrust.sh
 	sudo ./evilTrust.sh -m terminal
-	cd .. 
-	sudo rm -r evilTrust
+	cd ..; cd ..
 }
 # 5) ataque
 scanner() {
