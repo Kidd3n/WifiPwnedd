@@ -19,7 +19,7 @@ programs() {
 	mactest=$(echo= $?)
 	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	sleep 0.5
-	if [ $mactest -eq 0 ]; then 
+	if [ "$mactest" == "0" ]; then 
 		echo -e "\n${greenColour}[+] macchanger listo"
 	else
 		echo -e "${blueColour}[*] Instalando macchanger..."
@@ -309,7 +309,8 @@ else
 				sleep 0.5
 				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
-				echo -e "${yellowColour}\n1) Ataque Handshake"
+				echo -e "${grayColour}\n[+] Ataques Wifi\t[+] Wifiphisher"
+				echo -e "${yellowColour}1) Ataque Handshake"
 				echo -e "2) Ataque PMKID"
 				echo -e "3) Menu de ataques con fuerza bruta"
 				echo -e "4) Ataque evilTrust (S4vitar)"
