@@ -12,10 +12,11 @@ grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 # Comprobacion e instalacion de la dependencias
 programs() {
-	clear
-	tput civis
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
-	if test -f /usr/bin/macchanger; then
+	clear; tput civis
+	
+	test -f /usr/bin/macchanger
+	mactest=$(echo=$?)
+	if [ $mactest -eq 0 ]; then
 		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 		sleep 0.5
 		echo -e "\n${greenColour}[+] macchanger listo"
@@ -23,11 +24,12 @@ programs() {
 		echo -e "${blueColour}[*] Instalando macchanger..."
 		sudo apt-get install macchanger -y
 		clear
+		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
 	fi
-
+	
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
-
 		if [ "$(echo $?)" -eq 0 ]; then
 			echo -e "\n${greenColour}[+] $program listo"
 			sleep 0.5
