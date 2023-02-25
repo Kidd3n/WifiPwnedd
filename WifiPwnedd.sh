@@ -27,7 +27,7 @@ programs() {
 		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 	fi
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools)
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
 		if [ "$(echo $?)" -eq 0 ]; then
@@ -269,14 +269,11 @@ else
 	programs
 	clear
 	echo -e "${turquoiseColour}"
-	echo " ( ( ( /\ ) ) )  "
-	echo "      /\/\      "  
-	echo "     /\/\/\      " 
-	echo "    /)/\/\(\   "
-	echo "   /\/\/\/\/\ "
-	echo "  / O O O O  \ "
-	echo "WifiPwnedd ByKidd3n"
-	echo "/\/\/\/\/\/\/\/\ "
+	echo "  _       __  _   ____  _      ____                                __      __ "
+	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
+	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
+	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
+	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
 	echo -e "${purpleColour}"
 	echo "[+] Github: https://github.com/kidd3n"
 	read -p "[+] Enter para continuar"
