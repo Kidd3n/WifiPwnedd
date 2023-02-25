@@ -280,7 +280,7 @@ else
 	read -p "[+] Enter para continuar"
 	$cleancolor
 	tput cnorm
-	echo -e "\n${grayColour}[*] Recomendable y necesario para algunos ataques"
+	echo -e "\n${grayColour}[*] El modo monitor es recomendable y necesario para algunos ataques"
 	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
