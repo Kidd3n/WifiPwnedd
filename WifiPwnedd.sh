@@ -17,14 +17,14 @@ programs() {
 	test -f /usr/bin/macchanger
 	mactest=$(echo $?)
 	if [ $mactest -eq 0 ]; then
-		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
+		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 		sleep 0.5
 		echo -e "\n${greenColour}[+] macchanger listo"
 	else
 		echo -e "${blueColour}[*] Instalando macchanger..."
 		sudo apt-get install macchanger -y
 		clear
-		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
+		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 	fi
 	
 	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
@@ -94,6 +94,7 @@ handshake_ataque() {
 # salida
 salir() {
 	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+	tput civis
 	airmon-ng stop ${tar}mon > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
@@ -146,7 +147,8 @@ fuerza_.cap() {
 }
 
 fuerza_rainbow() {
-	read -p "[?] Nombre del archivo .cap: " cap
+	read -p "[?] Ruta del archivo .cap : " cap
+	cd WifiPwnedd
 	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
 }
 
@@ -160,10 +162,11 @@ rainbowtaibles() {
 		echo "$ap" > essid.lst
 		airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
 		airolib-ng dicc-hasheado --clean all 
-		read -p "[?] Cuanto quieres que dure el proceso de hasheo?: " seg
+		read -p "[?] Cuantos segundos quieres que dure el proceso de hasheo?: " seg
 		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
+		echo -e "\n${greenColour}[+] Diccionario listo (Nombre: dicc-hasheado)"
 		read -p "[?] Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " attak
 		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
 			fuerza_rainbow
@@ -272,7 +275,7 @@ else
 	echo "    /)/\/\(\   "
 	echo "   /\/\/\/\/\ "
 	echo "  / O O O O  \ "
-	echo "WifiPwned ByKidd3n"
+	echo "WifiPwnedd ByKidd3n"
 	echo "/\/\/\/\/\/\/\/\ "
 	echo -e "${purpleColour}"
 	echo "[+] Github: https://github.com/kidd3n"
@@ -303,7 +306,7 @@ else
 				echo -e "   #"
 				echo -e "    #	                             ( ( \ )  ( / ) )"
 				echo -e "    ###=====================\      	  \----/"
-				echo -e "    ###= WifiPwneed by kidd3n ----->  	  |    |"
+				echo -e "    ###= WifiPwnedd by kidd3n ----->  	  |    |"
 				echo -e "    ###=====================/             +----+"
 				echo -e "    #"
 				echo -e "   #"
@@ -311,10 +314,10 @@ else
 				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${grayColour}\n[+] Hacking Wifi\t\t[+] Wifiphisher\t\t[+] Cracking password"
-				echo -e "${yellowColour}\n1) Ataque Handshake\t\t\n4) EvilTrust (S4vitar)\t\t\n5) Ataque Fuerza bruta (.cap)"
-				echo -e "2) Ataque PMKID\t\t\t\t\t6) Crear diccionario hasheado (Rainbow taibles)"
+				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Ataque Fuerza bruta (.cap)"
+				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) Crear diccionario hasheado (Rainbow taibles)"
 				echo -e "3) Scanner de la red local"
-				echo -e "\n7) Salir"
+				echo -e "${redColour}\n7) Salir"
 				tput cnorm
 				echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 				$cleancolor
