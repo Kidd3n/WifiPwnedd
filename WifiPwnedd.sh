@@ -89,6 +89,7 @@ handshake_ataque() {
 		sudo rm Handshake* > /dev/null 2>&1
 	else 
 		echo -e "${redColour}\n [!] No se ha capturado el Handshake"
+		sleep 2
 	fi
 }
 # salida
@@ -131,7 +132,7 @@ pkmid_ataque() {
 		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
 	else 
 		echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
-		exit
+		sleep 2
 	fi
 }
 # 3) ataque
