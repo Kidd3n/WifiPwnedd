@@ -1,4 +1,4 @@
-#!/bin/bash
+	#!/bin/bash
 
 # Modulo de colores 
 greenColour="\e[0;32m\033[1m"
@@ -15,17 +15,16 @@ programs() {
 	clear
 	tput civis
 	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools net-tools)
-	test -f /usr/bin/macchanger
-	mactest=$(echo= $?)
-	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
-	sleep 0.5
-	if [ "$mactest" == "0" ]; then 
+	if test -f /usr/bin/macchanger; then
+		echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
+		sleep 0.5
 		echo -e "\n${greenColour}[+] macchanger listo"
 	else
 		echo -e "${blueColour}[*] Instalando macchanger..."
-		sudo apt-get install macchanger -y 
+		sudo apt-get install macchanger -y
 		clear
 	fi
+
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
 
@@ -195,7 +194,7 @@ menuforce() {
 	echo -e "\n[*] Saliendo..."
 	;;
 	*)
-	echo -e "${redColour}\n[!] Opción inválida"
+	echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
 	sleep 2
 	;;
 	esac
@@ -251,7 +250,7 @@ menunomon() {
 	echo -e "\n[*] Saliendo..."
 	;;
 	*)
-	echo -e "${redColour}\n[!] Opción inválida"
+	echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
 	sleep 2
 	;;
 	esac
@@ -309,13 +308,12 @@ else
 				sleep 0.5
 				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
-				echo -e "${grayColour}\n[+] Ataques Wifi\t[+] Wifiphisher"
-				echo -e "${yellowColour}1) Ataque Handshake"
+				echo -e "${grayColour}\n[+] Ataques Wifi\t\t[+] Wifiphisher"
+				echo -e "${yellowColour}1) Ataque Handshake\t\t6) EvilTrust (S4vitar)"
 				echo -e "2) Ataque PMKID"
 				echo -e "3) Menu de ataques con fuerza bruta"
-				echo -e "4) Ataque evilTrust (S4vitar)"
-				echo -e "5) Scanner de la red local"
-				echo -e "6) Salir"
+				echo -e "4) Scanner de la red local"
+				echo -e "5) Salir"
 				tput cnorm
 				echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 				$cleancolor
@@ -330,16 +328,16 @@ else
 				menuforce
 				;;
 				4)
-				evil_ataque
-				;;
-				5)
 				scanner
 				;;
-				6)
+				5)
 				salir
 				;;
+				6)
+				evil_ataque
+				;;
 				*)
-				echo -e "${redColour}\n[!] Opción inválida"
+				echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
 				sleep 2
 				;;
 				esac
