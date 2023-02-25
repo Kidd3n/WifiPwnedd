@@ -310,12 +310,11 @@ else
 				sleep 0.5
 				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
 				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
-				echo -e "${grayColour}\n[+] Ataques Wifi\t\t[+] Wifiphisher"
-				echo -e "${yellowColour}1) Ataque Handshake\t\t6) EvilTrust (S4vitar)"
-				echo -e "2) Ataque PMKID"
-				echo -e "3) Menu de ataques con fuerza bruta"
-				echo -e "4) Scanner de la red local"
-				echo -e "5) Salir"
+				echo -e "${grayColour}\n[+] Hacking Wifi\t\t[+] Wifiphisher\t\t[+] Cracking password"
+				echo -e "${yellowColour}\n1) Ataque Handshake\t\t\n4) EvilTrust (S4vitar)\t\t\n5) Ataque Fuerza bruta (.cap)"
+				echo -e "2) Ataque PMKID\t\t\t\t\t6) Crear diccionario hasheado (Rainbow taibles)"
+				echo -e "3) Scanner de la red local"
+				echo -e "\n7) Salir"
 				tput cnorm
 				echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
 				$cleancolor
@@ -327,16 +326,19 @@ else
 				pkmid_ataque
 				;;
 				3)
-				menuforce
-				;;
-				4)
 				scanner
 				;;
+				4)
+				evil_ataque
+				;;
 				5)
-				salir
+				fuerza_.cap
 				;;
 				6)
-				evil_ataque
+				rainbowtaibles
+				;;
+				7)
+				salir
 				;;
 				*)
 				echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
