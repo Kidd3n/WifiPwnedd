@@ -304,8 +304,8 @@ else
 				echo -e "${blueColour}\n[+] Targeta de Red: $tar" 
 				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${grayColour}\n[+] Hacking Wifi\t\t[+] Wifiphisher\t\t[+] Cracking password"
-				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Ataque Fuerza bruta (.cap)"
-				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) Crear diccionario hasheado (Rainbow taibles)"
+				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Fuerza bruta (.cap)"
+				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) dicc-hasheado (Rainbow taibles)"
 				echo -e "3) Scanner de la red local"
 				echo -e "${redColour}\n7) Salir"
 				tput cnorm
