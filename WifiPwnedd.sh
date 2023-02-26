@@ -27,7 +27,8 @@ programs() {
 		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 	fi
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd)
+	
 	for program in "${dependencias[@]}"; do
 		test -f /usr/bin/$program
 		if [ "$(echo $?)" -eq 0 ]; then
