@@ -13,7 +13,7 @@ cleancolor="echo -e "${endColour}""
 # Comprobacion e instalacion de la dependencias
 programs() {
 	clear; tput civis
-	
+	echo -e "${turquoiseColour}[*] Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
 	test -f /usr/bin/macchanger
 	mactest=$(echo $?)
 	if [ $mactest -eq 0 ]; then
