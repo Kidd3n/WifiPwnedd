@@ -364,7 +364,7 @@ if [ "$(id -u)" == "0" ]; then
 		helpPanel
 	else
 		if [ "$mode" == "terminal" ]; then
-			tput civis; banner
+			tput civis
 			dependencies
 			startAttack
 		elif [ "$mode" == "gui" ]; then
