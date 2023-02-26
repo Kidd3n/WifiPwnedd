@@ -12,36 +12,108 @@ grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 # Comprobacion e instalacion de la dependencias
 programs() {
-	clear; tput civis
-	echo -e "${turquoiseColour}[*] Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
-	test -f /usr/bin/macchanger
-	mactest=$(echo $?)
-	if [ $mactest -eq 0 ]; then
-		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
-		sleep 0.5
-		echo -e "\n${greenColour}[+] macchanger listo"
-	else
-		echo -e "${blueColour}[*] Instalando macchanger..."
-		sudo apt-get install macchanger -y
-		clear
-		echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
-	fi
+	test -f /etc/debian_version
+	debian=$(echo $?)
+	
+	test -f /etc/arch-release
+	arch=$(echo $?)
+
+	test -f /etc/redhat-release
+	fedora=$(echo $?)
 	
 	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd)
 	
-	for program in "${dependencias[@]}"; do
-		test -f /usr/bin/$program
-		if [ "$(echo $?)" -eq 0 ]; then
-			echo -e "\n${greenColour}[+] $program listo"
+	if [ "$debian" -eq 0 ]; then 
+		clear; tput civis
+		echo -e "${turquoiseColour}[*] Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
+		test -f /usr/bin/macchanger
+		mactest=$(echo $?)
+		if [ $mactest -eq 0 ]; then
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 			sleep 0.5
-		else 
-			echo -e "\n${redColour}[-] $program no instalado"
-			sleep 1
-			echo -e "\n${blueColour}[*] Instalando ${program}..." 
-			sudo apt-get install $program -y > /dev/null 2>&1
-
+			echo -e "\n${greenColour}[+] macchanger listo"
+		else
+			echo -e "${blueColour}[*] Instalando macchanger..."
+			sudo apt-get install macchanger -y
+			clear
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
 		fi
-	done
+		
+		for program in "${dependencias[@]}"; do
+			test -f /usr/bin/$program
+			if [ "$(echo $?)" -eq 0 ]; then
+				echo -e "\n${greenColour}[+] $program listo"
+				sleep 0.5
+			else 
+				echo -e "\n${redColour}[-] $program no instalado"
+				sleep 1
+				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				sudo apt-get install $program -y > /dev/null 2>&1
+
+			fi
+		done
+	elif [ "$arch" -eq 0 ]; then
+		clear; tput civis
+		echo -e "${turquoiseColour}[*] Actualizando los repositorios..."; sudo pacman -Syu -y > /dev/null 2>&1
+		test -f /usr/bin/macchanger
+		mactest=$(echo $?)
+		if [ $mactest -eq 0 ]; then
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			sleep 0.5
+			echo -e "\n${greenColour}[+] macchanger listo"
+		else
+			echo -e "${blueColour}[*] Instalando macchanger..."
+			sudo pacman -S macchanger -y
+			clear
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+		fi
+		
+		for program in "${dependencias[@]}"; do
+			test -f /usr/bin/$program
+			if [ "$(echo $?)" -eq 0 ]; then
+				echo -e "\n${greenColour}[+] $program listo"
+				sleep 0.5
+			else 
+				echo -e "\n${redColour}[-] $program no instalado"
+				sleep 1
+				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				sudo pacman -S $program -y > /dev/null 2>&1
+
+			fi
+		done
+	elif [ "$fedora" -eq 0 ]; then
+		clear; tput civis
+		echo -e "${turquoiseColour}[*] Actualizando los repositorios..."; sudo dnf update -y > /dev/null 2>&1
+		test -f /usr/bin/macchanger
+		mactest=$(echo $?)
+		if [ $mactest -eq 0 ]; then
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			sleep 0.5
+			echo -e "\n${greenColour}[+] macchanger listo"
+		else
+			echo -e "${blueColour}[*] Instalando macchanger..."
+			sudo dnf install macchanger -y
+			clear
+			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+		fi
+		
+		for program in "${dependencias[@]}"; do
+			test -f /usr/bin/$program
+			if [ "$(echo $?)" -eq 0 ]; then
+				echo -e "\n${greenColour}[+] $program listo"
+				sleep 0.5
+			else 
+				echo -e "\n${redColour}[-] $program no instalado"
+				sleep 1
+				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				sudo dnf install $program -y > /dev/null 2>&1
+
+			fi
+		done
+	else 
+		echo -e "\n${redColour}[!] No se puedo encontrar tu distribucion, descarga estos programas manualmente: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
+		sleep 5
+	fi
 }
 # 1) ataque
 handshake_ataque() {
