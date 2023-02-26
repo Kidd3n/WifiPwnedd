@@ -65,6 +65,8 @@ sudo ./WifiPwnedd.sh
 
 - Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
 
+- Le estare haciendo modificaciones al codigo, ya que esta desactualizado pero el creador seguira siendo S4vitar
+
 ### 5) Scanner
 
 - Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
