@@ -41,26 +41,6 @@ echo -e "╰━━╯╰╯╰┻━╯╰╯╰╯╰━━┻━━┻━╯${
 sleep 0.05
 }
 
-function dependencies(){
-	clear
-	tput civis
-	dependencias=(php dnsmasq hostapd)
-
-	echo -e "\n${greenColour}[*] Comprobando dependencias necesarias...\n"
-	sleep 1
-
-	for program in "${dependencias[@]}"; do
-		test -f /usr/bin/$program
-
-		if [ "$(echo $?)" -eq 0 ]; then
-			echo -e "${greenColour}[+] $program listo"
-		else 
-			echo -e "${redColour}[-] $program no instalado"
-			echo -e "${blueColour}[*] Instalando ${program}..." 
-			sudo apt-get install $program -y > /dev/null 2>&1
-		fi
-	done
-}
 
 function getCredentials(){
 
@@ -365,7 +345,6 @@ if [ "$(id -u)" == "0" ]; then
 	else
 		if [ "$mode" == "terminal" ]; then
 			tput civis
-			dependencies
 			startAttack
 		elif [ "$mode" == "gui" ]; then
 			guiMode
