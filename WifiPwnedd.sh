@@ -11,6 +11,20 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 # Comprobacion e instalacion de la dependencias
+trap ctrl_c INT
+
+ctrl_c() {
+	echo -e "\n${redColour}[*]${endColour}${grayColour}Saliendo...${endColour}\n" 
+	tput civis
+	airmon-ng stop $tar > /dev/null 2>&1
+	sudo /etc/init.d/networking start > /dev/null 2>&1
+	sudo /etc/init.d/networking restart > /dev/null 2>&1
+	sudo systemctl start NetworkManager > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	tput cnorm
+	exit
+}
+
 programs() {
 	test -f /etc/debian_version
 	debian=$(echo $?)
@@ -272,22 +286,6 @@ menuforce() {
 	esac
 }
 
-
-# 4) ataque
-evil_ataque() {
-	clear; echo -e "\n${grayColour}[*] Iniciando Ataque evilTrust by S4vitar..."
-	airmon-ng stop $tar> /dev/null 2>&1
-	sudo /etc/init.d/networking start > /dev/null 2>&1
-	sudo /etc/init.d/networking restart > /dev/null 2>&1
-	sudo systemctl start NetworkManager > /dev/null 2>&1
-	ifconfig $tar up > /dev/null 2>&1
-	sleep 10
-	cd src; cd evilTrust
-	chmod 755 evilTrust.sh
-	sudo ./evilTrust.sh -m terminal
-	cd ..; cd ..
-}
-# 5) ataque
 scanner() {
 	clear; echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
 	airmon-ng stop $tar > /dev/null 2>&1
@@ -326,10 +324,10 @@ menunomon() {
 }
 
 eviltrust() {
-	trap ctrl_c INT
+	trap ctrl_c1 INT
 
-	function ctrl_c(){
-		echo -e "\n\n${yellowColour}[*]${endColour}${grayColour} Exiting...\n${endColour}"
+	function ctrl_c1(){
+		echo -e "\n\n${yellowColour}[*]${endColour}${grayColour} Saliendo...\n${endColour}"
 		rm dnsmasq.conf hostapd.conf 2>/dev/null
 		rm -r iface 2>/dev/null
 		find \-name datos-privados.txt | xargs rm 2>/dev/null
@@ -442,8 +440,6 @@ eviltrust() {
 			popd > /dev/null 2>&1; getCredentials
 		fi
 	}
-
-		tput civis
 		startAttack
 }
 # Comprobacion si el usuario es root
@@ -462,6 +458,7 @@ else
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
 	echo -e "${purpleColour}"
 	echo "[+] Github: https://github.com/kidd3n"
+	echo "[-] Version no testeada (EvilTrust)"
 	read -p "[+] Enter para continuar"
 	$cleancolor
 	tput cnorm
@@ -546,5 +543,4 @@ else
 		else
 			menunomon
 		fi
-
 fi
