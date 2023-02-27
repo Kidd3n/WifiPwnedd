@@ -164,7 +164,7 @@ handshake_ataque() {
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
 		echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-		read -p "[?] Ruta del Diccionario al usar: " dicc
+		echo -ne "$blueColour[?]$grayColour Ruta del Diccionario al usar: " && read dicc
 		$cleancolor; tput civis
 		xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 	else 
@@ -192,7 +192,7 @@ pkmid_ataque() {
 	echo -e "\n${greenColour}[*]$grayColour Iniciando ataque PMKID..\n"
 	sleep 1 
 	echo -e "${blueColour}[!]$grayColour Recomendacion: 600 segundos (10 minutos)"
-	read -p "[?] Cuantos segundos quieres que dure la captura de los paquetes?: " seg
+	echo -ne "$purpleColour[?]$grayColour Cuantos segundos quieres que dure la captura de los paquetes?: " && read seg
 	$cleancolor
 	xterm -hold -e "hcxdumptool -i $tar --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
@@ -207,7 +207,7 @@ pkmid_ataque() {
 		sleep 1
 		tput cnorm
 		echo -e "\n${blueColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
-		read -p "[?] Ruta del Diccionario al usar: " dicc1
+		echo -ne "${greenColour}[?]$grayColour Ruta del Diccionario al usar: " && read dicc1
 		tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
 		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
 	else 
@@ -222,33 +222,33 @@ fuerza_.cap() {
 	echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
 	tput cnorm
-	read -p "[?] Nombre del archivo .cap: " cap
-	tput civis; read -p "[?] Ruta del Diccionario al usar: " dicc
+	echo -ne "${blueColour}[?]$grayColour Nombre del archivo .cap: " && read cap
+	tput civis; echo -ne "${redColour}[?]$grayColour Ruta del Diccionario al usar: " && read dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
 
 fuerza_rainbow() {
-	read -p "[?] Ruta del archivo .cap : " cap
+	echo -ne "${greenColour}[?]$grayColour Ruta del archivo .cap : " && read cap
 	cd WifiPwnedd
 	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
 }
 
 rainbowtaibles() {
 	clear; echo -e "\n${yellowColour}[*]$grayColour Iniciando..."
-	read -p "[?] Ruta del diccionario: " ruta
+	echo -ne "${blueColour}[?]$grayColour Ruta del diccionario: " && read ruta
 	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hasheado
 	if [ "$(echo $?)" -eq 0 ]; then
-		read -p "[?] Nombre o essid de la red: " ap 
+		echo -ne "${turquoiseColour}[?]$grayColour Nombre o essid de la red: " && read ap 
 		echo "$ap" > essid.lst
 		airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
 		airolib-ng dicc-hasheado --clean all 
-		read -p "[?] Cuantos segundos quieres que dure el proceso de hasheo?: " seg
+		echo -ne "${redColour}[?]$grayColour Cuantos segundos quieres que dure el proceso de hasheo?: " && read seg
 		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
 		echo -e "\n${greenColour}[+]$grayColour Diccionario listo (Nombre: dicc-hasheado)"
-		read -p "[?] Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " attak
+		echo -ne "${blueColour}[?]$grayColour Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " && read attak
 		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
 			fuerza_rainbow
 		else
@@ -265,7 +265,7 @@ menuforce() {
 	echo -e "2) Crear diccionario hasheado (Rainbow taibles)"
 	echo -e "3) Ataque fuerza bruta con diccionario hasheado"
 	echo -e "4) Salir"
-	echo -e "${greenColour}"; read -p "Seleccione una opcion: " force 
+	echo -ne "${yellowColour}[*]$grayColour Seleccione una opcion: " && read force 
 	case $force in 
 	1)
 	fuerza_.cap
@@ -294,18 +294,18 @@ scanner() {
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 10
-	read -p "[?] Cual es tu subred? (Ejemplo: 192.168.1): " ipnmap
+	echo -ne "${redColour}[?]$grayColour Cual es tu subred? (Ejemplo: 192.168.1): " && read ipnmap
 	tput civis; echo -e "\n---------------------------------------------------\n"
 	nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
-	read -p "Enter para salir"
+	echo -ne "${purpleColour}[!]$grayColour Enter para salir"
 	tput cnorm
 }
 menunomon() {
 	clear; echo -e "${yellowColour}\n1) Menu fuerza bruta"
 	echo -e "2) Scanner de la red local"
 	echo -e "3) Salir"
-	echo -e "${greenColour}"; read -p "Seleccione una opcion: " force 
+	echo -ne "${yellowColour}[*]$grayColour Seleccione una opcion: " && read force
 	case $force in 
 	1)
 	menuforce
@@ -360,7 +360,7 @@ eviltrust() {
 		rm iface 2>/dev/null
 		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Nombre del punto de acceso a utilizar (Ej: wifiGratis):${endColour} " && read -r use_ssid
 		echo -ne "${yellowColour}[*]${endColour}${grayColour} Canal a utilizar (1-12):${endColour} " && read use_channel; tput civis
-		echo -e "\n${redColour}[!] Matando todas las conexiones...${endColour}\n"
+		echo -e "\n${redColour}[!]$grayColour Matando todas las conexiones...${endColour}\n"
 		sleep 2
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
 		sleep 5
@@ -457,7 +457,7 @@ else
 	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
-	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
+	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -e "${redColour}[-]${grayColour} Version no testeada (EvilTrust)"
 	echo -ne "${greenColour}[+]$grayColour Enter para continuar" && read 
 	$cleancolor
@@ -479,7 +479,7 @@ else
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${yellowColour}[*]${grayColour} Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*]${grayColour} Ya tienes tu tarjeta preparada!\n"
-			tput cnorm; echo -ne "${blueColour}[?]$grayColour Quieres ir al menu ataques? [Y/N] " && read rps
+			tput cnorm; echo -ne "${blueColour}[?]$grayColour Quieres ir al menu ataques? [Y/N]: " && read rps
 			tput civis; $cleancolor
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				while true; do
@@ -502,7 +502,7 @@ else
 				echo -e "3) Scanner de la red local"
 				echo -e "\n7) Salir"
 				tput cnorm
-				echo -ne "${greenColour}[?]${grayColour} Seleccione un ataque " && read opcion
+				echo -ne "${greenColour}[?]${grayColour} Seleccione un ataque: " && read opcion
 				$cleancolor
 				case $opcion in
 				1)
