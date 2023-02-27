@@ -457,29 +457,29 @@ else
 	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
-	echo "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
-	echo "${redColour}[-]${grayColour} Version no testeada (EvilTrust)"
-	read -p "${greenColour}[+]$grayColour Enter para continuar"
+	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
+	echo -e "${redColour}[-]${grayColour} Version no testeada (EvilTrust)"
+	echo -ne "${greenColour}[+]$grayColour Enter para continuar" && read 
 	$cleancolor
 	tput cnorm
 	echo -e "\n${redColour}[*]${endColour}${grayColour} El modo monitor es recomendable y necesario para algunos ataques"
 	sleep 1
-	echo -e "${purpleColour}[?]$grayColour"read -p " Quieres poner en modo monitor tu targeta de red? [Y/N]: " mon
+	echo -ne "${purpleColour}[?]${grayColour} Quieres poner en modo monitor tu targeta de red? [Y/N] " && read mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -e "\n${redColour}[?]$grayColour"; read -p "[?] Que tarjeta deseas usar: " tar
+			echo -ne "\n${redColour}[?]$grayColour Que tarjeta deseas usar: " && read tar
 			$cleancolor
 			airmon-ng start $tar > /dev/null 2>&1
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -e "${redColour}\n[?]$grayColour"; read -p " Confirmacion de la targeta (Poner el nombre tal como sale): " tar
+			echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
 			tput civis; echo -e "\n${redColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
 			echo -e "\n${yellowColour}[*]${grayColour} Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 			echo -e "\n${greenColour}[*]${grayColour} Ya tienes tu tarjeta preparada!\n"
-			tput cnorm; echo -e "${blueColour}[?]$grayColour"; read -p " Quieres ir al menu ataques? [Y/N]: " rps
+			tput cnorm; echo -ne "${blueColour}[?]$grayColour Quieres ir al menu ataques? [Y/N] " && read rps
 			tput civis; $cleancolor
 			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				while true; do
@@ -502,7 +502,7 @@ else
 				echo -e "3) Scanner de la red local"
 				echo -e "\n7) Salir"
 				tput cnorm
-				echo -e "${greenColour}[?]${grayColour}"; read -p "Seleccione un ataque: " opcion
+				echo -ne "${greenColour}[?]${grayColour} Seleccione un ataque " && read opcion
 				$cleancolor
 				case $opcion in
 				1)
@@ -527,8 +527,7 @@ else
 				salir
 				;;
 				*)
-				echo -e "${redColour}\n[!]$grayColour Opcion invalida"
-				sleep 2
+				echo -e "${redColour}\n[!]$grayColour Opcion invalida"; sleep 2
 				;;
 				esac
 				done
