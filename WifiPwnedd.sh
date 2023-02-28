@@ -335,6 +335,7 @@ eviltrust() {
 		iwconfig $tar mode monitor 2>/dev/null; sleep 1
 		ifconfig $tar up 2>/dev/null; airmon-ng stop $tar > /dev/null 2>&1; sleep 1
 		tput cnorm; service network-manager restart
+		cd ..
 		exit 0
 	}
 
@@ -398,7 +399,7 @@ eviltrust() {
 		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
 		sleep 5
 
-		# Array de plantillas
+		cd src/
 		plantillas=(facebook-login google-login starbucks-login twitter-login yahoo-login cliqq-payload optimumwifi all_in_one)
 
 		tput cnorm; echo -ne "\n${blueColour}[Información]${endColour}${yellowColour} Si deseas usar tu propia plantilla, crea otro directorio en el proyecto y especifica su nombre :)${endColour}\n\n"
@@ -429,7 +430,7 @@ eviltrust() {
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			cat msfconsole.rc
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "\n${redColour}[!] Presiona <Enter> para continuar${endColour}" && read
+			echo -e "\n${redColour}[!]${grayColour} Enter para continuar${endColour}" && read
 			popd > /dev/null 2>&1; getCredentials
 		else
 			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} Usando plantilla personalizada...${endColour}"; sleep 1
@@ -439,8 +440,9 @@ eviltrust() {
 			sleep 2
 			popd > /dev/null 2>&1; getCredentials
 		fi
+		cd ..
 	}
-		startAttack
+		echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
 }
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
