@@ -442,7 +442,7 @@ eviltrust() {
 		fi
 		cd ..
 	}
-		echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
+		clear; echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
 }
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
@@ -460,13 +460,12 @@ else
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
 	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
-	echo -e "${redColour}[-]${grayColour} Version no testeada (EvilTrust)"
 	echo -ne "${greenColour}[+]$grayColour Enter para continuar" && read 
 	$cleancolor
 	tput cnorm
 	echo -e "\n${redColour}[*]${endColour}${grayColour} El modo monitor es recomendable y necesario para algunos ataques"
 	sleep 1
-	echo -ne "${purpleColour}[?]${grayColour} Quieres poner en modo monitor tu targeta de red? [Y/N] " && read mon
+	echo -ne "${purpleColour}[?]${grayColour} Quieres poner en modo monitor tu targeta de red? [Y/N]: " && read mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
@@ -497,7 +496,7 @@ else
 				echo -e "   #"
 				sleep 0.5
 				echo -e "${blueColour}\n[+]${grayColour} Targeta de Red: $tar" 
-				echo -e "${blueColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
+				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Fuerza bruta (.cap)"
 				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) dicc-hasheado (Rainbow taibles)"
