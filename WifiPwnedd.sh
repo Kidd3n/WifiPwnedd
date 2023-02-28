@@ -296,7 +296,7 @@ scanner() {
 	sleep 10
 	echo -ne "${redColour}[?]$grayColour Cual es tu subred? (Ejemplo: 192.168.1): " && read ipnmap
 	tput civis; echo -e "\n---------------------------------------------------\n"
-	nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
+	sudo nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
 	echo -ne "${purpleColour}[!]$grayColour Enter para salir"
 	tput cnorm
@@ -501,7 +501,7 @@ else
 				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Fuerza bruta (.cap)"
 				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) dicc-hasheado (Rainbow taibles)"
 				echo -e "3) Scanner de la red local"
-				echo -e "\n7) Salir"
+				echo -e "\n7) Salir\n"
 				tput cnorm
 				echo -ne "${greenColour}[?]${grayColour} Seleccione un ataque: " && read opcion
 				$cleancolor
