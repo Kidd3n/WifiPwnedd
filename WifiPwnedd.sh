@@ -328,14 +328,13 @@ eviltrust() {
 
 	function ctrl_c1(){
 		echo -e "\n\n${yellowColour}[*]${endColour}${grayColour} Saliendo...\n${endColour}"
-		rm dnsmasq.conf hostapd.conf 2>/dev/null
+		sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
 		rm -r iface 2>/dev/null
 		find \-name datos-privados.txt | xargs rm 2>/dev/null
 		sleep 3; ifconfig $tar down 2>/dev/null; sleep 1
 		iwconfig $tar mode monitor 2>/dev/null; sleep 1
 		ifconfig $tar up 2>/dev/null; airmon-ng stop $tar > /dev/null 2>&1; sleep 1
 		tput cnorm; service network-manager restart
-		cd ..
 		exit 0
 	}
 
