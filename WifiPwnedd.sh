@@ -334,6 +334,7 @@ eviltrust() {
 		sleep 3; ifconfig $tar down 2>/dev/null; sleep 1
 		iwconfig $tar mode monitor 2>/dev/null; sleep 1
 		ifconfig $tar up 2>/dev/null; airmon-ng stop $tar > /dev/null 2>&1; sleep 1
+		sudo systemctl start NetworkManager > /dev/null 2>&1
 		tput cnorm; service network-manager restart
 		exit 0
 	}
@@ -353,7 +354,7 @@ eviltrust() {
 	}
 
 	function startAttack(){
-		clear; if [[ -e credenciales.txt ]]; then
+		if [[ -e credenciales.txt ]]; then
 			rm -rf credenciales.txt
 		fi
 
