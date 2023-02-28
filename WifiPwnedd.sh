@@ -498,10 +498,10 @@ else
 				echo -e "${blueColour}\n[+]${grayColour} Targeta de Red: $tar" 
 				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n1) Ataque Handshake\t\t4) EvilTrust (S4vitar)\t5) Fuerza bruta (.cap)"
-				echo -e "2) Ataque PMKID\t\t\t\t\t\t6) dicc-hasheado (Rainbow taibles)"
-				echo -e "3) Scanner de la red local"
-				echo -e "\n7) Salir\n"
+				echo -e "${yellowColour}\n[1] Ataque Handshake\t\t[4] EvilTrust (S4vitar)\t[5] Fuerza bruta (.cap)"
+				echo -e "[2] Ataque PMKID\t\t\t\t\t\t[6] dicc-hasheado (Rainbow taibles)"
+				echo -e "[3] Scanner de la red local"
+				echo -e "\n[7] Salir\n"
 				tput cnorm
 				echo -ne "${greenColour}[?]${grayColour} Seleccione un ataque: " && read opcion
 				$cleancolor
