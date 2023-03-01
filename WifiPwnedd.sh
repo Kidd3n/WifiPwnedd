@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 trap ctrl_c INT
 
 ctrl_c() {
-	echo -e "\n${redColour}[*]${endColour}${grayColour}Saliendo...${endColour}\n" 
+	echo -e "\n${redColour}[!]${endColour}${grayColour}Saliendo...${endColour}\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
@@ -468,7 +468,7 @@ else
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			echo -ne "\n${redColour}[?]$grayColour Que tarjeta deseas usar: " && read tar
-			$cleancolor
+			$cleancolor; tput civis
 			airmon-ng start $tar > /dev/null 2>&1
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
