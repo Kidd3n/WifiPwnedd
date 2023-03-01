@@ -139,8 +139,8 @@ handshake_ataque() {
 	airodump_xterm_PID=$!
 	echo -e "$grayColour"
  	tput cnorm
-    read -p "[?] Que red deseas atacar?: " ap
-	read -p "[?] En que canal esta ${ap}?: " channel
+    echo -ne "${greenColour}[?]$grayColour Que red deseas atacar?: " && read ap
+	echo -ne "${greenColour}[?]$grayColour En que canal esta ${ap}?: " && read channel
 	tput civis
 	$cleancolor
 	echo -e "${greenColour}[*]$grayColour Se esta desautenticando a los usuarios de la red"
