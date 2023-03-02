@@ -471,7 +471,7 @@ else
 			$cleancolor; tput civis
 			airmon-ng start $tar > /dev/null 2>&1
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
+			tput cnorm; echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
 			tput civis; echo -e "\n${redColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
