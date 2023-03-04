@@ -297,7 +297,7 @@ scanner() {
 	tput civis; echo -e "\n---------------------------------------------------\n"
 	sudo nmap -sP -Pn 192.168.1.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
-	echo -ne "${purpleColour}[!]$grayColour Enter para salir" && read 
+	echo -ne "${redColour}[!]$grayColour Enter para salir" && read 
 	tput cnorm
 }
 menunomon() {
@@ -443,15 +443,15 @@ eviltrust() {
 }
 dosattack() {
 	clear; echo -e "${purpleColour}[*]$grayColour Iniciando DoS attack..."; sleep 2
-	
+
 
 }
 
 beaconflood() {
-	clear; echo -e "${purpleColour}[*]$grayColour Iniciando Beacon Flood attack..."; sleep 2
-	echo -ne "${blueColour}[?]$grayColour Quieres ponerle un nombre?: [Y/N]" && read rpsbeacon 
+	clear; echo -e "\n${purpleColour}[*]$grayColour Iniciando Beacon Flood attack..."; sleep 2
+	echo -ne "\n${blueColour}[?]$grayColour Quieres ponerle un nombre a las redes? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
-		echo -ne "${yelloColour}[?]$grayColour Cual sera el nombre de las redes?: " && read nameap
+		echo -ne "${yelloColour}[?]$grayColour Nombre: " && read nameap
 			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
 	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
 		xterm -hold -e "sudo mdk3 $tar b -s 1000"
@@ -471,9 +471,9 @@ else
 	echo -e "${turquoiseColour}"
 	echo "  _       __  _   ____  _      ____                               __      __ "
 	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
-	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  / "
-	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ / "
-	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/ "
+	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  /  "
+	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
+	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "  
 	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter para continuar" && read 
 	$cleancolor
@@ -493,11 +493,7 @@ else
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${grayColour} Nueva direccion MAC asignada: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
-			echo -e "\n${greenColour}[*]${grayColour} Ya tienes tu tarjeta preparada!\n"
-			tput cnorm; echo -ne "${blueColour}[?]$grayColour Quieres ir al menu ataques? [Y/N]: " && read rps
 			tput civis; $cleancolor
-			if [ "$rps" == "Y" ] || [ "$rps" == "y" ]; then
 				while true; do
 				clear
 				echo -e "${purpleColour}\n[+]$grayColour Menu de ataques\n${endColour}"
@@ -511,9 +507,9 @@ else
 				echo -e "   #"
 				sleep 0.5
 				echo -e "${greenColour}\n[+]${grayColour} Targeta de Red: $tar" 
-				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
+				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n[1 Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Fuerza bruta .cap"
+				echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Fuerza bruta .cap"
 				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
 				echo -e "[3] DoS Attack"
 				echo -e "[4] Beacon Flood Attack"
@@ -555,13 +551,6 @@ else
 				;;
 				esac
 				done
-			fi
-			if [ "$rps" == "N" ] || [ "$rps" == "n" ]; then
-				echo -e "${redColour}\n[!]$grayColour Saliendo"
-				$cleancolor
-				tput cnorm
-				exit
-			fi
 		else
 			menunomon
 		fi
