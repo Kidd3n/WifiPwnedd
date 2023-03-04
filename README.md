@@ -14,13 +14,14 @@ sudo ./WifiPwnedd.sh
 ```
 
 ## Menu de ataques 
-![cap](https://user-images.githubusercontent.com/89719224/221727919-68abb430-e71a-4d0c-be40-9444fe69ca57.png)
+![wifi2](https://user-images.githubusercontent.com/89719224/222926139-8b7865ce-1b11-46be-a409-3b76dfc81a8d.png)
+
 
 - Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
 
 - Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
 
-### 1) Ataque Handshake 
+### 1) Handshake Attack
 
 - Nos saldra una ventana con todas las redes disponibles y sus canales, le debemos indicar el nombre correctamnete de la red y su canal
 
@@ -39,19 +40,33 @@ gunzip -d rockyou.txt.gz
 
 - Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
 
-### 2) Ataque PMKID 
+### 2) PMKID Attack
 
 - Esperara el paquete necesario por 60 segundos
 
 - Si lo captura pasara a la fase de fuerza bruta con hashcat
 
-- Si no lo captura se cerrara el programa
+- Si no lo captura se cerrara el ataque
 
-### 3) Scanner
+### 3) DoS Attack
+
+- Nos preguntara por la red que ke queremos hacer ek ataque
+
+- Luego por los canales, los recomendados son el 1,6,11 pero puedes poner todos del 1-12 o los que guste 
+
+- Puede que la red cambie de canales
+
+### 4) Beacon Flood Attack
+
+- Nos preguntara si queremos ponerle nombre a la red, si le damos que si (Y) nos preguntara el nombre y empazara
+
+- (Recomendado) Si le damos que no (N) pues se nos hara un flood de redes con nombre extraños
+
+### 5) Scanner
 
 - Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
 
-### 4) Ataque evilTrust
+### 6) Ataque evilTrust
 
 - Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
 
@@ -59,10 +74,10 @@ gunzip -d rockyou.txt.gz
 
 - Le estare haciendo modificaciones al codigo, ya que esta desactualizado pero el creador seguira siendo S4vitar
 
-### 5) Fuerza bruta (.cap)
+### 7) Fuerza bruta .cap
 
 - Nos hara fuerza bruta a un handshake .cap
 
-### 6) Rainbow Taibles
+### 8) Rainbow Taibles
 
 - Es un diccionario precomputado para ser usado contra hashes, esto nos ayudara a que sea mas rapido (Depende de la contraseñas)
