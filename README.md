@@ -1,9 +1,9 @@
 ## WifiPwnedd
 ![Bash-Scripting-brightgreen](https://user-images.githubusercontent.com/89719224/216780401-60655d5f-6804-4a3d-a9f2-3a02a1a3f9c8.svg)
 
-❗ Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
+❗ Using this tool in controlled environments is completely illegal without the necessary authorization.
 
-## Como se ejecuta la herramienta? 
+## How is the tool executed?
 
 ```
 cd WifiPwnedd
@@ -13,71 +13,71 @@ chmod 755 WifiPwnedd.sh
 sudo ./WifiPwnedd.sh
 ```
 
-## Menu de ataques 
+## Attack menu 
 ![wifi2](https://user-images.githubusercontent.com/89719224/222926139-8b7865ce-1b11-46be-a409-3b76dfc81a8d.png)
 
 
-- Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
+- Configure the specified card to be in monitor mode (required)
 
-- Se cambia la direccion MAC con Macchanger para ser aun mas anonimos 
+- The MAC address is changed with Macchanger to be even more anonymous 
 
 ### 1) Handshake Attack
 
-- Nos saldra una ventana con todas las redes disponibles y sus canales, le debemos indicar el nombre correctamnete de la red y su canal
+- A window will appear with all available networks and their channels. We must correctly indicate the name of the network and its channel.
 
-- Luego nos saldra una ventana igual, solo que ahora estara filtrada por el nombre y el canal que le pasamos anteriormente
+- Then a similar window will appear, but now it will be filtered by the name and channel we provided earlier
 
-- Esperamos unos segundos y empezara el ataque a la red
+- We wait a few seconds and the attack on the network will begin
 
-- Despues de algunos segundos vamos a optener un Handshake
+- After a few seconds, we will obtain a Handshake
 
-- Nos preguntara por algun diccionario que queramos usar, igual se dara la ruta de rockyou.txt por si quieres usar ese diccionario (El rockyou en kali esta comprimido, para descomprimir el archivo debemos aplicar estos comandos): 
+- It will ask us if we want to use any dictionary, and it will also give the path to rockyou.txt in case we want to use that dictionary. (The rockyou dictionary in Kali is compressed, so we need to apply these commands to decompress the file): 
 ```
 cd /usr/share/wordlists
 
 gunzip -d rockyou.txt.gz
 ```
 
-- Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
+- Then it will perform a brute-force attack with the dictionary we provided (it will take a while depending on your computer and the password)
 
 ### 2) PMKID Attack
 
-- Esperara el paquete necesario por 60 segundos
+- It will wait for the required packet for the number of seconds we specify
 
-- Si lo captura pasara a la fase de fuerza bruta con hashcat
+- If it captures it, it will move on to the brute-force phase with hashcat
 
-- Si no lo captura se cerrara el ataque
+- If it does not capture it, the attack will be closed
 
 ### 3) DoS Attack
 
-- Nos preguntara por la red que ke queremos hacer ek ataque
+- It will ask us which network we want to attack
 
-- Luego por los canales, los recomendados son el 1,6,11 pero puedes poner todos del 1-12 o los que guste 
+- Then it will ask for the channels, the recommended ones are 1, 6, 11 but you can put all from 1-12 or the ones you prefer 
 
-- Puede que la red cambie de canales
+- The network may change channels
 
 ### 4) Beacon Flood Attack
 
-- Nos preguntara si queremos ponerle nombre a la red, si le damos que si (Y) nos preguntara el nombre y empazara
+- It will ask us if we want to name the network. If we say yes (Y), it will ask for the name and start the attack
 
-- (Recomendado) Si le damos que no (N) pues se nos hara un flood de redes con nombre extraños
+- (Recommended) If we say no (N), we will flood the area with networks with strange names.
 
 ### 5) Scanner
 
-- Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
+- It will search for the devices on our network and show them on the screen with their IP addresses.
 
-### 6) Ataque evilTrust
+### 6)  Evil Trust
 
-- Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
+- Automated deployment of a Rogue AP with template selection capability + 2FA
 
-- Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
+- If you want to support the creator and learn more about the tool: https://github.com/s4vitar/evilTrust
 
-- Le estare haciendo modificaciones al codigo, ya que esta desactualizado pero el creador seguira siendo S4vitar
+- I will be making modifications to the code, as it is outdated, but the creator will still be S4vitar
 
-### 7) Fuerza bruta .cap
+### 7) Force Brute .cap
 
-- Nos hara fuerza bruta a un handshake .cap
+- It will perform a brute-force attack on a .cap Handshake
 
 ### 8) Rainbow Taibles
 
-- Es un diccionario precomputado para ser usado contra hashes, esto nos ayudara a que sea mas rapido (Depende de la contraseñas)
+- It is a precomputed dictionary used for brute-forcing hashes. This will help speed up the process (depending on the passwords)
