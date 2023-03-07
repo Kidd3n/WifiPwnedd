@@ -42,7 +42,7 @@ gunzip -d rockyou.txt.gz
 
 ### 2) PMKID Attack
 
-- Esperara el paquete necesario por 60 segundos
+- Esperara el paquete necesario por los segundos que le indiquemos
 
 - Si lo captura pasara a la fase de fuerza bruta con hashcat
 
