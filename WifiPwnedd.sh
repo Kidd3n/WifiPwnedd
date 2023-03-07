@@ -39,14 +39,12 @@ programs() {
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
-		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios (update)..."; sudo apt-get update -y > /dev/null 2>&1
-		clear
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger"
 		else
 			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
 			sudo apt-get install macchanger -y
@@ -69,7 +67,6 @@ programs() {
 		done
 	elif [ "$arch" -eq 0 ]; then
 		clear; tput civis
-		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios..."; sudo pacman -Syu -y > /dev/null 2>&1
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
@@ -98,7 +95,6 @@ programs() {
 		done
 	elif [ "$fedora" -eq 0 ]; then
 		clear; tput civis
-		echo -e "${turquoiseColour}[*]$grayColour Actualizando los repositorios..."; sudo dnf update -y > /dev/null 2>&1
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
@@ -129,6 +125,30 @@ programs() {
 		echo -e "\n${redColour}[!]$grayColour No se puedo encontrar tu distribucion, descarga estos programas manualmente: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
 		sleep 5
 	fi
+}
+updatepackages() {
+	clear; echo -ne "${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
+	if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
+		if [ "$debian" -eq 0 ]; then
+			clear; tput civis
+			echo -e "\n${greenColour}[*]$grayColour Updating the packages..."; sudo apt-get update -y > /dev/null 2>&1
+			programs
+		elif [ "$arch" -eq 0 ]; then
+			clear; tput civis
+			echo -e "${greenColour}[*]$grayColour Updating the packages..."; sudo pacman -Syu -y > /dev/null 2>&1
+			programs
+		elif [ "$fedora" -eq 0 ]; then
+			clear; tput civis
+			echo -e "${greenColour}[*]$grayColour Updating the packages..."; sudo dnf update -y > /dev/null 2>&1
+			programs
+		fi
+	elif [ "$update" == " " ] || [ "$update" == "" ]; then 
+		echo -e "${redColour}[!]$grayColour Select an option"
+		updatepackages
+	elif [ "$update" == "n" ] || [ "$update" == "N" ]; then
+		programs
+	fi
+
 }
 # 1) ataque
 handshake_ataque() {
@@ -327,7 +347,8 @@ eviltrust() {
 	function getCredentials(){
 
 		activeHosts=0
-		tput civis; while true; do
+		tput civis
+		while true; do
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Enter para finalizar${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			echo -e "${redColour}[*]$grayColour Dispositivos conectados: ${endColour}${blueColour}$activeHosts${endColour}\n"
@@ -335,14 +356,15 @@ eviltrust() {
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
 			sleep 3; clear
-			read -p ""
-			echo -e "\n\n${redColour}[!]${endColour}${grayColour} Saliendo...\n${endColour}"
-			sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
-			rm -r iface 2>/dev/null
-			find \-name datos-privados.txt | xargs rm 2>/dev/null
-			tput cnorm
+			if read -p "" -n 1 -r && [[ $REPLY == $'\n' ]]; then
+				echo -e "\n\n${redColour}[!]${endColour}${grayColour} Saliendo...\n${endColour}"
+				sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
+				rm -r iface 2>/dev/null
+				find \-name datos-privados.txt | xargs rm 2>/dev/null
+				tput cnorm
+			fi
 		done
-	}
+}
 
 	function startAttack(){
 		if [[ -e credenciales.txt ]]; then
@@ -459,12 +481,12 @@ beaconflood() {
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
-	echo -e "$redColour\n[!]$grayColour Debes ser root para ejecutar la herramienta -> (sudo $0)\n"
+	echo -e "$redColour\n[!]$grayColour Must be root (sudo $0)\n"
 	$cleancolor
 	exit 1
 # Programa principal
 else
-	programs
+	updatepackages
 	clear
 	echo -e "${turquoiseColour}"
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -473,7 +495,7 @@ else
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "  
 	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
-	echo -ne "${greenColour}[+]$grayColour Enter para continuar" && read 
+	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
 	tput cnorm
 	echo -e "\n${redColour}[*]${endColour}${grayColour} El modo monitor es recomendable y necesario para algunos ataques"
@@ -504,8 +526,8 @@ else
 				echo -e "    #"
 				echo -e "   #"
 				sleep 0.5
-				echo -e "${greenColour}\n[+]${grayColour} Targeta de Red: $tar" 
-				echo -e "${greenColour}[+]${grayColour} Direccion MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
+				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
+				echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 				echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Fuerza bruta .cap"
 				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
