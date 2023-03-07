@@ -45,25 +45,25 @@ programs() {
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
 			echo -e "\n${greenColour}[+]$grayColour macchanger"
 		else
-			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo apt-get install macchanger -y
 			clear
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 		fi
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-]$grayColour $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program"
 				sleep 1
-				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo apt-get install $program -y > /dev/null 2>&1
 
 			fi
@@ -73,25 +73,25 @@ programs() {
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger"
 		else
-			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo pacman -S macchanger -y
 			clear
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 		fi
 		
 		for program in "${depasendenci[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-]$grayColour $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program"
 				sleep 1
-				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo pacman -S $program -y > /dev/null 2>&1
 
 			fi
@@ -101,31 +101,31 @@ programs() {
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger listo"
+			echo -e "\n${greenColour}[+]$grayColour macchanger"
 		else
-			echo -e "${blueColour}[*]$grayColour Instalando macchanger..."
+			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo dnf install macchanger -y
 			clear
-			echo -e "\n${blueColour}[*]$grayColour Comprobando dependencias necesarias...\n"
+			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 		fi
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program listo"
+				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-]$grayColour $program no instalado"
+				echo -e "\n${redColour}[-]$grayColour $program"
 				sleep 1
-				echo -e "\n${blueColour}[*]$grayColour Instalando ${program}..." 
+				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo dnf install $program -y > /dev/null 2>&1
 
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!]$grayColour No se puedo encontrar tu distribucion, descarga estos programas manualmente: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
+		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
 		sleep 5
 	fi
 }
@@ -156,7 +156,7 @@ updatepackages() {
 # 1) ataque
 handshake_ataque() {
 	clear
-	echo -e "\n${turquoiseColour}[*]$grayColour Iniciando Ataque Handshake"
+	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
 	sleep 1
 	xterm -hold -e "airodump-ng $tar" &
 	airodump_xterm_PID=$!
@@ -212,7 +212,7 @@ salir() {
 # 2) ataque
 pkmid_ataque() {
 	clear
-	echo -e "\n${greenColour}[*]$grayColour Iniciando ataque PMKID..\n"
+	echo -e "\n${greenColour}[*]$grayColour Starting PMKID attack...\n"
 	sleep 1 
 	echo -e "${blueColour}[!]$grayColour Recomendacion: 600 segundos (10 minutos)"
 	echo -ne "$purpleColour[?]$grayColour Cuantos segundos quieres que dure la captura de los paquetes?: " && read seg
@@ -240,7 +240,7 @@ pkmid_ataque() {
 }
 # 3) ataque
 fuerza_.cap() {
-	clear; echo -e "\n${greenColour}[*]$grayColour Iniciando Ataque de Fuerza Bruta"
+	clear; echo -e "\n${greenColour}[*]$grayColour Starting Fuerza Bruta"
 	sleep 1
 	echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
@@ -310,7 +310,7 @@ menuforce() {
 }
 
 scanner() {
-	clear; echo -e "\n${greenColour}[*]$grayColour Iniciando Scanner de la red"
+	clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
@@ -451,10 +451,10 @@ eviltrust() {
 		fi
 		cd ..
 	}
-		clear; echo -e "$purpleColour[*]$grayColour Iniciando EvilTrust..."; sleep 2; startAttack
+		clear; echo -e "$purpleColour[*]$grayColour Starting EvilTrust..."; sleep 2; startAttack
 }
 dosattack() {
-	clear; echo -e "\n${blueColourColour}[*]$grayColour Iniciando DoS attack..."; sleep 2
+	clear; echo -e "\n${blueColourColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -hold -e "airodump-ng $tar" &
 	dosairdump_PID=$!
 	echo -ne "${purpleColour}[?]$grayColour Cual red deseas atacar?: " && read redos
@@ -464,7 +464,7 @@ dosattack() {
 }
 
 beaconflood() {
-	clear; echo -e "\n${purpleColour}[*]$grayColour Iniciando Beacon Flood attack..."; sleep 2
+	clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
 	echo -ne "\n${blueColour}[?]$grayColour Quieres ponerle un nombre a las redes? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
 		echo -ne "${yelloColour}[?]$grayColour Nombre: " && read nameap
@@ -529,7 +529,7 @@ else
 				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
 				echo -e "[3] DoS Attack"
 				echo -e "[4] Beacon Flood Attack"
-				echo -e "[5] Scanner de la red local"
+				echo -e "[5] Scanner"
 				echo -e "\n[9] Salir\n"
 				tput cnorm
 				echo -ne "${blueColour}[?]${grayColour} Seleccione un ataque: " && read opcion
