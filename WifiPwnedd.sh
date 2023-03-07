@@ -134,15 +134,18 @@ updatepackages() {
 	if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
 		if [ "$debian" -eq 0 ]; then
 			clear; tput civis
-			echo -e "\n${greenColour}[*]$grayColour Updating the packages..."; sudo apt-get update -y > /dev/null 2>&1
+			echo -e "\n${greenColour}[*]$grayColour Updating the packages..."
+			sudo apt-get update -y > /dev/null 2>&1
 			programs
 		elif [ "$arch" -eq 0 ]; then
 			clear; tput civis
-			echo -e "${greenColour}[*]$grayColour Updating the packages..."; sudo pacman -Syu -y > /dev/null 2>&1
+			echo -e "${greenColour}[*]$grayColour Updating the packages..."
+			sudo pacman -Syu -y > /dev/null 2>&1
 			programs
 		elif [ "$fedora" -eq 0 ]; then
 			clear; tput civis
-			echo -e "${greenColour}[*]$grayColour Updating the packages..."; sudo dnf update -y > /dev/null 2>&1
+			echo -e "${greenColour}[*]$grayColour Updating the packages..."
+			sudo dnf update -y > /dev/null 2>&1
 			programs
 		fi
 	elif [ "$update" == " " ] || [ "$update" == "" ]; then 
