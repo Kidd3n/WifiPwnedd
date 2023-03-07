@@ -136,7 +136,7 @@ updatepackages() {
 			clear; tput civis
 			echo -e "\n${greenColour}[*]$grayColour Updating the packages..."
 			sudo apt-get update -y 
-	
+			read -p "h"
 		elif [ "$arch" -eq 0 ]; then
 			clear; tput civis
 			echo -e "${greenColour}[*]$grayColour Updating the packages..."
