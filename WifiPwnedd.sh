@@ -10,7 +10,7 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
-# Comprobacion e instalacion de la dependencias
+
 trap ctrl_c INT
 
 ctrl_c() {
@@ -486,7 +486,6 @@ if [ $(id -u) -ne 0 ]; then
 # Programa principal
 else
 	updatepackages
-	programs
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	echo "  _       __  _   ____  _      ____                               __      __ "
