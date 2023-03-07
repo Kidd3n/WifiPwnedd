@@ -483,7 +483,8 @@ if [ $(id -u) -ne 0 ]; then
 # Programa principal
 else
 	updatepackages
-	clear
+	programs
+	tput civis; clear
 	echo -e "${turquoiseColour}"
 	echo "  _       __  _   ____  _      ____                               __      __ "
 	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
