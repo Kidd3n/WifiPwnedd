@@ -135,8 +135,8 @@ updatepackages() {
 		if [ "$debian" -eq 0 ]; then
 			clear; tput civis
 			echo -e "\n${greenColour}[*]$grayColour Updating the packages..."
-			sudo apt-get update -y > /dev/null 2>&1
-			programs
+			sudo apt-get update -y 
+	
 		elif [ "$arch" -eq 0 ]; then
 			clear; tput civis
 			echo -e "${greenColour}[*]$grayColour Updating the packages..."
