@@ -187,10 +187,18 @@ handshake_ataque() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
-		echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
-		echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
-		$cleancolor; tput civis
-		xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+		test -f /usr/share/wordlists/rockyou.txt
+		if [ "$(echo $?)" == "0" ]; then
+			echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
+			echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
+			$cleancolor; tput civis
+			xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+		else 
+			pathonher=$(pwd)
+			cd /usr/share/wordlists
+			sudo gunzip -d rockyou.txt.gz
+			cd $pathonher
+		fi
 	else 
 		echo -e "${redColour}\n[!]$grayColour Handshake has not been captured"
 		sleep 2
