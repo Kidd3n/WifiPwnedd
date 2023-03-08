@@ -36,7 +36,7 @@ sudo ./WifiPwnedd.sh
 ```
 cd /usr/share/wordlists
 
-gunzip -d rockyou.txt.gz
+sudo gunzip -d rockyou.txt.gz
 ```
 
 - Then it will perform a brute-force attack with the dictionary we provided (it will take a while depending on your computer and the password)
