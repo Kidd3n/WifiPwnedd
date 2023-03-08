@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 trap ctrl_c INT
 
 ctrl_c() {
-	echo -e "\n\n${redColour}[!]${endColour}${grayColour}Saliendo...${endColour}\n" 
+	echo -e "\n\n${redColour}[!]${endColour}${grayColour}Exit...${endColour}\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
