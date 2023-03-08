@@ -39,7 +39,7 @@ fedora=$(echo $?)
 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3 gunzip)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
