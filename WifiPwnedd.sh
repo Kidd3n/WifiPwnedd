@@ -27,16 +27,16 @@ ctrl_c() {
 	find \-name datos-privados.txt | xargs rm 2>/dev/null
 	exit
 }
+test -f /etc/debian_version
+debian=$(echo $?)
+	
+test -f /etc/arch-release
+arch=$(echo $?)
+
+test -f /etc/redhat-release
+fedora=$(echo $?)
 
 programs() {
-	test -f /etc/debian_version
-	debian=$(echo $?)
-	
-	test -f /etc/arch-release
-	arch=$(echo $?)
-
-	test -f /etc/redhat-release
-	fedora=$(echo $?)
 	
 	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3)
 	
