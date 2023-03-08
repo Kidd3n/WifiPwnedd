@@ -14,7 +14,8 @@ sudo ./WifiPwnedd.sh
 ```
 
 ## Menu de ataques 
-![wifi2](https://user-images.githubusercontent.com/89719224/222926139-8b7865ce-1b11-46be-a409-3b76dfc81a8d.png)
+![cap](https://user-images.githubusercontent.com/89719224/223302307-f68622a4-a527-4762-8138-24b1abf31f6d.png)
+
 
 
 - Configura la tarjeta que tu le indiques para que este en modo monitor (necesario)
