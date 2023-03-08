@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 trap ctrl_c INT
 
 ctrl_c() {
-	echo -e "\n${redColour}[!]${endColour}${grayColour}Saliendo...${endColour}\n" 
+	echo -e "\n\n${redColour}[!]${endColour}${grayColour}Saliendo...${endColour}\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
@@ -130,7 +130,7 @@ programs() {
 	fi
 }
 updatepackages() {
-	clear; echo -ne "${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
+	clear; echo -ne "\n${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
 	if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
 		if [ "$debian" -eq 0 ]; then
 			clear; tput civis
@@ -497,18 +497,18 @@ else
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
 	tput cnorm
-	echo -e "\n${redColour}[*]${endColour}${grayColour} El modo monitor es recomendable y necesario para algunos ataques"
+	echo -e "\n${redColour}[*]${endColour}${grayColour} Monitor mode is recommended and necessary for most attacks"
 	sleep 1
-	echo -ne "${purpleColour}[?]${grayColour} Quieres poner en modo monitor tu targeta de red? [Y/N]: " && read mon
+	echo -ne "${purpleColour}[?]${grayColour} Do you want to put your network card in monitor mode? [Y/N]: " && read mon
 	$cleancolor
 		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -ne "\n${redColour}[?]$grayColour Que tarjeta deseas usar: " && read tar
+			echo -ne "\n${redColour}[?]$grayColour Network card: " && read tar
 			$cleancolor; tput civis
 			airmon-ng start $tar > /dev/null 2>&1
 			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			tput cnorm; echo -ne "${redColour}\n[?]$grayColour Confirmacion de la targeta (Poner el nombre tal como sale): " && read tar
-			tput civis; echo -e "\n${greenColour}[*]${grayColour} Cambiando tu dirrecion MAC en $tar\n"
+			tput cnorm; echo -ne "${redColour}\n[?]$grayColour Card confirmation (Enter the name exactly as it appears): " && read tar
+			tput civis; echo -e "\n${greenColour}[*]${grayColour} Changing your MAC address on $tar\n"
 			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 			ifconfig $tar up
 			airmon-ng check kill > /dev/null 2>&1
@@ -566,7 +566,7 @@ else
 				salir
 				;;
 				*)
-				echo -e "${redColour}\n[!]$grayColour Opcion invalida"; sleep 2
+				echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
 				;;
 				esac
 				done
