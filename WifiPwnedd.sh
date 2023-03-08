@@ -163,9 +163,9 @@ handshake_ataque() {
 	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
 	sleep 1
  	tput cnorm
-	xterm -hold -e "airodump-ng ${tar}" > /dev/null 2>&1
+	xterm -hold -e "airodump-ng ${tar}" &
 	xtermnet=$!
-	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read ap
+	echo -ne "\n${greenColour}[?]$grayColour Select a network (Essid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
 	$cleancolor
