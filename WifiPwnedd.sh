@@ -356,6 +356,7 @@ scanner() {
 	tput cnorm
 }
 menunomon() {
+	bannerattack
 	clear; echo -e "${yellowColour}\n1) Force Brute menu"
 	echo -e "2) Scanner "
 	echo -e "3) Exit"
@@ -506,8 +507,8 @@ beaconflood() {
 	
 }
 bannerattack() {
-	echo -e "	    ${blueColour}.--======."
-	echo -e "${redColour}     :    ${blueColour}.-@#*==-!==+#@*-."
+	echo -e "	    ${blueColour}.--------."
+	echo -e "${redColour}     :  ${blueColour}.-@#*==-!==+#@*-."
 	echo -e "${redColour}     I__________${blueColour}%@%%#*-.${redColour}___"
 	echo -e "${redColour}O====I__________${blueColour}#%%#*-.${redColour}_____>"
 	echo -e "${redColour}     I    ${blueColour}.-*=:::::--."
