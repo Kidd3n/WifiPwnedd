@@ -547,11 +547,11 @@ else
 				echo -e "${redColour}"
 				echo -e "	       .--======."
 				echo -e "     :      .-@#*==-==+#@*-."
-				echo -e "     I__________$$%%#*-.___"
+				echo -e "     I__________%@%%#*-.___"
 				echo -e "O====I__________#%%#*-._____>"
 				echo -e "     I    .-*=:::::--."
 				echo -e "     :      .-####-."
-				echo -e "	        .*_"
+				echo -e "	      .*_"
 				echo -e "               ."
 				sleep 0.5
 				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
