@@ -506,14 +506,15 @@ beaconflood() {
 	
 }
 bannerattack() {
-	echo -e "	    .--======."
-	echo -e "     :   .-@#*==-!==+#@*-."
-	echo -e "     I__________%@%%#*-.___"
-	echo -e "O====I__________#%%#*-._____>"
-	echo -e "     I    .-*=:::::--."
-	echo -e "     :      .-####-."
-	echo -e "	      .*_"
-	echo -e "               ."
+	echo -e "	    ${blueColour}.--======."
+	echo -e "${redColour}     :    ${blueColour}.-@#*==-!==+#@*-."
+	echo -e "${redColour}     I__________${blueColour}%@%%#*-.${redColour}___"
+	echo -e "${redColour}O====I__________${blueColour}#%%#*-.${redColour}_____>"
+	echo -e "${redColour}     I    ${blueColour}.-*=:::::--."
+	echo -e "${redColour}     :      ${blueColour}.-####-."
+	echo -e "	      ${blueColour}.*_"
+	echo -e "               ${blueColour}."
+	$cleancolor
 }
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -558,7 +559,6 @@ else
 				while true; do
 				clear
 				echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
-				echo -e "${redColour}"
 				bannerattack
 				sleep 0.5
 				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
