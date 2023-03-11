@@ -545,8 +545,8 @@ else
 				clear
 				echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
 				echo -e "${redColour}"
-				echo -e "	        .--======."
-				echo -e "     :    .-@#*==-!==+#@*-."
+				echo -e "	     .--======."
+				echo -e "     :   .-@#*==-!==+#@*-."
 				echo -e "     I__________%@%%#*-.___"
 				echo -e "O====I__________#%%#*-._____>"
 				echo -e "     I    .-*=:::::--."
