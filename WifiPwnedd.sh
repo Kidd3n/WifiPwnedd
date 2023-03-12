@@ -98,11 +98,15 @@ programs() {
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
-				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 0.5
-				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
-				sudo pacman -S $program -y > /dev/null 2>&1
-			fi
+				test -f /usr/sbin/$program
+				if [ "$(echo $?)" -eq 0 ]; then
+					echo -e "\n${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				else
+					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					sudo pacman -S $program -y > /dev/null 2>&1
+				fi
+			fi	
 		done
 	elif [ "$fedora" -eq 0 ]; then
 		clear; tput civis
@@ -127,10 +131,14 @@ programs() {
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
-				echo -e "\n${redColour}[-]$grayColour $program"
+				test -f /usr/sbin/$program
+				if [ "$(echo $?)" -eq 0 ]; then
+					echo -e "\n${greenColour}[+]$grayColour $program"
 					sleep 0.5
+				else
 					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo dnf install $program -y > /dev/null 2>&1
+				fi
 			fi
 		done
 	else 
@@ -586,7 +594,7 @@ else
 				scanner
 				;;
 				6)
-				eviltrust
+				ntwkphishing
 				;;
 				7)
 				fuerza_.cap
