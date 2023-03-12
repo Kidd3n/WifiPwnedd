@@ -68,13 +68,15 @@ sudo gunzip -d rockyou.txt.gz
 
 - It will search for the devices on our network and show them on the screen with their IP addresses.
 
-### 6)  Evil Trust
+### 6)  NTWK phishing 
 
-- Automated deployment of a Rogue AP with template selection capability + 2FA
+- Network phishing
 
-- If you want to support the creator and learn more about the tool: https://github.com/s4vitar/evilTrust
+- Creates a fake network with the name of your choice 
 
-- I will be making modifications to the code, as it is outdated, but the creator will still be S4vitar
+- Then we can choose a login to use
+
+- We are waiting for the credentials of the victims
 
 ### 7) Force Brute .cap
 
