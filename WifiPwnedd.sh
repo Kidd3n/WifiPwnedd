@@ -61,7 +61,7 @@ programs() {
 			testest1=$(echo= $?)
 			test -f /usr/sbin/$program
 			testest2=$(echo= $?)
-			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
+			if [ "$testest1" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
@@ -76,7 +76,7 @@ programs() {
 		clear; tput civis
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
-		if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
+		if [ "$testest1" -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
 			echo -e "\n${greenColour}[+]$grayColour macchanger"
@@ -92,7 +92,7 @@ programs() {
 			testest1=$(echo= $?)
 			test -f /usr/sbin/$program
 			testest2=$(echo= $?)
-			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
+			if [ "$testest1" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
@@ -123,7 +123,7 @@ programs() {
 			testest1=$(echo= $?)
 			test -f /usr/sbin/$program
 			testest2=$(echo= $?)
-			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
+			if [ "$testest1" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
