@@ -68,13 +68,13 @@ gunzip -d rockyou.txt.gz
 
 - Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
 
-### 6) Ataque evilTrust
+### 6) NTWK phishing
 
-- Despliegue automatizado de un Rogue AP con capacidad de selección de plantilla + 2FA.
+- Crea una red falsa con el nombre que queramos
 
-- Si quieres apoyar al creador y ver mas sobre la herramienta: https://github.com/s4vitar/evilTrust
+- Podremos elejir el login 
 
-- Le estare haciendo modificaciones al codigo, ya que esta desactualizado pero el creador seguira siendo S4vitar
+- Esperamos las credenciales de las victimas
 
 ### 7) Fuerza bruta .cap
 
