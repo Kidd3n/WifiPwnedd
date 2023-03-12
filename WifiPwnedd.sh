@@ -64,8 +64,14 @@ programs() {
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
-				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
-				sudo apt-get install $program -y > /dev/null 2>&1
+				test -f /usr/sbin/$program
+				if [ "$(echo $?)" -eq 0 ]; then
+					echo -e "\n${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				else
+					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					sudo apt-get install $program -y > /dev/null 2>&1
+				fi
 			fi
 
 		done
