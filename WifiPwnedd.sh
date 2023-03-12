@@ -363,30 +363,8 @@ scanner() {
 	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
 }
-menunomon() {
-	bannerattack
-	clear; echo -e "${yellowColour}\n1) Force Brute menu"
-	echo -e "2) Scanner "
-	echo -e "3) Exit"
-	echo -ne "\n${yellowColour}[?]$grayColour Attack: " && read force
-	case $force in 
-	1)
-	menuforce
-	;;
-	2)
-	scanner
-	;;
-	3)
-	echo -e "\n${redColour}[*]$grayColour Exit..."
-	;;
-	*)
-	echo -e "${redColour}\n[!]$grayColour Invalid option"
-	sleep 2
-	;;
-	esac
-}
 
-ntwkphishing(){
+ntwkphishing() {
 	
 	credentials() {
 		hosts=0 
@@ -520,6 +498,28 @@ banner() {
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
 }
 
+menunomon() {
+	bannerattack
+	clear; echo -e "${yellowColour}\n1) Force Brute menu"
+	echo -e "2) Scanner "
+	echo -e "3) Exit"
+	echo -ne "\n${yellowColour}[?]$grayColour Attack: " && read force
+	case $force in 
+	1)
+	menuforce
+	;;
+	2)
+	scanner
+	;;
+	3)
+	echo -e "\n${redColour}[*]$grayColour Exit..."
+	;;
+	*)
+	echo -e "${redColour}\n[!]$grayColour Invalid option"
+	sleep 2
+	;;
+	esac
+}
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
