@@ -14,7 +14,8 @@ sudo ./WifiPwnedd.sh
 ```
 
 ## Attack menu 
-![banner2](https://user-images.githubusercontent.com/89719224/224511025-b5258370-3b6e-4f83-8c58-edb403f18913.png)
+![banner](https://user-images.githubusercontent.com/89719224/224522153-918c9017-7a3a-4b6e-ba7a-585aa1d9d47a.png)
+
 
 
 
