@@ -59,9 +59,15 @@ programs() {
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
 			testest1=$(echo= $?)
+			
 			test -f /usr/sbin/$program
 			testest2=$(echo= $?)
+			
 			if [ "$testest1" -eq 0 ]; then
+				echo -e "\n${greenColour}[+]$grayColour $program"
+				sleep 0.5
+			
+			elif [ "$testest2" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
