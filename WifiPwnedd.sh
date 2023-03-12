@@ -59,7 +59,8 @@ programs() {
 		for program in "${dependencias[@]}"; do
 			
 			test -f /usr/bin/$program
-			if [ "$(echo= $?)" -eq 0 ]; then
+
+			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
@@ -87,7 +88,7 @@ programs() {
 			
 			test -f /usr/bin/$program
 			
-			if [ "$(echo= $?)" -eq 0 ]; then
+			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
@@ -116,7 +117,7 @@ programs() {
 			
 			test -f /usr/bin/$program
 			
-			if [ "$(echo= $?)" -eq 0 ]; then
+			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
