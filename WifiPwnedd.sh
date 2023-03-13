@@ -536,11 +536,8 @@ menunomon() {
 	esac
 }
 gui() {
-	
+	echo "test"
 }
-
-
-
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
