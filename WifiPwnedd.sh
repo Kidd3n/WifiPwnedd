@@ -173,6 +173,19 @@ updatepackages() {
 	fi
 
 }
+monitormode() {
+	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig | awk '$1~/^[a-z]+[0-9]+/{print "    " $1}'
+	tput cnorm
+	echo -ne "\n${redColour}[?]$grayColour Network card: " && read tar
+	$cleancolor; tput civis
+	airmon-ng start $tar > /dev/null 2>&1
+	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig | awk '$1~/^[a-z]+[0-9]+/{print "    " $1}'
+	tput cnorm; echo -ne "${redColour}\n[?]$grayColour Card confirmation (Enter the name exactly as it appears): " && read tar
+	airmon-ng check kill > /dev/null 2>&1
+	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
+	ifconfig $tar up
+}
+
 testhandshake() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
@@ -360,6 +373,7 @@ menuforce() {
 
 scanner() {
 	clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
+	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
@@ -371,8 +385,8 @@ scanner() {
 	echo -e "\n---------------------------------------------------"
 	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
 	airmon-ng start $tar > /dev/null 2>&1
-	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
-	ifconfig $tar up > /dev/null 2>&1
+	ifconfig $tar down && macchanger -a $tar 2>/dev/null
+	ifconfig $tar up 2>/dev/null
 	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
 }
@@ -512,34 +526,6 @@ banner() {
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
 }
-
-menunomon() {
-	bannerattack
-	clear; echo -e "${yellowColour}\n1) Force Brute menu"
-	echo -e "2) Scanner "
-	echo -e "3) Exit"
-	echo -ne "\n${yellowColour}[?]$grayColour Attack: " && read force
-	case $force in 
-	1)
-	menuforce
-	;;
-	2)
-	scanner
-	;;
-	3)
-	echo -e "\n${redColour}[*]$grayColour Exit..."
-	;;
-	*)
-	echo -e "${redColour}\n[!]$grayColour Invalid option"
-	sleep 2
-	;;
-	esac
-}
-gui() {
-	echo "test"
-}
-
-# Comprobacion si el usuario es root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!]$grayColour Must be root (sudo $0)\n"
 	$cleancolor
@@ -551,77 +537,59 @@ else
 	echo -e "${turquoiseColour}"
 	banner
 	echo -e "\n${greenColour}[+]${grayColour} Version [1.0]"
-	echo -e "\n${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
+	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
-	tput cnorm
-	echo -e "\n${redColour}[*]${endColour}${grayColour} Monitor mode is recommended and necessary for most attacks"
 	sleep 1
-	echo -ne "${purpleColour}[?]${grayColour} Do you want to put your network card in monitor mode? [Y/N]: " && read mon
-	$cleancolor
-		if [ "$mon" == "Y" ] || [ "$mon" == "y" ]; then 
-			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			echo -ne "\n${redColour}[?]$grayColour Network card: " && read tar
-			$cleancolor; tput civis
-			airmon-ng start $tar > /dev/null 2>&1
-			clear; echo -e "$blueColour"; iwconfig | awk '$1~/^[a-z]+[0-9]+/{print $1}'
-			tput cnorm; echo -ne "${redColour}\n[?]$grayColour Card confirmation (Enter the name exactly as it appears): " && read tar
-			tput civis; echo -e "\n${greenColour}[*]${grayColour} Changing your MAC address on $tar\n"
-			ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
-			ifconfig $tar up
-			airmon-ng check kill > /dev/null 2>&1
-			tput civis; $cleancolor
-				while true; do
-				clear
-				echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
-				bannerattack
-				sleep 0.5
-				echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
-				echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
-				echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-				echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] NTWK phishing\t[7] Force Brute .cap"
-				echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
-				echo -e "[3] DoS Attack"
-				echo -e "[4] Beacon Flood Attack"
-				echo -e "[5] Scanner"
-				echo -e "\n[9] Exit\n"
-				tput cnorm
-				echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
-				$cleancolor
-				case $opcion in
-				1)
-				handshake_ataque
-				;;
-				2)
-				pkmid_ataque
-				;;
-				3)
-				dosattack
-				;;
-				4)
-				beaconflood
-				;;
-				5)
-				scanner
-				;;
-				6)
-				ntwkphishing
-				;;
-				7)
-				fuerza_.cap
-				;;
-				8)
-				rainbowtaibles
-				;;
-				9)
-				salir
-				;;
-				*)
-				echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
-				;;
-				esac
-				done
-		else
-			menunomon
-		fi
+	monitormode
+	while true; do
+		clear
+		echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
+		bannerattack
+		sleep 0.5
+		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
+		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
+		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
+		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] NTWK phishing\t[7] Force Brute .cap"
+		echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
+		echo -e "[3] DoS Attack"
+		echo -e "[4] Beacon Flood Attack"
+		echo -e "[5] Scanner"
+		echo -e "\n[9] Exit\n"
+		tput cnorm
+		echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
+		$cleancolor
+		case $opcion in
+			1)
+			handshake_ataque
+			;;
+			2)
+			pkmid_ataque
+			;;
+			3)
+			dosattack
+			;;
+			4)
+			beaconflood
+			;;
+			5)
+			scanner
+			;;
+			6)
+			ntwkphishing
+			;;
+			7)
+			fuerza_.cap
+			;;
+			8)
+			rainbowtaibles
+			;;
+			9)
+			salir
+			;;
+			*)
+			echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+			;;
+			esac
+			done
 fi
