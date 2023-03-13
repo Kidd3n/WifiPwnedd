@@ -499,7 +499,7 @@ dosattack() {
 
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
-	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N) )? [Y/N]: " && read rpsbeacon 
+	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N))? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
 		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
 			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
