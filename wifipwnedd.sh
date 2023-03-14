@@ -40,7 +40,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip tcpdump)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -49,7 +49,8 @@ programs() {
 		if [ $mactest -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger"
+			echo -e "${greenColour}[+]$grayColour macchanger"
+			sleep 0.5
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo apt-get install macchanger -y
@@ -62,15 +63,15 @@ programs() {
 			test -f /usr/bin/$program
 
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program"
+				echo -e "${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
 				if [ "$(echo $?)" -eq 0 ]; then
-					echo -e "\n${greenColour}[+]$grayColour $program"
+					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
-					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo apt-get install $program -y > /dev/null 2>&1
 				fi
 			fi
@@ -83,7 +84,8 @@ programs() {
 		if [ "$mactest" -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger"
+			echo -e "${greenColour}[+]$grayColour macchanger"
+			sleep 0.5
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo pacman -S macchanger -y
@@ -96,15 +98,15 @@ programs() {
 			test -f /usr/bin/$program
 			
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program"
+				echo -e "${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
 				if [ "$(echo $?)" -eq 0 ]; then
-					echo -e "\n${greenColour}[+]$grayColour $program"
+					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
-					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo pacman -S $program -y > /dev/null 2>&1
 				fi
 			fi	
@@ -116,7 +118,8 @@ programs() {
 		if [ $mactest -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
 			sleep 0.5
-			echo -e "\n${greenColour}[+]$grayColour macchanger"
+			echo -e "${greenColour}[+]$grayColour macchanger"
+			sleep 0.5
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo dnf install macchanger -y
@@ -129,21 +132,21 @@ programs() {
 			test -f /usr/bin/$program
 			
 			if [ "$(echo $?)" -eq 0 ]; then
-				echo -e "\n${greenColour}[+]$grayColour $program"
+				echo -e "${greenColour}[+]$grayColour $program"
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
 				if [ "$(echo $?)" -eq 0 ]; then
-					echo -e "\n${greenColour}[+]$grayColour $program"
+					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
-					echo -e "\n${blueColour}[*]$grayColour Installing ${program}..." 
+					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo dnf install $program -y > /dev/null 2>&1
 				fi
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd" 
+		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip tcpdump" 
 		sleep 5
 	fi
 }
@@ -512,6 +515,18 @@ beaconflood() {
 	fi
 	
 }
+#[5] Network traffic with tcpdump
+traffic() {
+	clear; tput civis; echo -e "\n$blueColour[*]$grayColour Starting Network traffic"; sleep 1
+	echo -ne "[?] Do you want to save the captured packets? [Y/N]: " && read captraffic
+	if [ "$captraffic" == "y" ] || [ "$captraffic" == "Y" ]; then 
+		xterm -hold -e "sudo tcpdump -i $tar -w captraffic.pcap" &
+	elif [ "$captraffic" == "N" ] || [ "$captraffic" == "n" ]; then
+		xterm -hold -e "sudo tcpdump -i $tar" &
+	else
+		xterm -hold -e "sudo tcpdump -i $tar" &
+	fi
+}
 #banner for attack menu
 bannerattack() {
 	echo -e "	   ${blueColour}.--------."
@@ -557,12 +572,13 @@ else
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] NTWK phishing\t[7] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t\t\t\t[8] hashed dictionary (Rainbow taibles)"
+		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] NTWK phishing\t[8] Force Brute .cap"
+		echo -e "[2] PMKID Attack\t\t\t\t\t[9] hashed dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
-		echo -e "[5] Scanner"
-		echo -e "\n[9] Exit\n"
+		echo -e "[5] Network traffic"
+		echo -e "[6] Scanner"
+		echo -e "\n[10] Exit and restart the network card\n"
 		tput cnorm
 		echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
 		$cleancolor
@@ -580,18 +596,21 @@ else
 			beaconflood
 			;;
 			5)
-			scanner
+			traffic
 			;;
 			6)
-			ntwkphishing
+			scanner
 			;;
 			7)
-			fuerza_.cap
+			ntwkphishing
 			;;
 			8)
-			rainbowtaibles
+			fuerza_.cap
 			;;
 			9)
+			rainbowtaibles
+			;;
+			10)
 			exitresart
 			;;
 			*)
