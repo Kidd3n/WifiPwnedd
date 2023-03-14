@@ -8,9 +8,9 @@
 ```
 cd WifiPwnedd
 
-chmod 755 WifiPwnedd.sh
+chmod 755 wifipwnedd.sh
 
-sudo ./WifiPwnedd.sh
+sudo ./wifipwnedd.sh
 ```
 
 ## Menu de ataques 
