@@ -34,13 +34,6 @@ sudo ./wifipwnedd.sh
 
 - After a few seconds, we will obtain a Handshake
 
-- It will ask us if we want to use any dictionary, and it will also give the path to rockyou.txt in case we want to use that dictionary. (The rockyou dictionary in Kali is compressed, so we need to apply these commands to decompress the file): 
-```
-cd /usr/share/wordlists
-
-sudo gunzip -d rockyou.txt.gz
-```
-
 - Then it will perform a brute-force attack with the dictionary we provided (it will take a while depending on your computer and the password)
 
 ### 2) PMKID Attack
