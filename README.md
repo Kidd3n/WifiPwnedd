@@ -26,54 +26,57 @@ sudo ./wifipwnedd.sh
 
 ### 1) Handshake Attack
 
-- A window will appear with all available networks and their channels. We must correctly indicate the name of the network and its channel.
+- An airodump-ng window will appear with all the available networks and their channels. We must correctly indicate the name of the network and its channel.
 
-- Then a similar window will appear, but now it will be filtered by the name and channel we provided earlier
+- Next a similar window will appear, but now filtered by the name (essid) and the channel that we have previously provided
 
-- We wait a few seconds and the attack on the network will begin
+- We wait a few seconds and the deauthentication attack with aireplay-ng will start.
 
-- After a few seconds, we will obtain a Handshake
+- After a few seconds, we will get the necessary packet with the encrypted password (Handshake).
 
-- It will ask us if we want to use any dictionary, and it will also give the path to rockyou.txt in case we want to use that dictionary. (The rockyou dictionary in Kali is compressed, so we need to apply these commands to decompress the file): 
-```
-cd /usr/share/wordlists
-
-sudo gunzip -d rockyou.txt.gz
-```
-
-- Then it will perform a brute-force attack with the dictionary we provided (it will take a while depending on your computer and the password)
+- It will then perform a brute force attack with the dictionary we provided (it will take a while depending on your computer and the password)
 
 ### 2) PMKID Attack
 
-- It will wait for the required packet for the number of seconds we specify
+- It will wait for the requested packet with hcxdumptool for the number of seconds you specify (recommended 600).
 
-- If it captures it, it will move on to the brute-force phase with hashcat
+- If it captures it, it will proceed to the brute force phase with hashcat.
 
-- If it does not capture it, the attack will be closed
+- If it does not capture it, the attack will be closed and we will return to the attack menu.
 
 ### 3) DoS Attack
 
 - It will ask us which network we want to attack
 
-- Then it will ask for the channels, the recommended ones are 1, 6, 11 but you can put all from 1-12 or the ones you prefer 
+- Then it will ask us for the channels, the recommended ones are 1, 6, 11 but you can put all of them from 1 to 12 or whatever you prefer. 
 
-- The network may change channels
+- The network can change channels to avoid this attack.
+
+- You can close the window when you want the attack to end. 
 
 ### 4) Beacon Flood Attack
 
-- It will ask us if we want to name the network. If we say yes (Y), it will ask for the name and start the attack
+- It will ask us if we want to give a name to the fake network. If we say yes (Y), it will ask us for the name and start sending the network by packets (Recommended).
 
-- (Recommended) If we say no (N), we will flood the area with networks with strange names.
+- (Recommended) If we say no (N), it will flood the network area with strange names.
+
+- The packet rate is 1000 packets per second, but it depends on your network card the speed. 
 
 ### 5) Scanner
 
-- It will search for the devices on our network and show them on the screen with their IP addresses.
+- will reboot the entire network card to be able to reconnect to a network.
+
+- It will then search for the devices on our network and display them on the screen with their IP addresses.
+
+- After hitting enter it will put our card in monitor mode
 
 ### 6)  NTWK phishing 
 
 - Network phishing
 
-- Creates a fake network with the name of your choice 
+- Creates a fake network with the name of your choice
+
+- It will generate hostapd and dnsmasq configuration files with the name and channel that we gave previously, and also configure that when a device is connected it is assigned an IP address and a NetMask.
 
 - Then we can choose a login to use
 
