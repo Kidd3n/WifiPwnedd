@@ -40,7 +40,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk4 gunzip)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxcaptool php dnsmasq hostapd mdk4 gunzip)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -286,7 +286,7 @@ pkmid_ataque() {
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%]$grayColour Capturing packages\n"
-	hcxcaptool -z HASHPMKID Capture; sudo rm Capture 2>/dev/null
+	hcxcaptool -z HASHPMKID Capture; sudo rm Capture 2>/dev/null 
 	sleep 1
 	$cleancolor
 	test -f HASHPMKID*
