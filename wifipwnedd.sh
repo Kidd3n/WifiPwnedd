@@ -189,6 +189,8 @@ modeverification() {
 			monitormode
 		elif [ "$again" == "n" ] || [ "$again" == "N" ]; then
 			ctrl_c
+		else
+			modeverification
 		fi
 	fi
 }
