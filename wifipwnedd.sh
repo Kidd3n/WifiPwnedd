@@ -511,7 +511,7 @@ beaconflood() {
 	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N))? [Y/N]: " && read rpsbeacon 
 	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
 		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
-			xterm -hold -e "sudo mdk3 $tar b -n $nameap -s 1000"
+			xterm -hold -e "sudo mdk4 $tar b -n $nameap -s 1000"
 	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
 		xterm -hold -e "sudo mdk4 $tar b -s 1000"
 	fi
@@ -564,7 +564,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.0"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.1"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
