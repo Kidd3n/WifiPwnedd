@@ -184,7 +184,7 @@ modeverification() {
 	iwconfig | grep Monitor > /dev/null 2>&1
 	if [ "$(echo $?)" -ne 0 ]; then
 		echo -e "\n$redColour[!]$grayColour Monitor mode is not activated"
-		sleep 2; echo -ne "$greenColour[?]$grayColouryou You want to reactivate the monitor mode? [Y/N]: " && read again
+		sleep 2; echo -ne "$greenColour[?]$grayColour You want to reactivate the monitor mode? [Y/N]: " && read again
 		if [ "$again" == "y" ] || [ "$again" == "Y" ]; then
 			monitormode
 		elif [ "$again" == "n" ] || [ "$again" == "N" ]; then
@@ -202,8 +202,8 @@ monitormode() {
 	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig 
 	tput cnorm; echo -ne "${redColour}\n[?]$grayColour Card confirmation (Enter the name exactly as it appears): " && read tar
 	airmon-ng check kill > /dev/null 2>&1
-	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
-	ifconfig $tar up
+	ifconfig $tar down > /dev/null 2>&1 && macchanger -a $tar > /dev/null 2>&1
+	ifconfig $tar up > /dev/null 2>&1
 	modeverification
 }
 #Test if the package was captured and if you have rockyou in your OS
