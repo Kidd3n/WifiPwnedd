@@ -21,12 +21,12 @@ ctrl_c() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	tput cnorm
 	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
 	sudo rm Capture.pcapng hash.hc22000 2>/dev/null
 	rm -r iface 2>/dev/null
 	sudo rm Handshake* 2>/dev/null
 	find \-name datos-privados.txt | xargs rm 2>/dev/null
+	tput cnorm
 	exit
 }
 #Verify the distribution 
@@ -179,6 +179,19 @@ updatepackages() {
 	fi
 
 }
+# Monitor mode check
+modeverification() {
+	iwconfig | grep Monitor > /dev/null 2>&1
+	if [ "$(echo $?)" -ne 0 ]; then
+		echo -e "\n$redColour[!]$grayColour Monitor mode is not activated"
+		sleep 2; echo -ne "$greenColour[?]$grayColouryou You want to reactivate the monitor mode? [Y/N]: " && read again
+		if [ "$again" == "y" ] || [ "$again" == "Y" ]; then
+			monitormode
+		elif [ "$again" == "n" ] || [ "$again" == "N" ]; then
+			ctrl_c
+		fi
+	fi
+}
 #Function to start monitor mode and kill confluent processes 
 monitormode() {
 	clear; echo -e "\n${blueColour}[*]$grayColour Interface:\n" && iwconfig 
@@ -191,6 +204,7 @@ monitormode() {
 	airmon-ng check kill > /dev/null 2>&1
 	ifconfig $tar down && macchanger -a $tar > /dev/null 2>&1
 	ifconfig $tar up
+	modeverification
 }
 #Test if the package was captured and if you have rockyou in your OS
 testhandshake() {
@@ -264,6 +278,7 @@ handshake_ataque() {
 		testhandshake
 	fi
 }
+
 #It will exit the program and restart the network card and the services required for connections
 exitresart() {
 	echo -e "\n${redColour}[*]$grayColour Exiting and restarting the network card...\n" 
@@ -273,7 +288,11 @@ exitresart() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sudo rm Handshake* > /dev/null 2>&1
+	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
+	sudo rm Capture.pcapng hash.hc22000 2>/dev/null
+	rm -r iface 2>/dev/null
+	sudo rm Handshake* 2>/dev/null
+	find \-name datos-privados.txt | xargs rm 2>/dev/null
 	tput cnorm
 	exit
 }
@@ -381,15 +400,15 @@ menuforce() {
 #[5] local network scanner with ip with nmap
 scanner() {
 	clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
-	tput civis
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 15
+	echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
 	tput civis; echo -e "\n---------------------------------------------------\n"
-	sudo nmap -sP -Pn 192.168.1.0/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
+	sudo nmap -sP -Pn ${iplocal}/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
 	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
 	airmon-ng start $tar > /dev/null 2>&1
@@ -397,6 +416,7 @@ scanner() {
 	ifconfig $tar up 2>/dev/null
 	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
+	modeverification
 }
 #[6] Creation of a fake network with a login to steal the credentials of the connecting victims (created by me)
 ntwkphishing() {
@@ -564,7 +584,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.1"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.3"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
