@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Attack menu 
-![wifipwneddparrot](https://user-images.githubusercontent.com/89719224/224881946-19479540-8da7-49c9-8baa-7eabb101675d.png)
+![Captura de pantalla -2023-03-16 14-06-22](https://user-images.githubusercontent.com/89719224/225740787-31e51cc7-9399-443b-8eb8-10c1073c6170.png)
+
 
 
 
@@ -63,19 +64,23 @@ sudo ./wifipwnedd.sh
 
 - The packet rate is 1000 packets per second, but it depends on your network card the speed. 
 
-### 5) Scanner
+### 5) Network Traffic
 
-- will reboot the entire network card to be able to reconnect to a network.
+- You can monitor all traffic and parcels that travel 
 
-- It will then search for the devices on our network and display them on the screen with their IP addresses.
+### 6)  Scanner
+
+- will reboot the entire network card to be able to reconnect to a network. 
+
+- It will then search for the devices on our network and display them on the screen with their IP addresses. 
 
 - After hitting enter it will put our card in monitor mode
 
-### 6)  NTWK phishing 
+### 7) Wifiphisher
 
-- Network phishing
+- Evil Twin 
 
-- Creates a fake network with the name of your choice
+- Creates a fake network with the name of your choice 
 
 - It will generate hostapd and dnsmasq configuration files with the name and channel that we gave previously, and also configure that when a device is connected it is assigned an IP address and a NetMask.
 
@@ -83,10 +88,14 @@ sudo ./wifipwnedd.sh
 
 - We are waiting for the credentials of the victims
 
-### 7) Force Brute .cap
+### 8) Fake/Rogue Ap
 
-- It will perform a brute-force attack on a .cap Handshake
+- Create a fake network with the name and channel of your choice
 
-### 8) Rainbow Taibles
+### 9) Force Brute .cap
+
+- Brute-force the dictionary we pass to a .cap file.
+
+### 10) Hashed Dictionary (Rainbow Taibles)
 
 - It is a precomputed dictionary used for brute-forcing hashes. This will help speed up the process (depending on the passwords)
