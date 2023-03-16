@@ -348,8 +348,8 @@ fuerza_rainbow() {
 }
 #[8] Attack with airolib for the creation of precomputed dictionaries
 rainbowtaibles() {
-	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."
-	echo -ne "${blueColour}[?]$grayColour Dictionary path: " && read ruta
+	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."; sleep 2
+	echo -ne "\n${blueColour}[?]$grayColour Dictionary path: " && read ruta
 	sudo airolib-ng dicc-hashed --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hashed
 	if [ "$(echo $?)" -eq 0 ]; then
@@ -634,6 +634,7 @@ else
 		bannerattack
 		sleep 0.5
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
+		echo -e "${greenColour}\n[+]${grayColour} Frequency: $(iwconfig $tar | grep 'Frequency' | awk '{print $2}' | cut -d':' -f2)"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
