@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Menu de ataques 
-![wifipwneddparrot](https://user-images.githubusercontent.com/89719224/224881993-84bc0b9e-2030-4f19-b877-d23d4b01bc3b.png)
+![Captura de pantalla -2023-03-16 14-06-22](https://user-images.githubusercontent.com/89719224/225742589-2d5700d4-3121-4f4a-a89a-0c386d37e704.png)
+
 
 
 
@@ -34,13 +35,6 @@ sudo ./wifipwnedd.sh
 - Esperamos unos segundos y empezara el ataque a la red
 
 - Despues de algunos segundos vamos a optener un Handshake
-
-- Nos preguntara por algun diccionario que queramos usar, igual se dara la ruta de rockyou.txt por si quieres usar ese diccionario (El rockyou en kali esta comprimido, para descomprimir el archivo debemos aplicar estos comandos): 
-```
-cd /usr/share/wordlists
-
-gunzip -d rockyou.txt.gz
-```
 
 - Luego se hara fuerza bruta con el diccionario que le pasamos (Durara bastante dependiendo de tu computadora y de la contraseña)
 
@@ -66,22 +60,34 @@ gunzip -d rockyou.txt.gz
 
 - (Recomendado) Si le damos que no (N) pues se nos hara un flood de redes con nombre extraños
 
-### 5) Scanner
+### 5) Network Traffic
 
-- Nos buscara los dispotivos de nuestra red y se nos mostrara por pantalla con la ip
+- Podemos ver todo el trafico que viaja
 
-### 6) NTWK phishing
+### 6) Scanner
 
-- Crea una red falsa con el nombre que queramos
+- Podemos ver los dispositivos que estan en la red que estabamos conectados con la ip
 
-- Podremos elejir el login 
+### 7) Wifiphisher
 
-- Esperamos las credenciales de las victimas
+- Gemelo malvado
 
-### 7) Fuerza bruta .cap
+- Crea una red falsa con el nombre que elijas.
 
-- Nos hara fuerza bruta a un handshake .cap
+- Generará los ficheros de configuración hostapd y dnsmasq con el nombre y canal que dimos anteriormente, y también configurará que cuando se conecte un dispositivo se le asigne una dirección IP y una NetMask.
 
-### 8) Rainbow Taibles
+- A continuación podemos elegir un login a utilizar
+
+- Esperamos las credenciales de las víctimas
+
+### 8) Fake/Rogue ap
+
+- Crea una red falsa con el nombre y el canal que quieras
+
+### 9) Force Brute .cap
+
+- Fuerza bruta con el diccionario que queramos a un archivo .cap.
+
+### 10) Hashed Dictionary (Rainbow Taibles)
 
 - Es un diccionario precomputado para ser usado contra hashes, esto nos ayudara a que sea mas rapido (Depende de la contraseñas)
