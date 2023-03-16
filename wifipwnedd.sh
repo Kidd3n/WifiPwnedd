@@ -568,6 +568,7 @@ bannerattack() {
 	$cleancolor
 }
 fakeap() {
+	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting Fake/Rogue AP"; sleep 2
 	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
 	echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
 	tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
@@ -585,6 +586,7 @@ fakeap() {
 	sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
 	hostapd hostapd.conf > /dev/null 2>&1 &
 	sleep 5
+	cd /root/fap
 	echo -e "${yellowColour}[*]${grayColour} Configuring dnsmasq..."
 	echo -e "interface=${tar}\n" > dnsmasq.conf
 	echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
@@ -624,7 +626,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.3"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.4"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	$cleancolor
@@ -638,7 +640,7 @@ else
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t\t[10] Hashed Dictionary (Rainbow taibles)"
+		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Network traffic"
