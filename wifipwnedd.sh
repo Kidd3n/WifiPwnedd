@@ -586,7 +586,6 @@ fakeap() {
 	sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
 	hostapd hostapd.conf > /dev/null 2>&1 &
 	sleep 5
-	cd /root/fap
 	echo -e "${yellowColour}[*]${grayColour} Configuring dnsmasq..."
 	echo -e "interface=${tar}\n" > dnsmasq.conf
 	echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
@@ -603,9 +602,7 @@ fakeap() {
 	route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
 	sleep 3
 	dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
-	iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
-	iptables --append FORWARD --in-interface $tar -j ACCEPT
-	xterm -hold -e "echo 1 > /proc/sys/net/ipv4/ip_forward" &
+	echo -ne "Enter to exit " && read 
 }
 #banner main
 banner() {
