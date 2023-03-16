@@ -634,6 +634,7 @@ else
 		bannerattack
 		sleep 0.5
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
+		echo -e "${greenColour}[+]${grayColour} $(iwconfig $tar | grep "Frequency" | awk "{print \$2}")"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
