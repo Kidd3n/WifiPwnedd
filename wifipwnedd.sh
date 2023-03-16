@@ -598,8 +598,8 @@ else
 		sleep 0.5
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
-		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Wifiphisher\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] NTWK phishing\t[8] Force Brute .cap"
+		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
+		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t[8] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t\t\t\t[9] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[3] DoS Attack"
 		echo -e "[4] Beacon Flood Attack"
