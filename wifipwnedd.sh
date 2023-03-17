@@ -153,7 +153,7 @@ programs() {
 }
 #Update your OS repositories
 updatepackages() {
-	clear; echo -ne "\n${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
+	tput cnorm; clear; echo -ne "\n${blueColour}[?]$grayColour Do you want to update the packages? [Y/N]: " && read update 
 	if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
 		if [ "$debian" -eq 0 ]; then
 			clear; tput civis
@@ -619,14 +619,13 @@ if [ $(id -u) -ne 0 ]; then
 	exit 1
 #if the tool was run as root, run the updatepackages, check the dependencies and run the main code
 else
-	updatepackages
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
 	echo -e "\n${greenColour}[+]${grayColour} Version 1.4"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
-	$cleancolor
+	updatepackages
 	monitormode
 	while true; do
 		clear
@@ -634,7 +633,6 @@ else
 		bannerattack
 		sleep 0.5
 		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
-		echo -e "${greenColour}[+]${grayColour} $(iwconfig $tar | grep "Frequency" | awk "{print \$2}")"
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
