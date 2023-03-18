@@ -515,7 +515,7 @@ ntwkphishing() {
 	}
 	
 	clear
-	echo -e "\n$purpleColour[*]$grayColour Starting NTWK Phishing..."
+	echo -e "\n$purpleColour[*]$grayColour Starting Wifiphisher..."
 	sleep 2
 	attack
 }
