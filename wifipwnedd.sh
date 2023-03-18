@@ -10,6 +10,20 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
+
+filestrash() {
+	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt)
+	tput civis
+	for file in "${files[@]}"; do
+		test -f $file
+		if [ "$(echo $?)" -eq 0 ]; then
+				sudo rm $file 2>/dev/null
+				sudo rm -r $file 2>/dev/null
+		fi
+	done
+	tput cnorm
+}
+
 #Catches the Ctrl+C signal and executes the output of the code
 trap ctrl_c INT
 
@@ -21,12 +35,7 @@ ctrl_c() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
-	sudo rm Capture.pcapng hash.hc22000 2>/dev/null
-	rm -r iface 2>/dev/null
-	sudo rm Handshake* 2>/dev/null
-	find \-name datos-privados.txt | xargs rm 2>/dev/null
-	tput cnorm
+	filestrash
 	exit
 }
 #Verify the distribution 
@@ -291,12 +300,7 @@ exitresart() {
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
-	sudo rm dnsmasq.conf hostapd.conf 2>/dev/null
-	sudo rm Capture.pcapng hash.hc22000 2>/dev/null
-	rm -r iface 2>/dev/null
-	sudo rm Handshake* 2>/dev/null
-	find \-name datos-privados.txt | xargs rm 2>/dev/null
-	tput cnorm
+	filestrash
 	exit
 }
 
