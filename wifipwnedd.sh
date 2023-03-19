@@ -20,7 +20,7 @@ filestrash() {
 	done
 	tput cnorm
 }
-
+3
 #Catches the Ctrl+C signal and executes the output of the code
 trap ctrl_c INT
 
@@ -47,7 +47,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump cap2hccapx.bin)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -74,7 +74,13 @@ programs() {
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
-				if [ "$(echo $?)" -eq 0 ]; then
+				sbin=$(echo $?)
+				test -f /usr/share/hashcat-utils/$program
+				hashu=$(echo $?)
+				if [ "$sbin" -eq 0 ]; then
+					echo -e "${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
@@ -109,7 +115,13 @@ programs() {
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
-				if [ "$(echo $?)" -eq 0 ]; then
+				sbin=$(echo $?)
+				test -f /usr/share/hashcat-utils/$program
+				hashu=$(echo $?)
+				if [ "$sbin" -eq 0 ]; then
+					echo -e "${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
@@ -143,7 +155,13 @@ programs() {
 				sleep 0.5
 			else
 				test -f /usr/sbin/$program
-				if [ "$(echo $?)" -eq 0 ]; then
+				sbin=$(echo $?)
+				test -f /usr/share/hashcat-utils/$program
+				hashu=$(echo $?)
+				if [ "$sbin" -eq 0 ]; then
+					echo -e "${greenColour}[+]$grayColour $program"
+					sleep 0.5
+				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
 					sleep 0.5
 				else
@@ -153,7 +171,7 @@ programs() {
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump" 
+		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump cap2hccapx.bin" 
 		sleep 5
 	fi
 }
@@ -229,10 +247,9 @@ testhandshake() {
 		else
 			test -f /usr/share/wordlists/rockyou.txt.gz
 			if [ "$(echo $?)" -eq 0 ]; then
-				pathonher=$(pwd)
 				cd /usr/share/wordlists
 				sudo gunzip -d rockyou.txt.gz
-				cd $pathonher
+				cd $pathmain
 			else 
 				echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"
 			fi
@@ -606,6 +623,14 @@ fakeap() {
 	dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
 	echo -ne "Enter to exit " && read 
 }
+caphccapx() {
+	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting "; sleep 2
+	cd /usr/share/hashcat-utils
+	tput cnorm; echo -ne "$greenColour[?]$grayColour Path to .cap file: " && read filecap
+	echo -ne "$greenColour[?]$grayColour File name for hccapx: " && read namehccapx
+	./cap2hccapx.bin $filecap ${pathmain}/${namehccapx}.hccapx
+	cd $pathmain
+}
 #banner main
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -621,6 +646,7 @@ if [ $(id -u) -ne 0 ]; then
 	exit 1
 #if the tool was run as root, run the updatepackages, check the dependencies and run the main code
 else
+	pathmain=$(pwd)
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
@@ -638,8 +664,8 @@ else
 		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
-		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hashed Dictionary (Rainbow taibles)"
-		echo -e "[3] DoS Attack"
+		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
+		echo -e "[3] DoS Attack\t\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
@@ -676,6 +702,9 @@ else
 			fuerza_.cap
 			;;
 			10)
+			caphccapx
+			;;
+			11)
 			rainbowtaibles
 			;;
 			99)
