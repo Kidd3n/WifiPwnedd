@@ -419,14 +419,14 @@ menuforce() {
 }
 #[5] local network scanner with ip with nmap
 scanner() {
-	clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 15
-	echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
+	tput cnorm; echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
 	tput civis; echo -e "\n---------------------------------------------------\n"
 	sudo nmap -sP -Pn ${iplocal}/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
 	echo -e "\n---------------------------------------------------"
@@ -664,7 +664,7 @@ else
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
-		echo -e "[3] DoS Attack\t\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
+		echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
 		echo -e "[4] Beacon Flood Attack"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
