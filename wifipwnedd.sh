@@ -15,11 +15,8 @@ filestrash() {
 	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt)
 	tput civis
 	for file in "${files[@]}"; do
-		test -f $file
-		if [ "$(echo $?)" -eq 0 ]; then
-				sudo rm $file 2>/dev/null
-				sudo rm -r $file 2>/dev/null
-		fi
+		sudo rm $file 2>/dev/null
+		sudo rm -r $file 2>/dev/null
 	done
 	tput cnorm
 }
