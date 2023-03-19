@@ -20,7 +20,6 @@ filestrash() {
 	done
 	tput cnorm
 }
-3
 #Catches the Ctrl+C signal and executes the output of the code
 trap ctrl_c INT
 
