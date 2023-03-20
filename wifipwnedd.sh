@@ -13,7 +13,7 @@ cleancolor="echo -e "${endColour}""
 
 filestrash() {
 	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt)
-	tput civis
+	tput civis; cd $pathmain
 	for file in "${files[@]}"; do
 		sudo rm $file 2>/dev/null
 		sudo rm -r $file 2>/dev/null
@@ -341,7 +341,7 @@ pkmid_ataque() {
 		echo -e "\n${blueColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
 		tput civis
-		hashcat -m 22000 hash.hc22000 $dicc1
+		hashcat -a 3 -m 22000 hash.hc22000 $dicc1
 	else 
 		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
 		sleep 3
@@ -623,12 +623,39 @@ fakeap() {
 	echo -ne "Enter to exit " && read 
 }
 caphccapx() {
-	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting "; sleep 2
+	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting .cap -> .hccapx converter"; sleep 2
 	cd /usr/share/hashcat-utils
-	tput cnorm; echo -ne "$greenColour[?]$grayColour Path to .cap file: " && read filecap
+	tput cnorm; echo -ne "\n$greenColour[?]$grayColour Path to .cap file: " && read filecap
 	echo -ne "$greenColour[?]$grayColour File name for hccapx: " && read namehccapx
 	./cap2hccapx.bin $filecap ${pathmain}/${namehccapx}.hccapx
 	cd $pathmain
+}
+gpuhash() {
+	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting ForceBrute with GPU"; sleep 2
+	echo -ne "\n$yellowColour[?]$grayColour You have a file or hash in hccapx format? [Y/N]: " && read format
+	if [ "$format" == "Y" ] || [ "$format" == "y" ]; then
+		echo -ne "$redColour[?]$grayColour hccapx path: " && read pahc
+		hashcat -I
+		echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu
+		echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu
+		hashcat -a 3 -m 2500 -d $numgpu $pahc $pathgpu
+	elif [ "$format" == "N" ] || [ "$format" == "n" ]; then
+		echo -ne "$blueColour[?]$grayColour Do you have a .cap file or hash? [Y/N]: " && read filecap
+		if [ "$filecap" == "Y" ] || [ "$filecap" == "y" ]; then
+			caphccapx
+		elif [ "$filecap" == "n" ] || [ "$filecap" == "N" ]; then
+			echo -ne "$greenColour[?]$grayColour Do you want to do a Handshake attack to get a .cap and then convert it? [Y/N]: " && read attackyn
+			if [ "$attackyn" == "Y" ] || [ "$attackyn" == "y" ]; then
+				handshake_ataque
+			else
+				echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"
+			fi
+		else
+			echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"
+		fi 
+	else
+		gpuhash
+	fi
 }
 #banner main
 banner() {
@@ -649,7 +676,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.4"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.5"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
@@ -665,7 +692,7 @@ else
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
 		echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
-		echo -e "[4] Beacon Flood Attack"
+		echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t\t[12] Force Brute with GPU (Hashcat)"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
 		echo -e "\n[99] Exit and restart the network card\n"
@@ -705,6 +732,9 @@ else
 			;;
 			11)
 			rainbowtaibles
+			;;
+			12)
+			gpuhash
 			;;
 			99)
 			exitresart
