@@ -632,12 +632,13 @@ caphccapx() {
 }
 gpuhash() {
 	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting ForceBrute with GPU"; sleep 2
-	echo -ne "\n$yellowColour[?]$grayColour You have a file or hash in hccapx format? [Y/N]: " && read format
+	tput cnorm; echo -ne "\n$yellowColour[?]$grayColour You have a file or hash in hccapx format? [Y/N]: " && read format
 	if [ "$format" == "Y" ] || [ "$format" == "y" ]; then
 		echo -ne "$redColour[?]$grayColour hccapx path: " && read pahc
 		hashcat -I
 		echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu
 		echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu
+		tput civis
 		hashcat -a 3 -m 2500 -d $numgpu $pahc $pathgpu
 	elif [ "$format" == "N" ] || [ "$format" == "n" ]; then
 		echo -ne "$blueColour[?]$grayColour Do you have a .cap file or hash? [Y/N]: " && read filecap
@@ -677,7 +678,6 @@ else
 	echo -e "${turquoiseColour}"
 	banner
 	echo -e "\n${greenColour}[+]${grayColour} Version 1.6"
-	echo -e "${redColour}[!]${grayColour} No Test Attack 12"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
@@ -693,7 +693,7 @@ else
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
 		echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
-		echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t\t[12] Force Brute with GPU (Hashcat)"
+		echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU (Hashcat)"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
 		echo -e "\n[99] Exit and restart the network card\n"
