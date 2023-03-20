@@ -676,7 +676,8 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.5"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.6"
+	echo -e "${redColour}[!]${grayColour} No Test Attack 12"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
