@@ -640,6 +640,7 @@ gpuhash() {
 		echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu
 		tput civis
 		hashcat -a 3 -m 2500 -d $numgpu $pahc $pathgpu
+		echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 	elif [ "$format" == "N" ] || [ "$format" == "n" ]; then
 		echo -ne "$blueColour[?]$grayColour Do you have a .cap file or hash? [Y/N]: " && read filecap
 		if [ "$filecap" == "Y" ] || [ "$filecap" == "y" ]; then
@@ -649,10 +650,10 @@ gpuhash() {
 			if [ "$attackyn" == "Y" ] || [ "$attackyn" == "y" ]; then
 				handshake_ataque
 			else
-				echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"
+				echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"; sleep 3
 			fi
 		else
-			echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"
+			echo -e "$redColour[!]$grayColour You have to have a hash prepared for this attack"; sleep 3
 		fi 
 	else
 		gpuhash
@@ -693,7 +694,7 @@ else
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
 		echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
-		echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU (Hashcat)"
+		echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
 		echo -e "[5] Network traffic"
 		echo -e "[6] Scanner"
 		echo -e "\n[99] Exit and restart the network card\n"
