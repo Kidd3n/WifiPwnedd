@@ -237,20 +237,29 @@ testhandshake() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
-		test -f /usr/share/wordlists/rockyou.txt
-		if [ "$(echo $?)" == "0" ]; then
-			echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
-			echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
-			$cleancolor; tput civis
-			xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap"
+		echo -ne "$yellowColour[?]$grayColour Do you want to brute force your GPU? [Y/N]: " && read gpuno
+		if [ "$gpuno" == "Y" ] || [ "$gpuno" == "y" ]; then
+			gpuhand
 		else
-			test -f /usr/share/wordlists/rockyou.txt.gz
-			if [ "$(echo $?)" -eq 0 ]; then
-				cd /usr/share/wordlists
-				sudo gunzip -d rockyou.txt.gz
-				cd $pathmain
-			else 
-				echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"
+			test -f /usr/share/wordlists/rockyou.txt
+			if [ "$(echo $?)" == "0" ]; then
+				echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
+				echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
+				$cleancolor; tput civis
+				xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+			else
+				test -f /usr/share/wordlists/rockyou.txt.gz
+				if [ "$(echo $?)" -eq 0 ]; then
+					cd /usr/share/wordlists
+					sudo gunzip -d rockyou.txt.gz
+					cd $pathmain
+					echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
+					echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
+					$cleancolor; tput civis
+					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+				else 
+					echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"
+				fi
 			fi
 		fi
 	else 
@@ -627,7 +636,9 @@ caphccapx() {
 	cd /usr/share/hashcat-utils
 	tput cnorm; echo -ne "\n$greenColour[?]$grayColour Path to .cap file: " && read filecap
 	echo -ne "$greenColour[?]$grayColour File name for hccapx: " && read namehccapx
+	tput civis
 	./cap2hccapx.bin $filecap ${pathmain}/${namehccapx}.hccapx
+	echo -ne "$greenColour[*]$grayColour You now have your file or hash ready, Enter to continue" && read
 	cd $pathmain
 }
 gpuhash() {
@@ -659,6 +670,17 @@ gpuhash() {
 		gpuhash
 	fi
 }
+gpuhand() {
+	cd /usr/share/hashcat-utils
+	./cap2hccapx.bin Handshake-01.cap ${pathmain}/Handshake.hccapx
+	cd $pathmain
+	hashcat -I
+	echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu1
+	echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu1
+	tput civis
+	hashcat -a 3 -m 2500 -d $numgpu1 Handshake.hccapx $pathgpu1
+	echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
+}
 #banner main
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -678,7 +700,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.6"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.7"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
