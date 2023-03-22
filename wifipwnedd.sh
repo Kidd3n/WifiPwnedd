@@ -54,9 +54,9 @@ programs() {
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
-			sleep 0.5
+			sleep 0.3
 			echo -e "${greenColour}[+]$grayColour macchanger"
-			sleep 0.5
+			sleep 0.1
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo apt-get install macchanger -y
@@ -70,7 +70,7 @@ programs() {
 
 			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "${greenColour}[+]$grayColour $program"
-				sleep 0.5
+				sleep 0.1
 			else
 				test -f /usr/sbin/$program
 				sbin=$(echo $?)
@@ -78,10 +78,10 @@ programs() {
 				hashu=$(echo $?)
 				if [ "$sbin" -eq 0 ]; then
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				else
 					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo apt-get install $program -y > /dev/null 2>&1
@@ -95,9 +95,9 @@ programs() {
 		mactest=$(echo $?)
 		if [ "$mactest" -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
-			sleep 0.5
+			sleep 0.3
 			echo -e "${greenColour}[+]$grayColour macchanger"
-			sleep 0.5
+			sleep 0.1
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo pacman -S macchanger -y
@@ -111,7 +111,7 @@ programs() {
 			
 			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "${greenColour}[+]$grayColour $program"
-				sleep 0.5
+				sleep 0.1
 			else
 				test -f /usr/sbin/$program
 				sbin=$(echo $?)
@@ -119,10 +119,10 @@ programs() {
 				hashu=$(echo $?)
 				if [ "$sbin" -eq 0 ]; then
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				else
 					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo pacman -S $program -y > /dev/null 2>&1
@@ -135,9 +135,9 @@ programs() {
 		mactest=$(echo $?)
 		if [ $mactest -eq 0 ]; then
 			echo -e "\n${blueColour}[*]$grayColour Checking dependencies...\n"
-			sleep 0.5
+			sleep 0.3
 			echo -e "${greenColour}[+]$grayColour macchanger"
-			sleep 0.5
+			sleep 0.1
 		else
 			echo -e "${blueColour}[*]$grayColour Installing macchanger..."
 			sudo dnf install macchanger -y
@@ -151,7 +151,7 @@ programs() {
 			
 			if [ "$(echo $?)" -eq 0 ]; then
 				echo -e "${greenColour}[+]$grayColour $program"
-				sleep 0.5
+				sleep 0.1
 			else
 				test -f /usr/sbin/$program
 				sbin=$(echo $?)
@@ -159,10 +159,10 @@ programs() {
 				hashu=$(echo $?)
 				if [ "$sbin" -eq 0 ]; then
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				elif [ "$hashu" -eq 0 ]; then 
 					echo -e "${greenColour}[+]$grayColour $program"
-					sleep 0.5
+					sleep 0.1
 				else
 					echo -e "${blueColour}[*]$grayColour Installing ${program}..." 
 					sudo dnf install $program -y > /dev/null 2>&1
@@ -269,12 +269,12 @@ testhandshake() {
 }
 #[1] Attack with aircrack
 handshake_ataque() {
-	clear
+	clear; tput civis
 	echo -e "\n${turquoiseColour}[*]$grayColour Starting Handshake attack"
 	sleep 1
- 	tput cnorm
 	xterm -hold -e "airodump-ng ${tar}" &
 	xtermnet=$!
+	tput cnorm
 	echo -ne "\n${greenColour}[?]$grayColour Select a network (Essid): " && read ap
 	echo -ne "${greenColour}[?]$grayColour What channel is ${ap}?: " && read channel
 	tput civis
