@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Attack menu 
-![Captura de pantalla -2023-03-16 14-06-22](https://user-images.githubusercontent.com/89719224/225740787-31e51cc7-9399-443b-8eb8-10c1073c6170.png)
+![banner](https://user-images.githubusercontent.com/89719224/227698176-f602ecf2-6d91-40df-92da-31cbe4bd88b5.png)
+
 
 
 
@@ -96,6 +97,20 @@ sudo ./wifipwnedd.sh
 
 - Brute-force the dictionary we pass to a .cap file.
 
-### 10) Hashed Dictionary (Rainbow Taibles)
+### 10) Hash .cap -> .hccapx
+
+- Convert your hash or .cap file to hccapx
+
+### 11) Hashed Dictionary (Rainbow Taibles)
 
 - It is a precomputed dictionary used for brute-forcing hashes. This will help speed up the process (depending on the passwords)
+
+### 12) Force brute with GPU
+
+- ❕ This option cannot be done in a virtual machine, it will only work when the OS is directly installed. 
+
+- It will ask for a hash, either .cap or hccapx, if it is .cap it will be automatically converted to hccapx format with the name you want.
+
+- Then a menu will pop up where we will see our Hardware and we can select our GPU (If you put a CPU, the brute force will not be done).
+
+- It will automatically brute force the process with our preferred dictionary to the hash and with the GPU of your pc.
