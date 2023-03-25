@@ -12,7 +12,7 @@ grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 
 filestrash() {
-	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap Handshake.hccapx)
+	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap)
 	tput civis; cd $pathmain
 	for file in "${files[@]}"; do
 		sudo rm $file 2>/dev/null
@@ -170,7 +170,7 @@ programs() {
 			fi
 		done
 	else 
-		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump cap2hccapx.bin" 
+		echo -e "\n${redColour}[!]$grayColour Can't find your distribution, download these programs manually: aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin" 
 		sleep 5
 	fi
 }
@@ -559,6 +559,7 @@ dosattack() {
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
 	sudo mdk4 $tar b -s 1000
+	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
 
 }
 #[5] Network traffic with tcpdump
@@ -568,13 +569,13 @@ traffic() {
 	tput civis
 	if [ "$captraffic" == "y" ] || [ "$captraffic" == "Y" ]; then 
 		xterm -hold -e "sudo tshark -i $tar -w TsharkCap" &
-		echo -e "$redColour[%]$grayColour Network traffic"
+		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
 	elif [ "$captraffic" == "N" ] || [ "$captraffic" == "n" ]; then
 		xterm -hold -e "sudo tshark -i $tar" &
-		echo -e "$redColour[%]$grayColour Network traffic"
+		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
 	else
-		xterm -hold -e "sudo tcpdump -i $tar -v" &
-		echo -e "$redColour[%]$grayColour Network traffic"
+		xterm -hold -e "sudo tshark -i $tar" &
+		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
 	fi
 }
 #banner for attack menu
