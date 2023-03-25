@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Menu de ataques 
-![Captura de pantalla -2023-03-16 14-06-22](https://user-images.githubusercontent.com/89719224/225742589-2d5700d4-3121-4f4a-a89a-0c386d37e704.png)
+![banner](https://user-images.githubusercontent.com/89719224/227734998-83129a58-8915-4c19-859f-9dbc2a90137d.png)
+
 
 
 
@@ -88,6 +89,20 @@ sudo ./wifipwnedd.sh
 
 - Fuerza bruta con el diccionario que queramos a un archivo .cap.
 
-### 10) Hashed Dictionary (Rainbow Taibles)
+### 10) Hash .cap -> .hccapx
+
+- Convierte tu archivo hash o archivo .cap a .hccapx
+
+### 11) Hashed Dictionary (Rainbow Taibles)
 
 - Es un diccionario precomputado para ser usado contra hashes, esto nos ayudara a que sea mas rapido (Depende de la contraseñas)
+
+### 12) Force brute with GPU
+
+- ❕ Esta opción no se puede hacer en una máquina virtual, sólo funcionará cuando el SO esté directamente instalado.
+
+- Nos pedirá un hash, ya sea .cap o hccapx, si es .cap se convertirá automáticamente a formato hccapx con el nombre que queramos.
+
+- Luego nos saldrá un menú donde veremos nuestro Hardware y podremos seleccionar nuestra GPU (Si pones una CPU no se hará la fuerza bruta).
+
+- Automáticamente se hará la fuerza bruta con nuestro diccionario preferido para el hash y con la GPU de tu pc.
