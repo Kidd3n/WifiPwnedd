@@ -667,13 +667,13 @@ gpuhash() {
 }
 gpuhand() {
 	cd /usr/share/hashcat-utils
-	./cap2hccapx.bin Handshake-01.cap ${pathmain}/Handshake.hccapx
+	./cap2hccapx.bin ${pathmain}/Handshake-01.cap ${pathmain}/Handshake.hccapx
 	cd $pathmain
 	hashcat -I
 	echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu1
 	echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu1
 	tput civis
-	hashcat -a 3 -m 2500 -d $numgpu1 Handshake.hccapx $pathgpu1
+	hashcat -a 3 -m 2500 -D 2 -d $numgpu1 Handshake.hccapx $pathgpu1
 	echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 }
 #banner main
