@@ -12,7 +12,7 @@ grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 
 filestrash() {
-	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt)
+	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap Handshake.hccapx)
 	tput civis; cd $pathmain
 	for file in "${files[@]}"; do
 		sudo rm $file 2>/dev/null
@@ -46,7 +46,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tcpdump cap2hccapx.bin)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -567,10 +567,10 @@ traffic() {
 	tput cnorm; echo -ne "[?] Do you want to save the captured packets? [Y/N]: " && read captraffic
 	tput civis
 	if [ "$captraffic" == "y" ] || [ "$captraffic" == "Y" ]; then 
-		xterm -hold -e "sudo tcpdump -i $tar -w captraffic.pcap -v" &
+		xterm -hold -e "sudo tshark -i $tar -w TsharkCap" &
 		echo -e "$redColour[%]$grayColour Network traffic"
 	elif [ "$captraffic" == "N" ] || [ "$captraffic" == "n" ]; then
-		xterm -hold -e "sudo tcpdump -i $tar -v" &
+		xterm -hold -e "sudo tshark -i $tar" &
 		echo -e "$redColour[%]$grayColour Network traffic"
 	else
 		xterm -hold -e "sudo tcpdump -i $tar -v" &
@@ -641,11 +641,11 @@ gpuhash() {
 	tput cnorm; echo -ne "\n$yellowColour[?]$grayColour You have a file or hash in hccapx format? [Y/N]: " && read format
 	if [ "$format" == "Y" ] || [ "$format" == "y" ]; then
 		echo -ne "$redColour[?]$grayColour hccapx path: " && read pahc
-		hashcat -I
+		hashcat -I | grep "GPU"
 		echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu
 		echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu
 		tput civis
-		hashcat -a 3 -m 2500 -d $numgpu $pahc $pathgpu
+		hashcat -a 3 -m 2500 -D 2 -d $numgpu $pahc $pathgpu
 		echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 	elif [ "$format" == "N" ] || [ "$format" == "n" ]; then
 		echo -ne "$blueColour[?]$grayColour Do you have a .cap file or hash? [Y/N]: " && read filecap
@@ -695,7 +695,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.7"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.8"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
