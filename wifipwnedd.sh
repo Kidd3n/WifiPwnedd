@@ -237,7 +237,7 @@ testhandshake() {
 	test -f Handshake-01.cap
 	if [ "$(echo $?)" == "0" ]; then
 		tput cnorm
-		echo -ne "$yellowColour[?]$grayColour Do you want to brute force your GPU? [Y/N]: " && read gpuno
+		echo -ne "\n$yellowColour[?]$grayColour Do you want to brute force your GPU? [Y/N]: " && read gpuno
 		if [ "$gpuno" == "Y" ] || [ "$gpuno" == "y" ]; then
 			gpuhand
 		else
@@ -554,12 +554,13 @@ dosattack() {
 	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
 	sudo mdk4 $tar a -e $redos
+	echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 }
 #[4] Beacon flood attack with mdk
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
 	sudo mdk4 $tar b -s 1000
-	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
+	echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 
 }
 #[5] Network traffic with tcpdump
@@ -569,13 +570,13 @@ traffic() {
 	tput civis
 	if [ "$captraffic" == "y" ] || [ "$captraffic" == "Y" ]; then 
 		xterm -hold -e "sudo tshark -i $tar -w TsharkCap" &
-		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
+		echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 	elif [ "$captraffic" == "N" ] || [ "$captraffic" == "n" ]; then
 		xterm -hold -e "sudo tshark -i $tar" &
-		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
+		echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 	else
 		xterm -hold -e "sudo tshark -i $tar" &
-		echo -ne "${greenColour}[+]$grayColour Enter to continue" && read
+		echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 	fi
 }
 #banner for attack menu
@@ -589,6 +590,8 @@ bannerattack() {
 	echo -e "	      ${blueColour}.*_"
 	echo -e "               ${blueColour}."
 	$cleancolor
+	echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
+	echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 }
 fakeap() {
 	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting Fake/Rogue AP"; sleep 2
@@ -697,7 +700,7 @@ else
 	echo -e "${turquoiseColour}"
 	banner
 	echo -e "\n${greenColour}[+]${grayColour} Version 1.8"
-	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/kidd3n"
+	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
 	monitormode
@@ -705,9 +708,7 @@ else
 		clear
 		echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
 		bannerattack
-		sleep 0.5
-		echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
-		echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
+		sleep 0.3
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 		echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
