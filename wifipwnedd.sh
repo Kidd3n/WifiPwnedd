@@ -688,6 +688,65 @@ banner() {
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
 }
+
+hackingwifi() {
+	bannerattack
+	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi"
+	echo -e "${yellowColour}\n[1] Handshake Attack"
+	echo -e "[2] PMKID Attack"
+	echo -e "[3] DoS Attack"
+	echo -e "[4] Beacon Flood Attack"
+	echo -e "[5] Network traffic"
+	echo -e "[6] Scanner"
+}
+fakeap() {
+	bannerattack
+	echo -e "\n${turquoiseColour}[+]${grayColour} Fake Access Point"
+	echo -e "${yellowColour}\n[1] Wifiphisher"
+	echo -e "[2] Fake/Rogue AP"
+
+}
+crackingpass() {
+	bannerattack
+	echo -e "${turquoiseColour}\n[+]${grayColour} Cracking password"
+	echo -e "${yellowColour}\n[1] Force Brute .cap"
+	echo -e "[2] Hash .cap -> .hccapx"
+	echo -e "[3] Hashed Dictionary (Rainbow taibles)"
+	echo -e "[4] Force Brute with GPU"
+}
+attackmain(){
+	bannerattack
+	echo -e "${turquoiseColour}\n[1]${grayColour} Hacking Wifi"
+	echo -e "${turquoiseColour}[2]${grayColour} Fake Access Point"
+	echo -e "${turquoiseColour}[3]${grayColour} Cracking password"
+	echo -e "${turquoiseColour}[4]${grayColour} Contact"
+	echo -e "\n[99] Exit and restart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
+	$cleancolor
+	case $menu in
+		1)
+		hackingwifi
+		;;
+		2)
+		fakeap
+		;;
+		3)
+		crackingpass
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
+
+
+}
+contact(){
+	
+}
 #Checks if the tool was run as root
 if [ $(id -u) -ne 0 ]; then
 	echo -e "$redColour\n[!]$grayColour Must be root (sudo $0)\n"
@@ -699,7 +758,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 1.8"
+	echo -e "\n${greenColour}[+]${grayColour} Version 1.9"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
