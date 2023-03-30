@@ -878,4 +878,5 @@ else
 	monitormode
 	while true; do
 		attackmain
+		done
 fi
