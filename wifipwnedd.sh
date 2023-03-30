@@ -702,10 +702,11 @@ hackingwifi() {
 	echo -e "${yellowColour}[4]$grayColour Beacon Flood Attack"
 	echo -e "${yellowColour}[5]$grayColour Network traffic"
 	echo -e "${yellowColour}[6]$grayColour Scanner"
+	echo -e "${greenColour}[7]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
-	case $menu in
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menuwi
+	case $menuwi in
 		1)
 		handshake_ataque
 		;;
@@ -724,6 +725,9 @@ hackingwifi() {
 		6)
 		scanner
 		;;
+		7)
+		attackmain
+		;;
 		99)
 		exitresart
 		;;
@@ -737,15 +741,19 @@ fakeapmenu() {
 	echo -e "\n${turquoiseColour}[+]${grayColour} Fake Access Point\n"
 	echo -e "${yellowColour}[1]$grayColour Wifiphisher"
 	echo -e "${yellowColour}[2]$grayColour Fake/Rogue AP"
+	echo -e "${greenColour}[3]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
-	case $menu in
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menufa
+	case $menufa in
 		1)
 		ntwkphishing
 		;;
 		2)
 		fakeap
+		;;
+		3)
+		attackmain
 		;;
 		99)
 		exitresart
@@ -762,10 +770,11 @@ crackingpass() {
 	echo -e "${yellowColour}[2]$grayColour Hash .cap -> .hccapx"
 	echo -e "${yellowColour}[3]$grayColour Hashed Dictionary (Rainbow taibles)"
 	echo -e "${yellowColour}[4]$grayColour Force Brute with GPU"
+	echo -e "${greenColour}[5]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
-	case $menu in
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menupass
+	case $menupass in
 		1)
 		fuerza_.cap
 		;;
@@ -777,6 +786,9 @@ crackingpass() {
 		;;
 		4)
 		gpuhash
+		;;
+		5)
+		attackmain
 		;;
 		99)
 		exitresart
@@ -794,47 +806,50 @@ attackmain(){
 	echo -e "${turquoiseColour}[4]${grayColour} Contact"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menuma
 	$cleancolor
-	while true; do
-		case $menu in
-			1)
-			hackingwifi
-			;;
-			2)
-			fakeapmenu
-			;;
-			3)
-			crackingpass
-			;;
-			4)
-			contact
-			;;
-			99)
-			exitresart
-			;;
-			*)
-			echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
-			;;
-			esac
-			done
+	case $menuma in
+		1)
+		ackingwifi
+		;;
+		2)
+		fakeapmenu
+		;;
+		3)
+		crackingpass
+		;;
+		4)
+		contact
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
+
 }
 contact(){
 	bannerattack
 	echo -e "${turquoiseColour}\n[*]${grayColour} Contact me"
-	echo -e "${yellowColourColour}[1]${grayColour} Instagram"
+	echo -e "${yellowColour}[1]${grayColour} Instagram"
 	echo -e "${blueColour}[2]${grayColour} Discord"
+	echo -e "${greenColour}[3]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Contact: " && read menu
+	echo -ne "${blueColour}[?]${grayColour} Contact: " && read menuco
 	$cleancolor
-	case $menu in
+	case $menuco in
 		1)
 		xdg-open https://www.instagram.com/kidd3n.sh/
 		;;
 		2)
 		echo -e "\n\n$blueColour[*]$grayColour Discord ID: Kidden#9079\n"
 		read -p "Enter to continue"
+		;;
+		3)
+		attackmain
 		;;
 		99)
 		exitresart
@@ -864,6 +879,7 @@ else
 		clear
 		echo -e "${purpleColour}\n[+]$grayColour Attack Menu\n${endColour}"
 		bannerattack
+		attackmain
 		sleep 0.3
 		echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 		echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
