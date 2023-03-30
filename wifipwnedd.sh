@@ -560,7 +560,7 @@ dosattack() {
 beaconflood() {
 	tput civis; clear; echo -e "\n${purpleColour}[*]$grayColour Starting Beacon Flood attack..."; sleep 2
 	sudo mdk4 $tar b -s 1000
-	echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
+	echo -ne "\n\n\n\n\n${greenColour}[+]$grayColour Enter to continue" && read
 
 }
 #[5] Network traffic with tcpdump
@@ -793,32 +793,34 @@ attackmain(){
 	tput cnorm
 	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
 	$cleancolor
-	case $menu in
-		1)
-		hackingwifi
-		;;
-		2)
-		fakeapmenu
-		;;
-		3)
-		crackingpass
-		;;
-		4)
-		contact
-		;;
-		99)
-		exitresart
-		;;
-		*)
-		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
-		;;
-		esac
+	while True; do
+		case $menu in
+			1)
+			hackingwifi
+			;;
+			2)
+			fakeapmenu
+			;;
+			3)
+			crackingpass
+			;;
+			4)
+			contact
+			;;
+			99)
+			exitresart
+			;;
+			*)
+			echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+			;;
+			esac
+			done
 }
 contact(){
 	echo -e "${turquoiseColour}\n[*]${grayColour} Contact me"
 	echo -e "${yellowColourColour}[1]${grayColour} Instagram"
 	echo -e "${blueColour}[2]${grayColour} Discord"
-	echo -e "\n[99] Exit and restart the network card\n"
+	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${blueColour}[?]${grayColour} Contact: " && read menu
 	$cleancolor
