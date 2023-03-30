@@ -46,7 +46,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin)
+	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin xdg-utils)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -581,6 +581,7 @@ traffic() {
 }
 #banner for attack menu
 bannerattack() {
+	tput civis
 	echo -e "	   ${blueColour}.--------."
 	echo -e "${redColour}     :  ${blueColour}.-@#*==-!==+#@*-."
 	echo -e "${redColour}     I__________${blueColour}%@%%#*-.${redColour}___"
@@ -698,13 +699,58 @@ hackingwifi() {
 	echo -e "[4] Beacon Flood Attack"
 	echo -e "[5] Network traffic"
 	echo -e "[6] Scanner"
+	echo -e "\n[99] Exit and resart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
+	case $menu in
+		1)
+		handshake_ataque
+		;;
+		2)
+		pkmid_ataque
+		;;
+		3)
+		dosattack
+		;;
+		4)
+		beaconflood
+		;;
+		5)
+		traffic
+		;;
+		6)
+		scanner
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
 }
-fakeap() {
+fakeapmenu() {
 	bannerattack
 	echo -e "\n${turquoiseColour}[+]${grayColour} Fake Access Point"
 	echo -e "${yellowColour}\n[1] Wifiphisher"
 	echo -e "[2] Fake/Rogue AP"
-
+	echo -e "\n[99] Exit and resart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
+	case $menu in
+		1)
+		ntwkphishing
+		;;
+		2)
+		fakeap
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
 }
 crackingpass() {
 	bannerattack
@@ -713,6 +759,29 @@ crackingpass() {
 	echo -e "[2] Hash .cap -> .hccapx"
 	echo -e "[3] Hashed Dictionary (Rainbow taibles)"
 	echo -e "[4] Force Brute with GPU"
+	echo -e "\n[99] Exit and resart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read menu
+	case $menu in
+		1)
+		fuerza_.cap
+		;;
+		2)
+		caphccapx
+		;;
+		3)
+		rainbowtaibles
+		;;
+		4)
+		gpuhash
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
 }
 attackmain(){
 	bannerattack
@@ -729,10 +798,13 @@ attackmain(){
 		hackingwifi
 		;;
 		2)
-		fakeap
+		fakeapmenu
 		;;
 		3)
 		crackingpass
+		;;
+		4)
+		contact
 		;;
 		99)
 		exitresart
@@ -741,11 +813,30 @@ attackmain(){
 		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
 		;;
 		esac
-
-
 }
 contact(){
-	
+	echo -e "${turquoiseColour}\n[*]${grayColour} Contact me"
+	echo -e "${yellowColourColour}[1]${grayColour} Instagram"
+	echo -e "${blueColour}[2]${grayColour} Discord"
+	echo -e "\n[99] Exit and restart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Contact: " && read menu
+	$cleancolor
+	case $menu in
+		1)
+		xdg-open https://www.instagram.com/kidd3n.sh/
+		;;
+		2)
+		echo -e "\n\n$blueColour[*]$grayColour Discord ID: Kidden#9079\n"
+		read -p "Enter to continue"
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
 }
 #Checks if the tool was run as root
 if [ $(id -u) -ne 0 ]; then
