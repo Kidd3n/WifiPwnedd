@@ -801,7 +801,7 @@ crackingpass() {
 attackmain(){
 	bannerattack
 	echo -e "${turquoiseColour}\n[1]${grayColour} Hacking Wifi"
-	echo -e "${turquoiseColour}[2]${grayColour} Fake Access Point"
+	echo -e "${turquoiseColour}[2]${grayColour} Fake Access Point/ Phishing"
 	echo -e "${turquoiseColour}[3]${grayColour} Cracking password"
 	echo -e "${turquoiseColour}[4]${grayColour} Contact"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
