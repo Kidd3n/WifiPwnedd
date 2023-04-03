@@ -46,7 +46,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat git nmap hcxdumptool hcxpcapngtool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin xdg-utils)
+	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -651,6 +651,7 @@ gpuhash() {
 		echo -ne "$redColour[?]$grayColour hccapx path: " && read pahc
 		hashcat -I | grep "GPU"
 		echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu
+		echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 		echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu
 		tput civis
 		hashcat -a 3 -m 2500 -D 2 -d $numgpu $pahc $pathgpu
@@ -679,6 +680,7 @@ gpuhand() {
 	cd $pathmain
 	hashcat -I
 	echo -ne "$redColour[?]$grayColour Device number when using: " && read numgpu1
+	echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu1
 	tput civis
 	hashcat -a 3 -m 2500 -D 2 -d $numgpu1 Handshake.hccapx $pathgpu1
@@ -800,10 +802,10 @@ crackingpass() {
 }
 attackmain(){
 	bannerattack
-	echo -e "${turquoiseColour}\n[1]${grayColour} Hacking Wifi"
-	echo -e "${turquoiseColour}[2]${grayColour} Fake Access Point/ Phishing"
-	echo -e "${turquoiseColour}[3]${grayColour} Cracking password"
-	echo -e "${turquoiseColour}[4]${grayColour} Contact"
+	echo -e "${yellowColour}\n[1]${grayColour} Hacking Wifi"
+	echo -e "${yellowColour}[2]${grayColour} Fake Access Point/ Phishing"
+	echo -e "${yellowColour}[3]${grayColour} Cracking password"
+	echo -e "${yellowColour}[4]${grayColour} Contact"
 	echo -e "\n$redColour[99]$grayColour Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${purpleColour}[?]${grayColour} Attack: " && read menuma
