@@ -59,10 +59,6 @@ sudo ./wifipwnedd.sh
 
 ### 4) Beacon Flood Attack
 
-- It will ask us if we want to give a name to the fake network. If we say yes (Y), it will ask us for the name and start sending the network by packets (Recommended).
-
-- (Recommended) If we say no (N), it will flood the network area with strange names.
-
 - The packet rate is 1000 packets per second, but it depends on your network card the speed. 
 
 ### 5) Network Traffic
