@@ -250,6 +250,7 @@ testhandshake() {
 				echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 				$cleancolor; tput civis
 				xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+				echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 			else
 				test -f /usr/share/wordlists/rockyou.txt.gz
 				if [ "$(echo $?)" -eq 0 ]; then
@@ -260,8 +261,9 @@ testhandshake() {
 					echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 					$cleancolor; tput civis
 					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+					echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 				else 
-					echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"
+					echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"; sleep 2; testhandshake
 				fi
 			fi
 		fi
@@ -843,7 +845,7 @@ else
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -e "${greenColour}[+]${grayColour} Discord ID: Kidden#9079"
 	echo -e "${greenColour}[+]${grayColour} Instagram: kidd3n.sh"
-	echo -ne "${greenColour}[+]$grayColour Enter to continue" && read 
+	echo -ne "\n${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
 	monitormode
 	while true; do
