@@ -696,6 +696,66 @@ banner() {
 	echo " | |/ |/ / / / / __/ / /    / ____/ | |/ |/ / / / / //  __// /_/ / / /_/ /  "
 	echo " |__/|__/ /_/ /_/   /_/    /_/      |__/|__/ /_/ /_/ \___/ \__,_/  \__,_/  "
 }
+bannermainattack() {
+	bannerattack
+	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
+	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
+	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
+	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
+	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
+	echo -e "[5] Network traffic"
+	echo -e "[6] Scanner"
+	echo -e "\n[99] Exit and restart the network card\n"
+	tput cnorm
+	echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
+	$cleancolor
+	case $opcion in
+		1)
+		handshake_ataque
+		;;
+		2)
+		pkmid_ataque
+		;;
+		3)
+		dosattack
+		;;
+		4)
+		beaconflood
+		;;
+		5)
+		traffic
+		;;
+		6)
+		scanner
+		;;
+		7)
+		ntwkphishing
+		;;
+		8)
+		fakeap
+		;;
+		9)
+		fuerza_.cap
+		;;
+		10)
+		caphccapx
+		;;
+		11)
+		rainbowtaibles
+		;;
+		12)
+		gpuhash
+		;;
+		99)
+		exitresart
+		;;
+		*)
+		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
+		;;
+		esac
+		done
+}
+
 
 hackingwifi() {
 	bannerattack
@@ -849,6 +909,6 @@ else
 	updatepackages
 	monitormode
 	while true; do
-		attackmain
+		bannermainattack
 		done
 fi
