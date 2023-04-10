@@ -753,7 +753,6 @@ bannermainattack() {
 		echo -e "${redColour}\n[!]$grayColour Invalid Option"; sleep 2
 		;;
 		esac
-		done
 }
 
 
