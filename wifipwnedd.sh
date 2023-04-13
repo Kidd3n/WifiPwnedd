@@ -381,7 +381,7 @@ fuerza_rainbow() {
 }
 #[8] Attack with airolib for the creation of precomputed dictionaries
 rainbowtaibles() {
-	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Taibles..."; sleep 2
+	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Tables..."; sleep 2
 	echo -ne "\n${blueColour}[?]$grayColour Dictionary path: " && read ruta
 	sudo airolib-ng dicc-hashed --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hashed
@@ -701,7 +701,7 @@ bannermainattack() {
 	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
 	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
-	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow taibles)"
+	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow tables)"
 	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
 	echo -e "[5] Network traffic"
 	echo -e "[6] Scanner"
