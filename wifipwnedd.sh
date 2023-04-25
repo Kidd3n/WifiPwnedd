@@ -900,7 +900,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 2.1"
+	echo -e "\n${greenColour}[+]${grayColour} Version 2.2"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -e "${greenColour}[+]${grayColour} Discord ID: Kidden#9079"
 	echo -e "${greenColour}[+]${grayColour} Instagram: kidd3n.sh"
