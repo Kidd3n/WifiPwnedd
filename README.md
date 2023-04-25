@@ -97,7 +97,7 @@ sudo ./wifipwnedd.sh
 
 - Convert your hash or .cap file to hccapx
 
-### 11) Hashed Dictionary (Rainbow Taibles)
+### 11) Hashed Dictionary (Rainbow Tables)
 
 - It is a precomputed dictionary used for brute-forcing hashes. This will help speed up the process (depending on the passwords)
 
