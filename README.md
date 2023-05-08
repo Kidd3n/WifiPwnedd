@@ -75,19 +75,27 @@ sudo ./wifipwnedd.sh
 
 ### 7) Wifiphisher
 
-- Evil Twin 
+- Evil Twin
 
-- Creates a fake network with the name of your choice 
+- You must choose a network to which global deauthentication packets will be sent (All MAC'S), this so that users do not have the network available and connect to our network.
 
-- It will generate hostapd and dnsmasq configuration files with the name and channel that we gave previously, and also configure that when a device is connected it is assigned an IP address and a NetMask.
+- The network name is the same as the network we want to clone.
+
+- It will generate the hostapd and dnsmasq configuration files, and will also configure that when a device connects it will be assigned an IP address and a NetMask.
 
 - Then we can choose a login to use
 
-- We are waiting for the credentials of the victims
+- We wait for the credentials of the victims
 
 ### 8) Fake/Rogue Ap
 
-- Create a fake network with the name and channel of your choice
+- Create a fake network with the name of your choice.
+
+- It will generate the hostapd and dnsmasq configuration files with the name and channel we gave earlier, and also configure that when a device is connected it is assigned an IP address and a NetMask.
+
+- Then we can choose a login to use
+
+- We wait for the credentials of the victims
 
 ### 9) Force Brute .cap
 
