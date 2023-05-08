@@ -73,9 +73,11 @@ sudo ./wifipwnedd.sh
 
 - Gemelo malvado
 
-- Crea una red falsa con el nombre que elijas.
+- Debes escoger una red a la cual se le mandaran paquetes de desauntenticacion global (Todas las MAC'S), esto para que los usuarios no tengan la red disponible y se conecten a nuesta red
 
-- Generará los ficheros de configuración hostapd y dnsmasq con el nombre y canal que dimos anteriormente, y también configurará que cuando se conecte un dispositivo se le asigne una dirección IP y una NetMask.
+- El nombre de la red es el mismo a la red que queremos clonar.
+
+- Generará los ficheros de configuración hostapd y dnsmasq, y también configurará que cuando se conecte un dispositivo se le asigne una dirección IP y una NetMask.
 
 - A continuación podemos elegir un login a utilizar
 
@@ -83,7 +85,13 @@ sudo ./wifipwnedd.sh
 
 ### 8) Fake/Rogue ap
 
-- Crea una red falsa con el nombre y el canal que quieras
+- Crea una red falsa con el nombre que elijas.
+
+- Generará los ficheros de configuración hostapd y dnsmasq con el nombre y canal que dimos anteriormente, y también configurará que cuando se conecte un dispositivo se le asigne una dirección IP y una NetMask.
+
+- A continuación podemos elegir un login a utilizar
+
+- Esperamos las credenciales de las víctimas
 
 ### 9) Force Brute .cap
 
