@@ -764,7 +764,7 @@ banner() {
 bannermainattack() {
 	bannerattack
 	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher/Evil Twin\t\t\t[9] Force Brute .cap"
+	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher/Evil Twin\t[9] Force Brute .cap"
 	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
 	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow tables)"
 	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
