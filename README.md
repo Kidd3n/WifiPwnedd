@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Attack menu 
-![banner](https://user-images.githubusercontent.com/89719224/227698176-f602ecf2-6d91-40df-92da-31cbe4bd88b5.png)
+![Screenshot_2023-05-22_18-31-05](https://github.com/Kidd3n/WifiPwnedd/assets/89719224/af88efca-3ce1-482b-a8f0-59390e77d21d)
+
 
 
 
@@ -73,9 +74,7 @@ sudo ./wifipwnedd.sh
 
 - After hitting enter it will put our card in monitor mode
 
-### 7) Wifiphisher
-
-- Evil Twin
+### 7) Wifiphisher/Evil Twin
 
 - You must choose a network to which global deauthentication packets will be sent (All MAC'S), this so that users do not have the network available and connect to our network.
 
