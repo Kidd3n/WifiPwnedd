@@ -727,7 +727,7 @@ caphccapx() {
 	cd $pathmain
 }
 gpuhash() {
-	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting ForceBrute with GPU"; sleep 2
+	clear; tput civis; echo -e "$blueColour[*]$grayColour Starting ForceBrute with GPU"; sleep 1
 	tput cnorm; echo -ne "\n$yellowColour[?]$grayColour You have a file or hash in hccapx format? [Y/N]: " && read format
 	if [ "$format" == "Y" ] || [ "$format" == "y" ]; then
 		echo -ne "$redColour[?]$grayColour hccapx path: " && read pahc
