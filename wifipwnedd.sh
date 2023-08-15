@@ -236,14 +236,6 @@ monitormode() {
 	modeverification
 }
 
-testdicc() {
-	cd $dicc
-	if [ "$(echo $?)" -ne 0 ]; then
-		echo -ne "\n${redColour}[!]$grayColour The path you typed does not exist, try again to continue"
-		sleep 3; cd $path
-		testhandshake
-	fi
-}
 #Test if the package was captured and if you have rockyou in your OS
 testhandshake() {
 	test -f Handshake-01.cap
@@ -269,9 +261,16 @@ testhandshake() {
 					echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 					echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 					$cleancolor; tput civis
-					testdicc
-					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
-					echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
+					test -f $dicc
+					diccveri=$(echo $?)
+					if [ "$diccveri" -ne 0 ]; then
+						echo -ne "\n${redColour}[!]$grayColour The path you typed does not exist, try again to continue"
+						sleep 3; cd $path
+						testhandshake
+					else 
+						xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
+						echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
+					fi
 				else 
 					echo -e "\n$redColour[!]$grayColour You don't have rockyou.txt in your system or it is in another directory"; sleep 2; testhandshake
 				fi
