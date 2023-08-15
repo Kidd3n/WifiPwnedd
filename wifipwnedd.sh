@@ -235,6 +235,15 @@ monitormode() {
 	ifconfig $tar up > /dev/null 2>&1
 	modeverification
 }
+
+testdicc() {
+	cd $dicc
+	if [ "$(echo $?)" -ne 0 ]; then
+		echo -ne "\n${redColour}[!]$grayColour The path you typed does not exist, try again to continue"
+		sleep 3; cd $path
+		testhandshake
+	fi
+}
 #Test if the package was captured and if you have rockyou in your OS
 testhandshake() {
 	test -f Handshake-01.cap
@@ -260,6 +269,7 @@ testhandshake() {
 					echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 					echo -ne "$blueColour[?]$grayColour Dictionary path to use: " && read dicc
 					$cleancolor; tput civis
+					testdicc
 					xterm -hold -e "aircrack-ng -w $dicc Handshake-01.cap" &
 					echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 				else 
@@ -272,6 +282,7 @@ testhandshake() {
 		sleep 2
 	fi
 }
+
 #[1] Attack with aircrack
 handshake_ataque() {
 	clear; tput civis
