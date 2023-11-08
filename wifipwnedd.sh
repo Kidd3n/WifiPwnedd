@@ -444,26 +444,35 @@ menuforce() {
 	;;
 	esac
 }
-#[5] local network scanner with ip with nmap
-scanner() {
-	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
+
+reconnect() {
 	airmon-ng stop $tar > /dev/null 2>&1
 	sudo /etc/init.d/networking start > /dev/null 2>&1
 	sudo /etc/init.d/networking restart > /dev/null 2>&1
 	sudo systemctl start NetworkManager > /dev/null 2>&1
 	ifconfig $tar up > /dev/null 2>&1
 	sleep 15
-	tput cnorm; echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
-	tput civis; echo -e "\n---------------------------------------------------\n"
-	sudo nmap -sP -Pn ${iplocal}/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
-	echo -e "\n---------------------------------------------------"
-	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
+}
+
+modeagain () {
 	airmon-ng start $tar > /dev/null 2>&1
 	ifconfig $tar down && macchanger -a $tar 2>/dev/null
 	ifconfig $tar up 2>/dev/null
 	airmon-ng check kill > /dev/null 2>&1
 	tput cnorm
 	modeverification
+}
+
+#[5] local network scanner with ip with nmap
+scanner() {
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
+	reconnect
+	tput cnorm; echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
+	tput civis; echo -e "\n---------------------------------------------------\n"
+	sudo nmap -sP -Pn ${iplocal}/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'
+	echo -e "\n---------------------------------------------------"
+	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
+	modeagain
 }
 #[6] Creation of a fake network with a login to steal the credentials of the connecting victims (created by me)
 ntwkphishing() {
