@@ -50,7 +50,7 @@ sudo ./wifipwnedd.sh
 
 ### 3) DoS Attack
 
-- Nos preguntara por la red que ke queremos hacer el ataque
+- Nos preguntara por la red que le queremos hacer el ataque
 
 - Luego por los canales, los recomendados son el 1,6,11 pero puedes poner todos del 1-12 o los que guste 
 
