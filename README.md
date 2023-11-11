@@ -74,7 +74,21 @@ sudo ./wifipwnedd.sh
 
 - After hitting enter it will put our card in monitor mode
 
-### 7) Wifiphisher/Evil Twin
+### 7)  DoS for Client 
+
+- This module is used to remove internet access to a client in our network using ARP packets with arpspoof.
+
+- We must be on a private network before entering this module.
+
+- We will be asked for an ip address, we must enter the one of our victim.
+
+- Then we will set in seconds the time we want to take away the access
+
+- Credits: The creator of this script was @PinguinodeMario, Thank you for allowing it to be in this tool.
+
+- Script Video: https://youtu.be/MbB0XRjFS_Y?si=1i1ajq_NEBHYmH-8
+
+### 8) Wifiphisher/Evil Twin
 
 - You must choose a network to which global deauthentication packets will be sent (All MAC'S), this so that users do not have the network available and connect to our network.
 
@@ -86,7 +100,7 @@ sudo ./wifipwnedd.sh
 
 - We wait for the credentials of the victims
 
-### 8) Fake/Rogue Ap
+### 9) Fake/Rogue Ap
 
 - Create a fake network with the name of your choice.
 
@@ -96,19 +110,19 @@ sudo ./wifipwnedd.sh
 
 - We wait for the credentials of the victims
 
-### 9) Force Brute .cap
+### 10) Force Brute .cap
 
 - Brute-force the dictionary we pass to a .cap file.
 
-### 10) Hash .cap -> .hccapx
+### 11) Hash .cap -> .hccapx
 
 - Convert your hash or .cap file to hccapx
 
-### 11) Hashed Dictionary (Rainbow Tables)
+### 12) Hashed Dictionary (Rainbow Tables)
 
 - It is a precomputed dictionary used for brute-forcing hashes. This will help speed up the process (depending on the passwords)
 
-### 12) Force brute with GPU
+### 13) Force brute with GPU
 
 - ❕ This option cannot be done in a virtual machine, it will only work when the OS is directly installed. 
 
