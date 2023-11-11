@@ -468,7 +468,7 @@ dosforclient () {
 
 	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client... Wait a moment"
 	reconnect
-	arp-scan -I $tarnomon --localnet 
+	sudo arp-scan -I $tarnomon --localnet 
 	sleep 1
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
 	echo -ne "${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
