@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Menu de ataques 
-![Screenshot_2023-05-22_18-31-05](https://github.com/Kidd3n/WifiPwnedd/assets/89719224/78f54ecd-ffd8-4179-82e7-8eaedaa8435b)
+
+![Screenshot_2023-11-14_17-53-37](https://github.com/Kidd3n/WifiPwnedd/assets/89719224/4f4ed8a4-501b-46c6-b976-6ba32610f0c4)
 
 
 
