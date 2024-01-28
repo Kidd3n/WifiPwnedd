@@ -1020,8 +1020,8 @@ else
 	banner
 	echo -e "\n${greenColour}[+]${grayColour} Version 2.5"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
-	echo -e "${greenColour}[+]${grayColour} Discord ID: Kidden#9079"
-	echo -e "${greenColour}[+]${grayColour} Instagram: kidd3n.sh"
+	echo -e "${greenColour}[+]${grayColour} Discord ID: kidd3n.sh"
+	echo -e "${greenColour}[+]${grayColour} Instagram: ruben_.sgg"
 	echo -ne "\n${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
 	monitormode
