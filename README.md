@@ -87,7 +87,7 @@ sudo ./wifipwnedd.sh
 
 - Credits: The creator of this script was @PinguinodeMario, Thank you for allowing it to be in this tool.
 
-- Script Video: https://youtu.be/MbB0XRjFS_Y?si=1i1ajq_NEBHYmH-8
+- Script Video: https://youtu.be/MbB0XRjFS_Y?si=1i1ajq_NEBHYmH-8 (Spanish)
 
 ### 8) Wifiphisher/Evil Twin
 
