@@ -14,7 +14,8 @@ sudo ./wifipwnedd.sh
 ```
 
 ## Menu de ataques 
-![Screenshot_2023-05-22_18-31-05](https://github.com/Kidd3n/WifiPwnedd/assets/89719224/78f54ecd-ffd8-4179-82e7-8eaedaa8435b)
+
+![Screenshot_2023-11-14_17-53-37](https://github.com/Kidd3n/WifiPwnedd/assets/89719224/4f4ed8a4-501b-46c6-b976-6ba32610f0c4)
 
 
 
@@ -68,9 +69,23 @@ sudo ./wifipwnedd.sh
 
 ### 6) Scanner
 
-- Podemos ver los dispositivos que estan en la red que estabamos conectados con la ip
+- Podemos ver los clientes que estan conectados a nuestra red privada, podemos ver el nombre del dispositivo y la IP
 
-### 7) Wifiphisher
+### 7) DoS for Client 
+
+- Este modulo sirve para quitarle el acceso a internet a un cliente en nuestra red usando paquetes ARP con arpspoof.
+
+- Tenemos que estar en una red privada antes de entrar en este modulo
+
+- Se nos pedira una direccion ip, debemos poner la de nuestra victima
+
+- Luego pondremos en segundos el tiempo que queremos quitarle el acceso
+
+- Creditos: El creador de este script fue @PinguinodeMario, Gracias por permitir que este en esta herramienta
+
+- Video sobre el Modulo: https://youtu.be/MbB0XRjFS_Y?si=1i1ajq_NEBHYmH-8
+
+### 8) Wifiphisher
 
 - Gemelo malvado
 
@@ -84,7 +99,7 @@ sudo ./wifipwnedd.sh
 
 - Esperamos las credenciales de las víctimas
 
-### 8) Fake/Rogue ap
+### 9) Fake/Rogue ap
 
 - Crea una red falsa con el nombre que elijas.
 
@@ -94,19 +109,19 @@ sudo ./wifipwnedd.sh
 
 - Esperamos las credenciales de las víctimas
 
-### 9) Force Brute .cap
+### 10) Force Brute .cap
 
 - Fuerza bruta con el diccionario que queramos a un archivo .cap.
 
-### 10) Hash .cap -> .hccapx
+### 11) Hash .cap -> .hccapx
 
 - Convierte tu archivo hash o archivo .cap a .hccapx
 
-### 11) Hashed Dictionary (Rainbow Taibles)
+### 12) Hashed Dictionary (Rainbow Taibles)
 
 - Es un diccionario precomputado para ser usado contra hashes, esto nos ayudara a que sea mas rapido (Depende de la contraseñas)
 
-### 12) Force brute with GPU
+### 13) Force brute with GPU
 
 - ❕ Esta opción no se puede hacer en una máquina virtual, sólo funcionará cuando el SO esté directamente instalado.
 
