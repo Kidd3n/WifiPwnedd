@@ -367,6 +367,7 @@ pkmid_ataque() {
 		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
 		tput civis
 		hashcat -a 0 -m 22000 hash.hc22000 $dicc1
+		echo -ne "${redColour}[!]$grayColour Enter to exit" && read
 	else 
 		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
 		sleep 3
@@ -799,7 +800,7 @@ gpuhand() {
 	echo -e "\n${yellowColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt"
 	echo -ne "$redColour[?]$grayColour Dictionary path to use: " && read pathgpu1
 	tput civis
-	hashcat -a 3 -m 2500 -D 2 -d $numgpu1 Handshake.hccapx $pathgpu1
+	hashcat -a 0 -m 2500 -D 2 -d $numgpu1 Handshake.hccapx $pathgpu1
 	echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 }
 #banner main
