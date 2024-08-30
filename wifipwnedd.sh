@@ -652,7 +652,7 @@ bannerattack() {
 	echo -e "               ${blueColour}."
 	$cleancolor
 	echo -e "${greenColour}\n[+]${grayColour} Network card: $tar"
-	echo -e "${greenColour}[+]${grayColour} MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
+	echo -e "${greenColour}[+]${grayColour} Anon MAC: $(macchanger -s $tar | grep -i current | xargs | cut -d ' ' -f '3-100')"
 }
 fakeap() {
 
@@ -885,10 +885,9 @@ else
 	tput civis; clear
 	echo -e "${turquoiseColour}"
 	banner
-	echo -e "\n${greenColour}[+]${grayColour} Version 2.5"
+	echo -e "\n${greenColour}[+]${grayColour} Version 3"
 	echo -e "${greenColour}[+]${grayColour} Github: https://github.com/Kidd3n"
 	echo -e "${greenColour}[+]${grayColour} Discord ID: kidd3n.sh"
-	echo -e "${greenColour}[+]${grayColour} Instagram: ruben_.sgg"
 	echo -ne "\n${greenColour}[+]$grayColour Enter to continue" && read 
 	updatepackages
 	monitormode
