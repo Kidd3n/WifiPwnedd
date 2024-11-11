@@ -489,7 +489,7 @@ scanner() {
 	echo -ne "${redColour}[!]$grayColour Enter to exit" && read 
 	modeagain
 }
-#[6] Creation of a fake network with a login to steal the credentials of the connecting victims (created by me)
+#[6] Creation of a fake network with a login to steal the credentials of the connecting victims (test on version android 10)
 ntwkphishing() {
 	
 	credentials() {
