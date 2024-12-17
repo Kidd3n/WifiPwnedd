@@ -11,17 +11,38 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 cleancolor="echo -e "${endColour}""
 
+handshakedel() {
+	echo -ne "\n${redColour}[?]$grayColour Do you want to delete the captured handshake? [Y/N]: " && read handel
+	if [ "$handel" == "y" ] || [ "$handel" == "Y" ]; then
+		sudo rm -rf Handshake*
+	elif [ "$handel" == "n" ] || [ "$handel" == "N" ]; then
+		exit
+	elif [ "$handel" == " " ] || [ "$handel" == "" ]; then	
+		echo -e "\n\n${redColour}[!]${endColour}${grayColour} Please select an option...${endColour}\n" 
+		sleep 2
+		handshakedel
+	else
+		echo -e "\n\n${redColour}[!]${endColour}${grayColour} Please select an option...${endColour}\n" 
+		sleep 2
+		handshakedel
+	fi
+}
 
 filestrash() {
-	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface Handshake* datos-privados.txt TsharkCap)
+	files=(dnsmasq.conf hostapd.conf Capture.pcapng hash.hc22000 iface datos-privados.txt TsharkCap) 
 	tput civis; cd $pathmain
+	
 	for file in "${files[@]}"; do
-		sudo rm $file 2>/dev/null
-		sudo rm -r $file 2>/dev/null
+		sudo rm -rf "$file" 2>/dev/null
 	done
+
+	if [ -f "Handshake" ]; then
+    	handshakedel
+	fi
+
 	tput cnorm
 }
-#Catches the Ctrl+C signal and executes the output of the code
+
 trap ctrl_c INT
 
 ctrl_c() {
@@ -35,7 +56,7 @@ ctrl_c() {
 	filestrash
 	exit
 }
-#Verify the distribution 
+ 
 test -f /etc/debian_version
 debian=$(echo $?)
 	
