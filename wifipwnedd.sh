@@ -16,6 +16,10 @@ handshakedel() {
 	if [ "$handel" == "y" ] || [ "$handel" == "Y" ]; then
 		sudo rm -rf Handshake*
 	elif [ "$handel" == "n" ] || [ "$handel" == "N" ]; then
+		mkdir -p HandShake
+		mv Handshake* Handshake/
+		echo -e "\n${greenColour}[+]$grayColour Packets were saved in “HandShake”\n"
+		sleep 0.3
 		exit
 	elif [ "$handel" == " " ] || [ "$handel" == "" ]; then	
 		echo -e "\n\n${redColour}[!]${endColour}${grayColour} Please select an option...${endColour}\n" 
@@ -35,7 +39,7 @@ filestrash() {
 	for file in "${files[@]}"; do
 		sudo rm -rf $file 2>/dev/null
 	done
-	
+
 	test -f $pathmain/Handshake-01.cap
 	if [ "$(echo $?)" -eq 0 ]; then 
 		handshakedel
