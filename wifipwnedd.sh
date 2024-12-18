@@ -17,7 +17,7 @@ handshakedel() {
 		sudo rm -rf Handshake*
 	elif [ "$handel" == "n" ] || [ "$handel" == "N" ]; then
 		mkdir -p HandShake
-		mv Handshake* Handshake/
+		mv Handshake* HandShake/
 		echo -e "\n${greenColour}[+]$grayColour Packets were saved in “HandShake”\n"
 		sleep 0.3
 		exit
