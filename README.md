@@ -9,6 +9,8 @@
 ## How is the tool executed?
 
 ```
+git clone https://github.com/Kidd3n/WifiPwnedd.git
+
 cd WifiPwnedd
 
 chmod 755 wifipwnedd.sh
