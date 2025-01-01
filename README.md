@@ -4,7 +4,10 @@
 | English | [Español](README%20ESPAÑOL.md) |
 | --- | --- |
 
-❗ Using this tool in controlled environments is completely illegal without the necessary authorization.
+| :exclamation:  **Disclaimer**  |
+|---------------------------------|
+| Using this tool in real environments is completely **illegal** without the necessary authorization. **You are responsible** for any trouble you may cause by using this tool. |
+
 
 ## How is the tool executed?
 
