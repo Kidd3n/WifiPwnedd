@@ -1,6 +1,9 @@
 ## WifiPwnedd
 ![Bash-Scripting-brightgreen](https://user-images.githubusercontent.com/89719224/216780401-60655d5f-6804-4a3d-a9f2-3a02a1a3f9c8.svg)
 
+| English | [Español](README.Espa.md) |
+| --- | --- |
+
 ❗ Using this tool in controlled environments is completely illegal without the necessary authorization.
 
 ## How is the tool executed?
