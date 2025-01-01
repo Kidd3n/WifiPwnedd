@@ -4,7 +4,10 @@
 | Español | [English](https://github.com/Kidd3n/WifiPwnedd?tab=readme-ov-file)  |
 | --- | --- |
 
-❗ Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
+
+| :exclamation:  **Disclaimer**  |
+|---------------------------------|
+| El uso de esta herramienta en entornos reales es completamente **ilegal** sin la autorización necesaria. **Usted es responsable** de cualquier problema que pueda causar al utilizar esta herramienta. |
 
 ## Como se ejecuta la herramienta? 
 
