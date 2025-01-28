@@ -1,11 +1,19 @@
 ## WifiPwnedd
 ![Bash-Scripting-brightgreen](https://user-images.githubusercontent.com/89719224/216780401-60655d5f-6804-4a3d-a9f2-3a02a1a3f9c8.svg)
 
-❗ Usar esta herramienta en entornos controlados, es totalmente ilegal hacerlo sin tener la autorizacion necesaria.
+| Español | [English](https://github.com/Kidd3n/WifiPwnedd?tab=readme-ov-file)  |
+| --- | --- |
+
+
+| :exclamation:  **Disclaimer**  |
+|---------------------------------|
+| El uso de esta herramienta en entornos reales es completamente **ilegal** sin la autorización necesaria. **Usted es responsable** de cualquier problema que pueda causar al utilizar esta herramienta. |
 
 ## Como se ejecuta la herramienta? 
 
 ```
+git clone https://github.com/Kidd3n/WifiPwnedd.git
+
 cd WifiPwnedd
 
 chmod 755 wifipwnedd.sh
